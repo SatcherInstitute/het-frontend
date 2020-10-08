@@ -52,11 +52,11 @@ npm run build
 
 This should output bundled files in the `app/build/` directory. Use these files for hosting the web app.
 
-### Ejecting CRA
+### Ejecting Create React App
 
 _Note: this is a one-way operation. Once you `eject`, you can’t go back!_
 
-If you aren’t satisfied with the CRA build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+If you aren’t satisfied with the Create React App build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
 Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
 
