@@ -4,6 +4,14 @@ The frontend codebase for [Health Equity Tracker](https://healthequitytracker.or
 
 ## Developer Instructions 
 
+Code in the `app/` directory was bootstrapped with [Create React App](https://github.com/facebook/create-react-app). In that directory you can run various `npm` scripts, which are described below.
+
+You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+
+To learn React, check out the [React documentation](https://reactjs.org/).
+
+_Note: The following instructions assume running all commands from the `app/` directory._
+
 ### Install
 
 Change directories to the `app/` directory, then install dependencies using NPM.  
@@ -16,7 +24,7 @@ cd app && npm install
 
 ### Develop
 
-To start a local web server and watch for changes, from the `app/` directory do:
+To run the app in development mode, start a local web server, and watch for changes do:
 
 ```bash
 npm start
@@ -26,17 +34,17 @@ The site should now be visible at `localhost:3000`. Any changes to source code w
 
 ### Tests
 
-To run unit tests, from the `app/` directory do:
+To run unit tests do:
 
 ```bash
-npm run test
+npm test
 ```
 
 This will run tests in watch mode, so you may have the tests running while developing.
 
 ### Build
 
-To create a "production" build, from the `app/` directory do:
+To create a "production" build do:
 
 ```bash
 npm run build
@@ -44,5 +52,16 @@ npm run build
 
 This should output bundled files in the `app/build/` directory. Use these files for hosting the web app.
 
+### Ejecting CRA
+
+_Note: this is a one-way operation. Once you `eject`, you can’t go back!_
+
+If you aren’t satisfied with the CRA build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+
+Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+
+You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+
 ## License
-MIT
+
+[MIT](./LICENSE)
