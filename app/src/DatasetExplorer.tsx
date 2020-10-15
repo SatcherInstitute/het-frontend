@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import DatasetFilter from "./DatasetFilter";
 import DataFetcher from "./DataFetcher";
 import DataTable from "./DataTable";
-import CssBaseline from "@material-ui/core/CssBaseline";
 import DatasetListing from "./DatasetListing";
 import styles from "./DatasetExplorer.module.scss";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
@@ -27,6 +26,21 @@ const sources = [
 
 type LoadStatus = "unloaded" | "loading" | "loaded";
 
+function renderTableOrPlaceholder(
+  loadStatus: LoadStatus,
+  columns: any[],
+  data: any[]
+) {
+  switch (loadStatus) {
+    case "loaded":
+      return <DataTable columns={columns} data={data} />;
+    case "loading":
+      return <p>Loading...</p>;
+    default:
+      return <p>Select a data source to view.</p>;
+  }
+}
+
 function DatasetExplorer() {
   const [loadStatus, setLoadStatus] = useState<LoadStatus>("unloaded");
   const [previewedSourceId, setPreviewedSourceId] = useState("");
@@ -38,7 +52,6 @@ function DatasetExplorer() {
     setLoadStatus("loading");
     setPreviewedSourceId(sourceId);
     const fetcher = new DataFetcher();
-    // TODO error handling
     const source = await fetcher.loadDataset(sourceId);
     setData(source.data);
     setColumns(source.columns);
@@ -49,46 +62,33 @@ function DatasetExplorer() {
     setActiveFilter(filtered);
   }
 
-  let table;
-  if (loadStatus === "loaded") {
-    table = <DataTable columns={columns} data={data} />;
-  } else if (loadStatus === "loading") {
-    table = <p>Loading...</p>;
-  } else {
-    table = <p>Select a data source to view.</p>;
-  }
-  // TODO move CssBaseline up to root, or don't use it.
   return (
-    <>
-      <CssBaseline />
-      <div className={styles.DatasetExplorer}>
-        <div className={styles.DatasetList}>
-          <div className={styles.DatasetListItem}>
-            <DatasetFilter
-              sources={sources}
-              onSelectionChange={filterSources}
-            />
-          </div>
-          {sources
-            .filter(
-              (source) =>
-                activeFilter.length === 0 || activeFilter.includes(source.id)
-            )
-            .map((source) => (
-              <div className={styles.Dataset}>
-                <div className={styles.DatasetListItem}>
-                  <DatasetListing
-                    source={source}
-                    onPreview={() => loadPreview(source.id)}
-                  />
-                </div>
-                {previewedSourceId === source.id ? <ChevronRightIcon /> : null}
-              </div>
-            ))}
+    <div className={styles.DatasetExplorer}>
+      <div className={styles.DatasetList}>
+        <div className={styles.DatasetListItem}>
+          <DatasetFilter sources={sources} onSelectionChange={filterSources} />
         </div>
-        <div className={styles.Table}>{table}</div>
+        {sources
+          .filter(
+            (source) =>
+              activeFilter.length === 0 || activeFilter.includes(source.id)
+          )
+          .map((source, index) => (
+            <div className={styles.Dataset} key={index}>
+              <div className={styles.DatasetListItem}>
+                <DatasetListing
+                  source={source}
+                  onPreview={() => loadPreview(source.id)}
+                />
+              </div>
+              {previewedSourceId === source.id ? <ChevronRightIcon /> : null}
+            </div>
+          ))}
       </div>
-    </>
+      <div className={styles.Table}>
+        {renderTableOrPlaceholder(loadStatus, columns, data)}
+      </div>
+    </div>
   );
 }
 

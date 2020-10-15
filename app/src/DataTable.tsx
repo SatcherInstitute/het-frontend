@@ -12,7 +12,7 @@ import TablePagination from "@material-ui/core/TablePagination";
 import TableSortLabel from "@material-ui/core/TableSortLabel";
 import Paper from "@material-ui/core/Paper";
 
-function renderHeader(column: HeaderGroup<any>) {
+function TableHeader({ column }: { column: HeaderGroup<any> }) {
   return (
     <TableCell {...column.getHeaderProps(column.getSortByToggleProps())}>
       {column.render("Header")}
@@ -24,21 +24,22 @@ function renderHeader(column: HeaderGroup<any>) {
   );
 }
 
-function renderHeaderGroup(group: HeaderGroup<any>) {
+function TableHeaderGroup({ group }: { group: HeaderGroup<any> }) {
   return (
     <TableRow {...group.getHeaderGroupProps()}>
-      {group.headers.map((col) => renderHeader(col))}
+      {group.headers.map((col) => (
+        <TableHeader column={col} />
+      ))}
     </TableRow>
   );
 }
 
-function renderCell(cell: Cell<any>) {
+function CustomTableCell({ cell }: { cell: Cell<any> }) {
   return <TableCell {...cell.getCellProps()}>{cell.render("Cell")}</TableCell>;
 }
 
-function DataTable(props: { columns: Array<any>; data: Array<any> }) {
+function DataTable(props: { columns: any[]; data: any[] }) {
   const { columns, data } = props;
-  // TODO does this work? How to memoize
   const memoCols = React.useMemo(() => columns, [columns]);
   const memoData = React.useMemo(() => data, [data]);
 
@@ -61,11 +62,13 @@ function DataTable(props: { columns: Array<any>; data: Array<any> }) {
     usePagination
   );
 
-  function renderRow(row: Row<any>) {
+  function CustomTableRow({ row }: { row: Row<any> }) {
     prepareRow(row);
     return (
       <TableRow {...row.getRowProps()}>
-        {row.cells.map((cell) => renderCell(cell))}
+        {row.cells.map((cell) => (
+          <CustomTableCell cell={cell} />
+        ))}
       </TableRow>
     );
   }
@@ -74,10 +77,14 @@ function DataTable(props: { columns: Array<any>; data: Array<any> }) {
     <Paper className={styles.DataTable}>
       <MaUTable {...getTableProps()}>
         <TableHead>
-          {headerGroups.map((group) => renderHeaderGroup(group))}
+          {headerGroups.map((group) => (
+            <TableHeaderGroup group={group} />
+          ))}
         </TableHead>
         <TableBody {...getTableBodyProps()}>
-          {page.map((row: Row<any>) => renderRow(row))}
+          {page.map((row: Row<any>) => (
+            <CustomTableRow row={row} />
+          ))}
         </TableBody>
         <TableFooter>
           <TableRow>

@@ -1,12 +1,14 @@
-// Note: temporary class for prototyping. Will be replaced with real API calls.
+// Note: this Will be replaced with real API calls. Leaving data fetches
+// untyped for now, but we should define types for the API calls once we
+// establish the API types.
 
 class DataFetcher {
-  async loadData_(url: string) {
+  private async loadData(url: string) {
     const r = await fetch(url);
     return await r.json();
   }
 
-  getUrl_(datasetId: string) {
+  private getUrl(datasetId: string) {
     if (datasetId === "state_names") {
       return "https://api.census.gov/data/2010/dec/sf1?get=NAME&for=state:*";
     } else if (datasetId === "county_names") {
@@ -21,7 +23,7 @@ class DataFetcher {
     throw new Error("Unknown dataset");
   }
 
-  convertJson_(data: any) {
+  private convertJson(data: any) {
     let realData = data;
     const headers = realData[0];
     realData = realData.slice(1);
@@ -40,9 +42,9 @@ class DataFetcher {
   }
 
   async loadDataset(datasetId: string) {
-    const url = this.getUrl_(datasetId);
-    const data = await this.loadData_(url);
-    return this.convertJson_(data);
+    const url = this.getUrl(datasetId);
+    const data = await this.loadData(url);
+    return this.convertJson(data);
   }
 }
 
