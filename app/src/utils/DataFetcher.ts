@@ -2,7 +2,7 @@
 // untyped for now, but we should define types for the API calls once we
 // establish the API types.
 
-import { DatasetMetadata } from "./DatasetMetadata";
+import { DatasetMetadata } from "./DatasetTypes";
 
 class DataFetcher {
   private async loadData(url: string) {
@@ -50,6 +50,10 @@ class DataFetcher {
   }
 
   async getMetadata(): Promise<Record<string, DatasetMetadata>> {
+    // Simulate load time
+    await new Promise((res) => {
+      setTimeout(res, 1000);
+    });
     /* TODO: populate this with real API call */
     let state_names: DatasetMetadata = {
       id: "state_names",

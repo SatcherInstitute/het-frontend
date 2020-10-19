@@ -9,10 +9,12 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import Toolbar from "@material-ui/core/Toolbar";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import NotFoundPage from "./pages/NotFoundPage";
+import { useDatasetStoreProvider, DatasetProvider } from "./utils/useDatasets";
 
 function App() {
+  const datasetStore = useDatasetStoreProvider();
   return (
-    <>
+    <DatasetProvider value={datasetStore}>
       <CssBaseline />
       <div className={styles.App}>
         <Router>
@@ -37,7 +39,7 @@ function App() {
           </Switch>
         </Router>
       </div>
-    </>
+    </DatasetProvider>
   );
 }
 
