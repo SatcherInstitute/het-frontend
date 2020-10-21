@@ -9,7 +9,13 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import Toolbar from "@material-ui/core/Toolbar";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import NotFoundPage from "./pages/NotFoundPage";
-import { useDatasetStoreProvider, DatasetProvider } from "./utils/useDatasets";
+import {
+  useDatasetStoreProvider,
+  DatasetProvider,
+  startMetadataLoad,
+} from "./utils/useDatasetStore";
+
+startMetadataLoad();
 
 function App() {
   const datasetStore = useDatasetStoreProvider();

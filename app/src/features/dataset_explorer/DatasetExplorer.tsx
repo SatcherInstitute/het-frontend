@@ -1,48 +1,20 @@
 import React, { useState } from "react";
 import DatasetFilter from "./DatasetFilter";
-import DataTable from "./DataTable";
 import DatasetListing from "./DatasetListing";
 import styles from "./DatasetExplorer.module.scss";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
-import { useDatasetStore } from "../../utils/useDatasets";
-import { DatasetStore } from "../../utils/DatasetTypes";
-
-function renderTableOrPlaceholder(
-  datasetStore: DatasetStore,
-  datasetId: string
-) {
-  const loadStatus = datasetStore.getDatasetLoadStatus(datasetId);
-  switch (loadStatus) {
-    case "loaded":
-      const dataset = datasetStore.datasets[datasetId];
-      return (
-        <DataTable
-          columns={dataset.getTableViewColumns()}
-          data={dataset.rows}
-        />
-      );
-    case "loading":
-      return <p>Loading...</p>;
-    case "unloaded":
-      return <p>Select a data source to view.</p>;
-    default:
-      return <p>Oops, something went wrong.</p>;
-  }
-}
+import useDatasetStore from "../../utils/useDatasetStore";
+import DatasetPreview from "./DatasetPreview";
 
 function DatasetExplorer() {
-  const [previewedSourceId, setPreviewedSourceId] = useState("");
+  const [previewedDatasetId, setPreviewedDatasetId] = useState("");
   const [activeFilter, setActiveFilter] = useState<Array<string>>([]);
   const datasetStore = useDatasetStore();
 
-  const loadPreview = (sourceId: string) => {
-    setPreviewedSourceId(sourceId);
-    datasetStore.loadDataset(sourceId);
+  const loadPreview = (datasetId: string) => {
+    setPreviewedDatasetId(datasetId);
+    datasetStore.loadDataset(datasetId);
   };
-
-  function filterSources(filtered: Array<string>) {
-    setActiveFilter(filtered);
-  }
 
   const metadata = datasetStore.metadata;
 
@@ -52,28 +24,35 @@ function DatasetExplorer() {
         <div className={styles.DatasetListItem}>
           <DatasetFilter
             datasets={metadata}
-            onSelectionChange={filterSources}
+            onSelectionChange={(filtered) => {
+              setActiveFilter(filtered);
+            }}
           />
         </div>
         {Object.keys(metadata)
           .filter(
-            (dataset_id) =>
-              activeFilter.length === 0 || activeFilter.includes(dataset_id)
+            (datasetId) =>
+              activeFilter.length === 0 || activeFilter.includes(datasetId)
           )
-          .map((dataset_id, index) => (
+          .map((datasetId, index) => (
             <div className={styles.Dataset} key={index}>
               <div className={styles.DatasetListItem}>
                 <DatasetListing
-                  dataset={metadata[dataset_id]}
-                  onPreview={() => loadPreview(dataset_id)}
+                  dataset={metadata[datasetId]}
+                  onPreview={() => loadPreview(datasetId)}
                 />
               </div>
-              {previewedSourceId === dataset_id ? <ChevronRightIcon /> : null}
+              {previewedDatasetId === datasetId ? <ChevronRightIcon /> : null}
             </div>
           ))}
       </div>
       <div className={styles.Table}>
-        {renderTableOrPlaceholder(datasetStore, previewedSourceId)}
+        {datasetStore.getDatasetLoadStatus(previewedDatasetId) ===
+        "unloaded" ? (
+          <p>Select a dataset to view.</p>
+        ) : (
+          <DatasetPreview datasetId={previewedDatasetId} />
+        )}
       </div>
     </div>
   );

@@ -1,23 +1,42 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import DataFetcher from "./DataFetcher";
-import { AllMetadata, Dataset, DatasetStore, LoadStatus } from "./DatasetTypes";
+import { MetadataMap, Dataset, DatasetStore, LoadStatus } from "./DatasetTypes";
 import Logger from "./Logger";
 
 const METADATA_KEY = "all_metadata";
 const fetcher = new DataFetcher();
 const logger = new Logger(false);
 
-const metadataLoadPromise: Promise<AllMetadata> = fetcher.getMetadata();
+let resolveMetadataPromise: (metadata: Promise<MetadataMap>) => void;
+const metadataLoadPromise: Promise<MetadataMap> = new Promise((res, rej) => {
+  resolveMetadataPromise = res;
+});
+
+// Expose method to kick off metadata loading. Note that it's important that
+// this method isn't async, or failures from getMetadata will bubble up to the
+// caller. Instead we want those errors to be handled by the resource loader.
+export function startMetadataLoad() {
+  resolveMetadataPromise(fetcher.getMetadata());
+}
 
 interface ResourceCache<R> {
-  resources: Record<string, R>;
-  statuses: Record<string, LoadStatus>;
+  readonly resources: Readonly<Record<string, R>>;
+  readonly statuses: Readonly<Record<string, LoadStatus>>;
 }
 
 interface ResourceCacheManager<R> {
-  cache: ResourceCache<R>;
-  setLoadStatus: (resourceId: string, status: LoadStatus) => void;
-  setLoaded: (resourceId: string, resource: R) => void;
+  readonly cache: ResourceCache<R>;
+  readonly setLoadStatus: (resourceId: string, status: LoadStatus) => void;
+  readonly setLoaded: (resourceId: string, resource: R) => void;
+}
+
+/** Whether the resource should be loaded based on its current load status. */
+function shouldLoadResource(loadStatus: LoadStatus) {
+  return (
+    loadStatus === undefined ||
+    loadStatus === "error" ||
+    loadStatus === "unloaded"
+  );
 }
 
 /**
@@ -34,7 +53,8 @@ async function loadResource<R>(
   loadFunction: () => Promise<R>
 ) {
   try {
-    if (cacheManager.cache.statuses[resourceId]) {
+    const loadStatus = cacheManager.cache.statuses[resourceId];
+    if (!shouldLoadResource(loadStatus)) {
       logger.debugLog("Already loaded or loading " + resourceId);
       return;
     }
@@ -92,11 +112,11 @@ function useResourceCache<R>(): ResourceCacheManager<R> {
  * management library.
  */
 export function useDatasetStoreProvider(): DatasetStore {
-  const metadataCacheManager = useResourceCache<AllMetadata>();
+  const metadataCacheManager = useResourceCache<MetadataMap>();
   const datasetCacheManager = useResourceCache<Dataset>();
 
   function trackMetadataLoad() {
-    loadResource<AllMetadata>(
+    loadResource<MetadataMap>(
       METADATA_KEY,
       metadataCacheManager,
       async () => metadataLoadPromise
@@ -112,11 +132,11 @@ export function useDatasetStoreProvider(): DatasetStore {
   function loadDataset(datasetId: string) {
     loadResource<Dataset>(datasetId, datasetCacheManager, async () => {
       const promise = fetcher.loadDataset(datasetId);
-      const [response, metadata] = await Promise.all([
+      const [data, metadata] = await Promise.all([
         promise,
         metadataLoadPromise,
       ]);
-      return new Dataset(response.data, metadata[datasetId]);
+      return new Dataset(data, metadata[datasetId]);
     });
   }
 
@@ -141,6 +161,6 @@ export const DatasetProvider = DatasetStoreContext.Provider;
  * Hook that allows components to access the DatasetStore. A parent component
  * must provide the DatasetStore via the DatasetProvider
  */
-export function useDatasetStore(): DatasetStore {
+export default function useDatasetStore(): DatasetStore {
   return useContext(DatasetStoreContext);
 }
