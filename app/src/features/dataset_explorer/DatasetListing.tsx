@@ -20,37 +20,44 @@ function DatasetListing(props: { dataset: DatasetMetadata }) {
     <Card elevation={3}>
       <CardHeader
         title={props.dataset.name}
-        subheader={props.dataset.description}
+        subheader={props.dataset.data_source_name}
       />
+      <Table size="small" aria-label="dataset field descriptions">
+        <TableBody>
+          <TableRow>
+            <TableCell width="21%">
+              <b>Data Source</b>
+            </TableCell>
+            <TableCell>
+              <b>Geographic Level</b>
+            </TableCell>
+            <TableCell>
+              <b>Demographic Granularity</b>
+            </TableCell>
+            <TableCell>
+              <b>Update Frequency</b>
+            </TableCell>
+            <TableCell>
+              <b>Latest Update Time</b>
+            </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell>
+              <a href={props.dataset.data_source_link}>
+                {props.dataset.data_source_name}
+              </a>
+            </TableCell>
+            <TableCell>{props.dataset.geographic_level}</TableCell>
+            <TableCell>{props.dataset.demographic_granularity}</TableCell>
+            <TableCell>{props.dataset.update_frequency}</TableCell>
+            <TableCell>{props.dataset.update_time}</TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
       <Collapse in={expanded} timeout="auto" className={styles.MoreInfo}>
-        <Table size="small" aria-label="dataset field descriptions">
-          <TableBody>
-            <TableRow>
-              <TableCell width="21%">
-                <b>Data Source</b>
-              </TableCell>
-              <TableCell>{props.dataset.data_source}</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>
-                <b>Geographic Level</b>
-              </TableCell>
-              <TableCell>{props.dataset.geographic_level}</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>
-                <b>Demographic Granularity</b>
-              </TableCell>
-              <TableCell>{props.dataset.demographic_granularity}</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>
-                <b>Category</b>
-              </TableCell>
-              <TableCell>{props.dataset.category}</TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
+        <p className={styles.descriptionParagraph}>
+          {props.dataset.description}
+        </p>
       </Collapse>
       <div className={styles.FirstCardFooter}>
         <div className={styles.CardFooterRight}>
@@ -87,9 +94,7 @@ function DatasetListing(props: { dataset: DatasetMetadata }) {
           variant="body2"
           component="p"
           className={styles.CardFooterLeft}
-        >
-          Data source: {props.dataset.data_source}
-        </Typography>
+        ></Typography>
       </div>
     </Card>
   );
