@@ -5,12 +5,6 @@ import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import styles from "./MapboxGLMap.module.scss";
 
-const mapStyles = {
-  width: "100vw",
-  height: "calc(100vh - 80px)",
-  position: "absolute",
-};
-
 // https://docs.mapbox.com/help/tutorials/use-mapbox-gl-js-with-react/
 const MapboxGLMap = () => {
   const [map, setMap] = useState(null);

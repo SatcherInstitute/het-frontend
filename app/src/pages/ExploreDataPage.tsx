@@ -1,7 +1,6 @@
 import React from "react";
 import VegaTest from "../features/VegaTest";
 import MapboxGLMap from "../features/MapboxGLMap";
-import LeaftletTest from "../features/LeafletTest";
 
 function ExploreDataPage() {
   return (
