@@ -1,8 +1,9 @@
 import React from "react";
+import styles from "./LandingPage.module.scss";
 
 function LandingPage() {
   return (
-    <React.Fragment>
+    <div className={styles.LandingPage}>
       <h1>OUR INITIATIVE.</h1>
       We aim to create a collaborative, multidisciplinary, multisector,
       public-facing data platform devoted to addressing the health equity
@@ -35,7 +36,7 @@ function LandingPage() {
       creates a special track in HELEN focused on coordinating COVID-19
       community engagement, education, training, information exchange and
       dissemination, policy analysis, and advocacy.
-    </React.Fragment>
+    </div>
   );
 }
 
