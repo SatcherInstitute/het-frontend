@@ -14,7 +14,7 @@ import {
   DatasetProvider,
   startMetadataLoad,
 } from "./utils/useDatasetStore";
-import LinkWithStickyParams from "./utils/LinkWithStickyParams";
+import { LinkWithStickyParams } from "./utils/urlutils";
 
 startMetadataLoad();
 

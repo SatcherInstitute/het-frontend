@@ -1,10 +1,9 @@
 import React from "react";
-import useSearchParams from "./useSearchParams";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 export const STICKY_VERSION_PARAM = "sv";
 
-function LinkWithStickyParams(props: {
+export function LinkWithStickyParams(props: {
   to: string;
   children: React.ReactNode;
 }) {
@@ -18,4 +17,9 @@ function LinkWithStickyParams(props: {
   return <Link to={newUrl}>{props.children}</Link>;
 }
 
-export default LinkWithStickyParams;
+export function useSearchParams() {
+  // Note: URLSearchParams doesn't support IE, if we keep this code and we want
+  // to support IE we'll need to change it.
+  const params = new URLSearchParams(useLocation().search);
+  return Object.fromEntries(params.entries());
+}
