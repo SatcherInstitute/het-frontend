@@ -20,54 +20,75 @@ import {
   DatasetProvider,
   startMetadataLoad,
 } from "./utils/useDatasetStore";
+import { createMuiTheme } from "@material-ui/core/styles";
+import { ThemeProvider } from "@material-ui/styles";
 
 startMetadataLoad();
 
 function App() {
   const datasetStore = useDatasetStoreProvider();
+
+  const theme = createMuiTheme({
+    typography: {
+      fontFamily: `"Hind", "Roboto", "Helvetica", "Arial", sans-serif`,
+      fontSize: 14,
+      fontWeightLight: 300,
+      fontWeightRegular: 400,
+      fontWeightMedium: 500,
+    },
+  });
+
   return (
-    <DatasetProvider value={datasetStore}>
-      <CssBaseline />
-      <div className={styles.App}>
-        <Router>
-          <AppBar position="static">
-            <Toolbar>
-              <Typography variant="h6" className={styles.HomeLogo}>
-                Health Equity Tracker
-              </Typography>
-              <div>
-                <Button className={styles.NavButton}>
-                  <NavLink to="/" activeClassName="ActiveNavButton">
-                    Home
-                  </NavLink>
-                </Button>
-                <Button className={styles.NavButton}>
-                  <NavLink to="/datacatalog" activeClassName="ActiveNavButton">
-                    Data Catalog
-                  </NavLink>
-                </Button>
-                <Button className={styles.NavButton}>
-                  <a href="https://satcherinstitute.github.io/data-visualization/02_covid19_death_disparities/">
-                    Explore the Data
-                  </a>
-                </Button>
-                <Button className={styles.NavButton}>
-                  <NavLink to="/exploredata" activeClassName="ActiveNavButton">
-                    (Ignore me)
-                  </NavLink>
-                </Button>
-              </div>
-            </Toolbar>
-          </AppBar>
-          <Switch>
-            <Route path="/datacatalog" component={DataCatalogPage} />
-            <Route path="/exploredata" component={ExploreDataPage} />
-            <Route exact path="/" component={LandingPage} />
-            <Route component={NotFoundPage} />
-          </Switch>
-        </Router>
-      </div>
-    </DatasetProvider>
+    <ThemeProvider theme={theme}>
+      <DatasetProvider value={datasetStore}>
+        <CssBaseline />
+        <div className={styles.App}>
+          <Router>
+            <AppBar position="static">
+              <Toolbar>
+                <Typography variant="h6" className={styles.HomeLogo}>
+                  Health Equity Tracker
+                </Typography>
+                <div>
+                  <Button className={styles.NavButton}>
+                    <NavLink to="/" activeClassName="ActiveNavButton">
+                      Home
+                    </NavLink>
+                  </Button>
+                  <Button className={styles.NavButton}>
+                    <NavLink
+                      to="/datacatalog"
+                      activeClassName="ActiveNavButton"
+                    >
+                      Data Catalog
+                    </NavLink>
+                  </Button>
+                  <Button className={styles.NavButton}>
+                    <a href="https://satcherinstitute.github.io/data-visualization/02_covid19_death_disparities/">
+                      Explore the Data
+                    </a>
+                  </Button>
+                  <Button className={styles.NavButton}>
+                    <NavLink
+                      to="/exploredata"
+                      activeClassName="ActiveNavButton"
+                    >
+                      (Ignore me)
+                    </NavLink>
+                  </Button>
+                </div>
+              </Toolbar>
+            </AppBar>
+            <Switch>
+              <Route path="/datacatalog" component={DataCatalogPage} />
+              <Route path="/exploredata" component={ExploreDataPage} />
+              <Route exact path="/" component={LandingPage} />
+              <Route component={NotFoundPage} />
+            </Switch>
+          </Router>
+        </div>
+      </DatasetProvider>
+    </ThemeProvider>
   );
 }
 
