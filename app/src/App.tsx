@@ -4,6 +4,7 @@ import DataCatalogPage from "./pages/DataCatalogPage";
 import ExploreDataPage from "./pages/ExploreDataPage";
 import LandingPage from "./pages/LandingPage";
 import AppBar from "@material-ui/core/AppBar";
+import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -26,16 +27,20 @@ function App() {
         <Router>
           <AppBar position="static">
             <Toolbar>
-              <h2>Health Equity Tracker</h2>
-              <Button className={styles.NavButton}>
-                <Link to="/">Home</Link>
-              </Button>
-              <Button className={styles.NavButton}>
-                <Link to="/datacatalog">Data Catalog</Link>
-              </Button>
-              <Button className={styles.NavButton}>
-                <Link to="/exploredata">Explore the Data</Link>
-              </Button>
+              <Typography variant="h6" className={styles.HomeLogo}>
+                Health Equity Tracker
+              </Typography>
+              <div>
+                <Button className={styles.NavButton}>
+                  <Link to="/">Home</Link>
+                </Button>
+                <Button className={styles.NavButton}>
+                  <Link to="/datacatalog">Data Catalog</Link>
+                </Button>
+                <Button className={styles.NavButton}>
+                  <Link to="/exploredata">Explore the Data</Link>
+                </Button>
+              </div>
             </Toolbar>
           </AppBar>
           <Switch>

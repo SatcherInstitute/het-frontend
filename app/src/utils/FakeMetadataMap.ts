@@ -3,7 +3,7 @@ import { MetadataMap } from "./DatasetTypes";
 const FakeMetadataMap: MetadataMap = {
   population_share: {
     id: "population_share",
-    name: "% Share of population",
+    name: "Share of population",
     data_source_name: "American Community Survey 5-year estimates (2014-2018)",
     data_source_link:
       "https://www.census.gov/data/developers/data-sets/acs-5year.html",
@@ -12,7 +12,8 @@ const FakeMetadataMap: MetadataMap = {
       "Race/ethnicity, age, gender (joint/intersections)",
     update_frequency: "??",
     update_time: "March 2, 2020",
-    description: "Description placeholder for % Share of population",
+    description:
+      "Description placeholder for Share of population. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed id lectus urna. Vestibulum lobortis ac quam vel tincidunt. Quisque ex erat, efficitur nec sagittis vitae, dictum semper arcu. Vivamus metus felis, fringilla sit amet metus nec, feugiat suscipit nisl. Morbi posuere mi sit amet elit posuere, id gravida ligula facilisis. Aenean gravida a eros fringilla venenatis.",
   },
   covid_deaths: {
     id: "covid_deaths",
@@ -24,7 +25,8 @@ const FakeMetadataMap: MetadataMap = {
     demographic_granularity: "Race/ethnicity",
     update_frequency: "Daily",
     update_time: "March 2, 2020",
-    description: "Description placeholder for COVID-19 Deaths",
+    description:
+      "Description placeholder for COVID-19 Deaths. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed id lectus urna. Vestibulum lobortis ac quam vel tincidunt. Quisque ex erat, efficitur nec sagittis vitae, dictum semper arcu. Vivamus metus felis, fringilla sit amet metus nec, feugiat suscipit nisl. Morbi posuere mi sit amet elit posuere, id gravida ligula facilisis. Aenean gravida a eros fringilla venenatis.",
   },
   social_vulernability: {
     id: "social_vulernability",
@@ -37,7 +39,7 @@ const FakeMetadataMap: MetadataMap = {
     update_frequency: "Every 2 years",
     update_time: "March 2, 2020",
     description:
-      "Description placeholder for Socioeconomic Vulnerability Index",
+      "Description placeholder for Socioeconomic Vulnerability Index. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed id lectus urna. Vestibulum lobortis ac quam vel tincidunt. Quisque ex erat, efficitur nec sagittis vitae, dictum semper arcu. Vivamus metus felis, fringilla sit amet metus nec, feugiat suscipit nisl. Morbi posuere mi sit amet elit posuere, id gravida ligula facilisis. Aenean gravida a eros fringilla venenatis.",
   },
   diabetes: {
     id: "diabetes",
@@ -49,7 +51,8 @@ const FakeMetadataMap: MetadataMap = {
       "race/ethnicity, age, gender (no intersections) gender @ county",
     update_frequency: "?",
     update_time: "?",
-    description: "Description placeholder for Diabetes Prevalence",
+    description:
+      "Description placeholder for Diabetes Prevalence. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed id lectus urna. Vestibulum lobortis ac quam vel tincidunt. Quisque ex erat, efficitur nec sagittis vitae, dictum semper arcu. Vivamus metus felis, fringilla sit amet metus nec, feugiat suscipit nisl. Morbi posuere mi sit amet elit posuere, id gravida ligula facilisis. Aenean gravida a eros fringilla venenatis.",
   },
 };
 

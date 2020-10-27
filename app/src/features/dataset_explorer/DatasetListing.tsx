@@ -6,10 +6,6 @@ import Card from "@material-ui/core/Card";
 import Collapse from "@material-ui/core/Collapse";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableRow from "@material-ui/core/TableRow";
 import Typography from "@material-ui/core/Typography";
 import CardHeader from "@material-ui/core/CardHeader";
 
@@ -17,49 +13,45 @@ function DatasetListing(props: { dataset: DatasetMetadata }) {
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <Card elevation={3}>
-      <CardHeader
-        title={props.dataset.name}
-        subheader={props.dataset.data_source_name}
-      />
-      <Table size="small" aria-label="dataset field descriptions">
-        <TableBody>
-          <TableRow>
-            <TableCell width="21%">
-              <b>Data Source</b>
-            </TableCell>
-            <TableCell>
-              <b>Geographic Level</b>
-            </TableCell>
-            <TableCell>
-              <b>Demographic Granularity</b>
-            </TableCell>
-            <TableCell>
-              <b>Update Frequency</b>
-            </TableCell>
-            <TableCell>
-              <b>Latest Update Time</b>
-            </TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell>
-              <a href={props.dataset.data_source_link}>
-                {props.dataset.data_source_name}
-              </a>
-            </TableCell>
-            <TableCell>{props.dataset.geographic_level}</TableCell>
-            <TableCell>{props.dataset.demographic_granularity}</TableCell>
-            <TableCell>{props.dataset.update_frequency}</TableCell>
-            <TableCell>{props.dataset.update_time}</TableCell>
-          </TableRow>
-        </TableBody>
-      </Table>
+    <Card elevation={3} className={styles.DatasetListing}>
+      <Typography variant="h5" className={styles.DataTitle} align="left">
+        {props.dataset.name}
+      </Typography>
+      <Typography className={styles.DataSubtitle} align="left">
+        <a href={props.dataset.data_source_link}>
+          {props.dataset.data_source_name}
+        </a>
+      </Typography>
+      <table className={styles.MetadataTable}>
+        <tr>
+          <td>
+            <b>Geographic Level</b>
+          </td>
+          <td>{props.dataset.geographic_level}</td>
+        </tr>
+        <tr>
+          <td>
+            <b>Demographic Granularity</b>
+          </td>
+          <td>{props.dataset.demographic_granularity}</td>
+        </tr>
+        <tr>
+          <td>
+            <b>Update Frequency</b>
+          </td>
+          <td>{props.dataset.update_frequency}</td>
+        </tr>
+        <tr>
+          <td>
+            <b>Latest Update Time</b>
+          </td>
+          <td>{props.dataset.update_time}</td>
+        </tr>
+      </table>
       <Collapse in={expanded} timeout="auto" className={styles.MoreInfo}>
-        <p className={styles.descriptionParagraph}>
-          {props.dataset.description}
-        </p>
+        <p className={styles.Description}>{props.dataset.description}</p>
       </Collapse>
-      <div className={styles.FirstCardFooter}>
+      <div className={styles.Footer}>
         <div className={styles.CardFooterRight}>
           <Button
             aria-label="expand dataset"
@@ -77,24 +69,9 @@ function DatasetListing(props: { dataset: DatasetMetadata }) {
             className={styles.ExpandButton}
             size="small"
           >
-            {expanded ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
             {expanded ? "Less" : "More"}
           </Button>
         </div>
-      </div>
-      <div className={styles.SecondCardFooter}>
-        <Typography
-          variant="body2"
-          component="p"
-          className={styles.CardFooterRight}
-        >
-          Updated: {props.dataset.update_time}
-        </Typography>
-        <Typography
-          variant="body2"
-          component="p"
-          className={styles.CardFooterLeft}
-        ></Typography>
       </div>
     </Card>
   );
