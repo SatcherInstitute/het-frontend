@@ -8,7 +8,12 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Toolbar from "@material-ui/core/Toolbar";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  NavLink,
+} from "react-router-dom";
 import NotFoundPage from "./pages/NotFoundPage";
 import {
   useDatasetStoreProvider,
@@ -32,13 +37,24 @@ function App() {
               </Typography>
               <div>
                 <Button className={styles.NavButton}>
-                  <Link to="/">Home</Link>
+                  <NavLink to="/" activeClassName="ActiveNavButton">
+                    Home
+                  </NavLink>
                 </Button>
                 <Button className={styles.NavButton}>
-                  <Link to="/datacatalog">Data Catalog</Link>
+                  <NavLink to="/datacatalog" activeClassName="ActiveNavButton">
+                    Data Catalog
+                  </NavLink>
                 </Button>
                 <Button className={styles.NavButton}>
-                  <Link to="/exploredata">Explore the Data</Link>
+                  <a href="https://satcherinstitute.github.io/data-visualization/02_covid19_death_disparities/">
+                    Explore the Data
+                  </a>
+                </Button>
+                <Button className={styles.NavButton}>
+                  <NavLink to="/exploredata" activeClassName="ActiveNavButton">
+                    (Ignore me)
+                  </NavLink>
                 </Button>
               </div>
             </Toolbar>
