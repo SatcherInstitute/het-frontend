@@ -4,10 +4,7 @@ import styles from "./DatasetListing.module.scss";
 import Button from "@material-ui/core/Button";
 import Card from "@material-ui/core/Card";
 import Collapse from "@material-ui/core/Collapse";
-import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
-import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import Typography from "@material-ui/core/Typography";
-import CardHeader from "@material-ui/core/CardHeader";
 
 function DatasetListing(props: { dataset: DatasetMetadata }) {
   const [expanded, setExpanded] = useState(false);
