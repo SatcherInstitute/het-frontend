@@ -3,8 +3,8 @@ import { DatasetMetadata } from "../../utils/DatasetTypes";
 import styles from "./DatasetListing.module.scss";
 import Button from "@material-ui/core/Button";
 import Card from "@material-ui/core/Card";
-import Collapse from "@material-ui/core/Collapse";
 import Typography from "@material-ui/core/Typography";
+import AnimateHeight from "react-animate-height";
 
 function DatasetListing(props: { dataset: DatasetMetadata }) {
   const [expanded, setExpanded] = useState(false);
@@ -15,7 +15,11 @@ function DatasetListing(props: { dataset: DatasetMetadata }) {
         {props.dataset.name}
       </Typography>
       <Typography className={styles.DataSubtitle} align="left">
-        <a href={props.dataset.data_source_link}>
+        <a
+          href={props.dataset.data_source_link}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           {props.dataset.data_source_name}
         </a>
       </Typography>
@@ -45,9 +49,9 @@ function DatasetListing(props: { dataset: DatasetMetadata }) {
           <td>{props.dataset.update_time}</td>
         </tr>
       </table>
-      <Collapse in={expanded} timeout="auto" className={styles.MoreInfo}>
-        <p className={styles.Description}>{props.dataset.description}</p>
-      </Collapse>
+      <AnimateHeight duration={500} height={expanded ? "auto" : 20}>
+        <div className={styles.Description}>{props.dataset.description}</div>
+      </AnimateHeight>
       <div className={styles.Footer}>
         <div className={styles.CardFooterRight}>
           <Button

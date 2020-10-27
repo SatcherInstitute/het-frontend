@@ -20,9 +20,7 @@ a:visited {
 
 .Description {
   text-align: left;
-}
-
-.Description::first-line {
+  line-height: 20px;
 }
 
 .DatasetListing {
