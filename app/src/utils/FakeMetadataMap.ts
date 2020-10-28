@@ -30,7 +30,7 @@ const FakeMetadataMap: MetadataMap = {
   },
   social_vulernability: {
     id: "social_vulernability",
-    name: "Socioeconomic Vulnerability Index",
+    name: "Social Vulnerability Index",
     data_source_name: "CDC's Social Vulernability Index",
     data_source_link:
       "https://www.atsdr.cdc.gov/placeandhealth/svi/data_documentation_download.html",
@@ -39,7 +39,7 @@ const FakeMetadataMap: MetadataMap = {
     update_frequency: "Every 2 years",
     update_time: "March 2, 2020",
     description:
-      "Description placeholder for Socioeconomic Vulnerability Index. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed id lectus urna. Vestibulum lobortis ac quam vel tincidunt. Quisque ex erat, efficitur nec sagittis vitae, dictum semper arcu. Vivamus metus felis, fringilla sit amet metus nec, feugiat suscipit nisl. Morbi posuere mi sit amet elit posuere, id gravida ligula facilisis. Aenean gravida a eros fringilla venenatis.",
+      "Description placeholder for Social Vulnerability Index. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed id lectus urna. Vestibulum lobortis ac quam vel tincidunt. Quisque ex erat, efficitur nec sagittis vitae, dictum semper arcu. Vivamus metus felis, fringilla sit amet metus nec, feugiat suscipit nisl. Morbi posuere mi sit amet elit posuere, id gravida ligula facilisis. Aenean gravida a eros fringilla venenatis.",
   },
   diabetes: {
     id: "diabetes",
