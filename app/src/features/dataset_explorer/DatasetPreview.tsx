@@ -3,6 +3,8 @@ import DataTable from "./DataTable";
 import useDatasetStore from "../../utils/useDatasetStore";
 import { Dataset } from "../../utils/DatasetTypes";
 
+/* NOTE: This file is currently unused */
+
 function getTableViewColumns(
   dataset: Dataset
 ): { Header: string; accessor: string }[] {

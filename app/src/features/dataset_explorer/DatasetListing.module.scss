@@ -25,15 +25,21 @@ a:visited {
 
 .DatasetListing {
   padding: 20px;
+  padding-bottom: 10px;
 }
 
 .DatasetTitle {
-  font-weight: bold;
-  padding: 3px;
+  font-size: 20px;
 }
+.Footer {
+  height: 29px;
+  margin-bottom: 0px;
+  margin-top: 10px;
 
-.ExpandButton {
-  vertical-align: middle;
+  Button {
+    color: blue;
+    min-width: 10px;
+  }
 }
 
 .CardFooterRight {
@@ -44,16 +50,8 @@ a:visited {
   float: left;
 }
 
-.DataTitle {
-  font-size: 20px;
-}
-
 .DataSubtitle {
   font-size: 15px;
-}
-
-.MuiTableCell {
-  border-bottom: none;
 }
 
 .MetadataTable {
@@ -64,9 +62,4 @@ a:visited {
   td {
     padding-right: 15px;
   }
-}
-
-.Footer Button {
-  color: blue;
-  min-width: 10px;
 }

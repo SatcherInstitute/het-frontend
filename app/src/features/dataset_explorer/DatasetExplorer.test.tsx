@@ -52,29 +52,4 @@ describe("DatasetExplorer", () => {
       await findByText(STATE_NAMES_DATASET_METADATA.description)
     ).toBeInTheDocument();
   });
-
-  test("opens collapsed preview of dataset fields", async () => {
-    mockGetMetadata.mockReturnValue(
-      Promise.resolve({ state_names: STATE_NAMES_DATASET_METADATA })
-    );
-    startMetadataLoad();
-
-    const { findByTestId, findByText, queryByText } = render(
-      <AppContext>
-        <DatasetExplorer />
-      </AppContext>
-    );
-    expect(
-      queryByText(STATE_NAMES_DATASET_METADATA.geographic_level)
-    ).toBeNull();
-    fireEvent.click(
-      await findByTestId("expand-" + STATE_NAMES_DATASET_METADATA.id)
-    );
-
-    expect(mockGetMetadata).toHaveBeenCalledTimes(1);
-    expect(mockLoadDataset).toHaveBeenCalledTimes(0);
-    expect(
-      await findByText(STATE_NAMES_DATASET_METADATA.geographic_level)
-    ).toBeInTheDocument();
-  });
 });

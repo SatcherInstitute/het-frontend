@@ -11,7 +11,7 @@ function DatasetListing(props: { dataset: DatasetMetadata }) {
 
   return (
     <Card elevation={3} className={styles.DatasetListing}>
-      <Typography variant="h5" className={styles.DataTitle} align="left">
+      <Typography variant="h5" className={styles.DatasetTitle} align="left">
         {props.dataset.name}
       </Typography>
       <Typography className={styles.DataSubtitle} align="left">
@@ -24,30 +24,32 @@ function DatasetListing(props: { dataset: DatasetMetadata }) {
         </a>
       </Typography>
       <table className={styles.MetadataTable}>
-        <tr>
-          <td>
-            <b>Geographic Level</b>
-          </td>
-          <td>{props.dataset.geographic_level}</td>
-        </tr>
-        <tr>
-          <td>
-            <b>Demographic Granularity</b>
-          </td>
-          <td>{props.dataset.demographic_granularity}</td>
-        </tr>
-        <tr>
-          <td>
-            <b>Update Frequency</b>
-          </td>
-          <td>{props.dataset.update_frequency}</td>
-        </tr>
-        <tr>
-          <td>
-            <b>Latest Update Time</b>
-          </td>
-          <td>{props.dataset.update_time}</td>
-        </tr>
+        <tbody>
+          <tr>
+            <td>
+              <b>Geographic Level</b>
+            </td>
+            <td>{props.dataset.geographic_level}</td>
+          </tr>
+          <tr>
+            <td>
+              <b>Demographic Granularity</b>
+            </td>
+            <td>{props.dataset.demographic_granularity}</td>
+          </tr>
+          <tr>
+            <td>
+              <b>Update Frequency</b>
+            </td>
+            <td>{props.dataset.update_frequency}</td>
+          </tr>
+          <tr>
+            <td>
+              <b>Latest Update Time</b>
+            </td>
+            <td>{props.dataset.update_time}</td>
+          </tr>
+        </tbody>
       </table>
       <AnimateHeight duration={500} height={expanded ? "auto" : 20}>
         <div className={styles.Description}>{props.dataset.description}</div>
@@ -67,7 +69,6 @@ function DatasetListing(props: { dataset: DatasetMetadata }) {
             aria-label="expand dataset"
             onClick={() => setExpanded(!expanded)}
             data-testid={"expand-" + props.dataset.id}
-            className={styles.ExpandButton}
             size="small"
           >
             {expanded ? "Less" : "More"}
