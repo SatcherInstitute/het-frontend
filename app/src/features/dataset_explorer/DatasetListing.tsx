@@ -5,6 +5,7 @@ import Button from "@material-ui/core/Button";
 import Card from "@material-ui/core/Card";
 import Typography from "@material-ui/core/Typography";
 import AnimateHeight from "react-animate-height";
+import DownloadButton from "./DownloadButton";
 
 function DatasetListing(props: { dataset: DatasetMetadata }) {
   const [expanded, setExpanded] = useState(false);
@@ -56,13 +57,10 @@ function DatasetListing(props: { dataset: DatasetMetadata }) {
       </AnimateHeight>
       <div className={styles.Footer}>
         <div className={styles.CardFooterRight}>
-          <Button
-            aria-label="Download CSV"
-            onClick={() => alert("unimplemented")}
-            size="small"
-          >
-            Download CSV
-          </Button>
+          <DownloadButton
+            className={styles.PreviewButton}
+            datasetId={props.dataset.id}
+          ></DownloadButton>
         </div>
         <div className={styles.CardFooterLeft}>
           <Button
