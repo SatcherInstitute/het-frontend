@@ -8,11 +8,7 @@ import { Dataset } from "../../utils/DatasetTypes";
 function getTableViewColumns(
   dataset: Dataset
 ): { Header: string; accessor: string }[] {
-  const fields =
-    typeof dataset.metadata.fields === "undefined"
-      ? []
-      : dataset.metadata.fields;
-  return fields.map((field) => ({
+  return dataset.metadata.fields.map((field) => ({
     Header: field.name,
     accessor: field.name,
   }));

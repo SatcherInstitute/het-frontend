@@ -14,6 +14,14 @@ const FakeMetadataMap: MetadataMap = {
     update_time: "March 2, 2020",
     description:
       "Description placeholder for Share of population. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed id lectus urna. Vestibulum lobortis ac quam vel tincidunt. Quisque ex erat, efficitur nec sagittis vitae, dictum semper arcu. Vivamus metus felis, fringilla sit amet metus nec, feugiat suscipit nisl. Morbi posuere mi sit amet elit posuere, id gravida ligula facilisis. Aenean gravida a eros fringilla venenatis.",
+    fields: [
+      {
+        data_type: "string",
+        name: "fakefield1",
+        description: "description",
+        origin_dataset: "origin_dataset",
+      },
+    ],
   },
   covid_deaths: {
     id: "covid_deaths",
@@ -27,6 +35,14 @@ const FakeMetadataMap: MetadataMap = {
     update_time: "March 2, 2020",
     description:
       "Description placeholder for COVID-19 Deaths. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed id lectus urna. Vestibulum lobortis ac quam vel tincidunt. Quisque ex erat, efficitur nec sagittis vitae, dictum semper arcu. Vivamus metus felis, fringilla sit amet metus nec, feugiat suscipit nisl. Morbi posuere mi sit amet elit posuere, id gravida ligula facilisis. Aenean gravida a eros fringilla venenatis.",
+    fields: [
+      {
+        data_type: "string",
+        name: "fakefield1",
+        description: "description",
+        origin_dataset: "origin_dataset",
+      },
+    ],
   },
   social_vulernability: {
     id: "social_vulernability",
@@ -40,6 +56,14 @@ const FakeMetadataMap: MetadataMap = {
     update_time: "March 2, 2020",
     description:
       "Description placeholder for Social Vulnerability Index. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed id lectus urna. Vestibulum lobortis ac quam vel tincidunt. Quisque ex erat, efficitur nec sagittis vitae, dictum semper arcu. Vivamus metus felis, fringilla sit amet metus nec, feugiat suscipit nisl. Morbi posuere mi sit amet elit posuere, id gravida ligula facilisis. Aenean gravida a eros fringilla venenatis.",
+    fields: [
+      {
+        data_type: "string",
+        name: "fakefield1",
+        description: "description",
+        origin_dataset: "origin_dataset",
+      },
+    ],
   },
   diabetes: {
     id: "diabetes",
@@ -53,6 +77,14 @@ const FakeMetadataMap: MetadataMap = {
     update_time: "?",
     description:
       "Description placeholder for Diabetes Prevalence. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed id lectus urna. Vestibulum lobortis ac quam vel tincidunt. Quisque ex erat, efficitur nec sagittis vitae, dictum semper arcu. Vivamus metus felis, fringilla sit amet metus nec, feugiat suscipit nisl. Morbi posuere mi sit amet elit posuere, id gravida ligula facilisis. Aenean gravida a eros fringilla venenatis.",
+    fields: [
+      {
+        data_type: "string",
+        name: "fakefield1",
+        description: "description",
+        origin_dataset: "origin_dataset",
+      },
+    ],
   },
 };
 

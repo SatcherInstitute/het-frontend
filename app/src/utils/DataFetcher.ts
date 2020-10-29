@@ -41,6 +41,8 @@ class DataFetcher {
   }
 
   async loadDataset(datasetId: string): Promise<Row[]> {
+    // TODO: Overriding the datasetID for now since the datasets aren't actually hooked up
+    datasetId = "state_names";
     const url = this.getUrl(datasetId);
     const data = await this.loadData(url);
     return this.convertJson(data);
