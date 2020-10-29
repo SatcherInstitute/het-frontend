@@ -57,7 +57,7 @@ function DatasetListing(props: { dataset: DatasetMetadata }) {
       <div className={styles.Footer}>
         <div className={styles.CardFooterRight}>
           <Button
-            aria-label="expand dataset"
+            aria-label="Download CSV"
             onClick={() => alert("unimplemented")}
             size="small"
           >
@@ -66,7 +66,7 @@ function DatasetListing(props: { dataset: DatasetMetadata }) {
         </div>
         <div className={styles.CardFooterLeft}>
           <Button
-            aria-label="expand dataset"
+            aria-label="expand description"
             onClick={() => setExpanded(!expanded)}
             data-testid={"expand-" + props.dataset.id}
             size="small"

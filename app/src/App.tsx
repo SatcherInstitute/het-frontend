@@ -21,6 +21,34 @@ import { LinkWithStickyParams } from "./utils/urlutils";
 
 startMetadataLoad();
 
+function AppToolbar() {
+  return (
+    <Toolbar>
+      <Typography variant="h6" className={styles.HomeLogo}>
+        Health Equity Tracker
+      </Typography>
+      <Button className={styles.NavButton}>
+        <LinkWithStickyParams to="/">Home</LinkWithStickyParams>
+      </Button>
+      <Button className={styles.NavButton}>
+        <LinkWithStickyParams to="/datacatalog">
+          Data Catalog
+        </LinkWithStickyParams>
+      </Button>
+      <Button className={styles.NavButton}>
+        <a href="https://satcherinstitute.github.io/data-visualization/02_covid19_death_disparities/">
+          Explore the Data
+        </a>
+      </Button>
+      <Button className={styles.NavButton}>
+        <LinkWithStickyParams to="/exploredata">
+          (Ignore me)
+        </LinkWithStickyParams>
+      </Button>
+    </Toolbar>
+  );
+}
+
 function App() {
   const datasetStore = useDatasetStoreProvider();
   return (
@@ -30,31 +58,7 @@ function App() {
         <div className={styles.App}>
           <Router>
             <AppBar position="static">
-              <Toolbar>
-                <Typography variant="h6" className={styles.HomeLogo}>
-                  Health Equity Tracker
-                </Typography>
-                <div>
-                  <Button className={styles.NavButton}>
-                    <LinkWithStickyParams to="/">Home</LinkWithStickyParams>
-                  </Button>
-                  <Button className={styles.NavButton}>
-                    <LinkWithStickyParams to="/datacatalog">
-                      Data Catalog
-                    </LinkWithStickyParams>
-                  </Button>
-                  <Button className={styles.NavButton}>
-                    <a href="https://satcherinstitute.github.io/data-visualization/02_covid19_death_disparities/">
-                      Explore the Data
-                    </a>
-                  </Button>
-                  <Button className={styles.NavButton}>
-                    <LinkWithStickyParams to="/exploredata">
-                      (Ignore me)
-                    </LinkWithStickyParams>
-                  </Button>
-                </div>
-              </Toolbar>
+              <AppToolbar />
             </AppBar>
             <Switch>
               <Route path="/datacatalog" component={DataCatalogPage} />

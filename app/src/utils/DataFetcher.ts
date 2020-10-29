@@ -4,6 +4,7 @@
 
 import { MetadataMap, Row } from "./DatasetTypes";
 import FakeMetadataMap from "./FakeMetadataMap";
+
 class DataFetcher {
   private async loadData(url: string): Promise<Response> {
     const r = await fetch(url);
