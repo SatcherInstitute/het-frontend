@@ -177,7 +177,7 @@ export default function useDatasetStore(): DatasetStore {
  * @param callback Callback that is executed exactly once, once metadata is
  *     loaded.
  */
-export function useMetadataLoaded(callback: (metadata: MetadataMap) => void) {
+export function useOnMetadataLoaded(callback: (metadata: MetadataMap) => void) {
   useEffect(() => {
     metadataLoadPromise.then((metadata) => {
       callback(metadata);

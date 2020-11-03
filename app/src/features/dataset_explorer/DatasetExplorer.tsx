@@ -3,7 +3,7 @@ import DatasetFilter from "./DatasetFilter";
 import DatasetListing from "./DatasetListing";
 import styles from "./DatasetExplorer.module.scss";
 import useDatasetStore, {
-  useMetadataLoaded,
+  useOnMetadataLoaded,
 } from "../../utils/useDatasetStore";
 import { DatasetMetadata, MetadataMap } from "../../utils/DatasetTypes";
 
@@ -44,7 +44,7 @@ function DatasetExplorer(props: { preFilterDatasetIds: string[] }) {
 
   // Once the metadata is loaded, update the filter to only include valid
   // dataset ids
-  useMetadataLoaded((metadata) => {
+  useOnMetadataLoaded((metadata) => {
     const validIds = props.preFilterDatasetIds.filter(
       (datasetId) => !!metadata[datasetId]
     );
