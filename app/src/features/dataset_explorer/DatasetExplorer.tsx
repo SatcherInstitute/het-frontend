@@ -68,6 +68,7 @@ function DatasetExplorer(props: { preFilterDatasetIds: string[] }) {
   function createFilter(
     id: string,
     propertySelector: (metadata: DatasetMetadata) => string,
+    placeholder: string,
     allOption: string
   ) {
     return (
@@ -81,6 +82,7 @@ function DatasetExplorer(props: { preFilterDatasetIds: string[] }) {
             });
           }}
           propertySelector={propertySelector}
+          placeholder={placeholder}
           allOption={allOption}
         />
       </div>
@@ -115,12 +117,14 @@ function DatasetExplorer(props: { preFilterDatasetIds: string[] }) {
               {createFilter(
                 "geographic_filter",
                 (metadata) => metadata.geographic_level,
-                "All geographic levels"
+                "geographic level...",
+                "All"
               )}
               {createFilter(
                 "demographic_filter",
                 (metadata) => metadata.demographic_granularity,
-                "All demographic levels"
+                "demographic level...",
+                "All"
               )}
             </div>
             {getFilteredDatasetIds(metadata, activeFilter).map(

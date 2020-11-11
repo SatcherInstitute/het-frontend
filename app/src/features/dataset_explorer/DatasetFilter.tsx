@@ -59,11 +59,14 @@ function updateFilters(
  *         including, or an empty array if this filter is not being used.
  *     propertySelector: function returns the metadata property to filter on.
  *     allOption: The value for selecting "all" values.
+ *     placeholder: What to show when nothing is selected. Note that this state
+ *         can only exist initially, before anything has been selected.
  */
 export function SingleSelectDatasetFilter(props: {
   datasets: Record<string, DatasetMetadata>;
   onSelectionChange: (filtered: Array<string>) => void;
   propertySelector: (metadata: DatasetMetadata) => string;
+  placeholder: string;
   allOption: string;
 }) {
   const propertyToDatasetsMap = getPropertyToDatasetsMap(
@@ -72,8 +75,8 @@ export function SingleSelectDatasetFilter(props: {
   );
   const options = [props.allOption]
     .concat(Object.keys(propertyToDatasetsMap))
+    .sort()
     .map(propertyToSelectOption);
-  const allOptionValue = propertyToSelectOption(props.allOption);
   return (
     <Select
       options={options}
@@ -89,7 +92,7 @@ export function SingleSelectDatasetFilter(props: {
           metadata.action
         );
       }}
-      defaultValue={allOptionValue}
+      placeholder={props.placeholder}
     />
   );
 }
@@ -116,9 +119,9 @@ export function MultiSelectDatasetFilter(props: {
     props.datasets,
     props.propertySelector
   );
-  const options = Object.keys(propertyToDatasetsMap).map(
-    propertyToSelectOption
-  );
+  const options = Object.keys(propertyToDatasetsMap)
+    .sort()
+    .map(propertyToSelectOption);
   const defaultValues = props.defaultValues
     ? props.defaultValues.map(propertyToSelectOption)
     : null;
