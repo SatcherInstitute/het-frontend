@@ -25,6 +25,22 @@ export interface Field {
 // TODO: make typedef for valid data types instead of any.
 export type Row = Readonly<Record<string, any>>;
 
+export interface Variable {
+  readonly variableId: string;
+  readonly variableName: string;
+  readonly description: string;
+  readonly datasetIds: readonly string[];
+  readonly rows: readonly Row[];
+}
+
+export interface Breakdowns {
+  geography: "national" | "state" | "county";
+  // Note: this assumes only one demographic breakdown at a time. If we want to
+  // support more later we can refactor this to multiple boolean fields.
+  demographic?: "race" | "age" | "gender";
+  date?: boolean;
+}
+
 export class Dataset {
   readonly rows: Readonly<Row[]>;
   readonly metadata: Readonly<DatasetMetadata>;
