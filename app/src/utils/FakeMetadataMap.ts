@@ -83,6 +83,7 @@ const fakeMetadata: DatasetMetadata[] = [
     ],
   },
   {
+    // TODO figure out whether copd should be a separate dataset or not.
     id: "brfss_diabetes",
     name: "Diabetes Prevalence by state and race",
     data_source_name: "CDC's BrFSS",
@@ -109,6 +110,12 @@ const fakeMetadata: DatasetMetadata[] = [
       {
         data_type: "integer",
         name: "diabetes_count",
+        description: "description",
+        origin_dataset: "brfss_diabetes",
+      },
+      {
+        data_type: "integer",
+        name: "copd_count",
         description: "description",
         origin_dataset: "brfss_diabetes",
       },

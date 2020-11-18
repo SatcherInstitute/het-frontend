@@ -54,13 +54,13 @@ function getDiabetesFrame() {
       "DIABETES_NO_REFUSED",
       "PREDIABETES_YES_YESPREGNANT",
       "PREDIABETES_NO_UNSURE_REFUSED",
-      "COPD_YES",
       "COPD_NO_UNKNOWN_REFUSED",
     ])
     .renameSeries({
       BRFSS2019_STATE: "state_name",
       BRFSS2019_IMPLIED_RACE: "race",
       DIABETES_YES_YESPREGNANT: "diabetes_count",
+      COPD_YES: "copd_count",
     });
 }
 
