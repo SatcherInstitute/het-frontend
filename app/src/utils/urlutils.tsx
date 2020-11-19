@@ -10,8 +10,8 @@ export const DATASET_PRE_FILTERS = "dpf";
 // Value is index of the phrase to jump to
 export const MADLIB_PHRASE = "mlp";
 
-// Value is a comma-separated list mapping indicies to values with :
-// Overrides defaults
+// Value is a comma-separated list mapping indicies to values with : delimiter
+// Values are applied on top of defaults so you only need to specify those that differ
 // mls=0:1,2:5
 export const MADLIB_SELECTIONS = "mls";
 

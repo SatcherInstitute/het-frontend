@@ -32,11 +32,9 @@ import {
 function ExploreDataPage() {
   const [shareModalOpen, setShareModalOpen] = React.useState(false);
   const params = useSearchParams();
-
   useEffect(() => {
     clearSearchParams([MADLIB_PHRASE, MADLIB_SELECTIONS]);
   }, []);
-
   const [phraseIndex, setPhraseIndex] = useState<number>(
     Number(params[MADLIB_PHRASE]) | 0
   );
