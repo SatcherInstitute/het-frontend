@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Paper, Grid } from "@material-ui/core";
+import LineChart from "../charts/LineChart";
 import UsaChloroplethMap from "../charts/UsaChloroplethMap";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -100,17 +101,6 @@ function DemoReport(props: {
         )}
       </Grid>
       <Grid item xs={12} sm={12} md={6} className={styles.PaddedGrid}>
-        <h2>
-          {props.madlib.phrase.map((phraseSegment, index) => (
-            <React.Fragment key={index}>
-              {phraseSegment.constructor === Object ? (
-                <span> {phraseSegment[props.phraseSelections[index]]} </span>
-              ) : (
-                <span>{phraseSegment}</span>
-              )}
-            </React.Fragment>
-          ))}
-        </h2>
         <p>
           Click on some counties to see data in this table, shift click on map
           to reset.
