@@ -9,47 +9,34 @@ function LineChart(props: {}) {
   let varX = "start_week";
   let varY = "hispanic";
   let varY2 = "non_hispanic_asian";
+  let varY3 = "non_hispanic_black";
 
-  const line1 = {
-    type: "line",
-    timeUnit: "yearmonthdate",
-    from: { data: "series" },
-    encode: {
-      enter: {
-        x: { scale: varX, field: varX },
-        y: { scale: varY, field: varY },
-        strokeWidth: { value: 2 },
+  const lines = [
+    { field: varY3, color: "blue" },
+    { field: varY2, color: "red" },
+    { field: varY, color: "green" },
+  ].map((item) => {
+    return {
+      type: "line",
+      timeUnit: "yearmonthdate",
+      from: { data: "series" },
+      encode: {
+        enter: {
+          x: { scale: varX, field: varX },
+          y: { scale: varY, field: item.field },
+          strokeWidth: { value: 2 },
+          stroke: { value: item.color },
+        },
+        update: {
+          interpolate: "linear",
+          strokeOpacity: { value: 1 },
+        },
+        hover: {
+          strokeOpacity: { value: 0.5 },
+        },
       },
-      update: {
-        interpolate: "linear",
-        strokeOpacity: { value: 1 },
-      },
-      hover: {
-        strokeOpacity: { value: 0.5 },
-      },
-    },
-  };
-  const line2 = {
-    type: "line",
-    timeUnit: "yearmonthdate",
-    from: { data: "series" },
-    encode: {
-      enter: {
-        x: { scale: varX, field: varX },
-        y: { scale: varY, field: varY2 },
-        strokeWidth: { value: 1 },
-        stroke: { value: "red" },
-      },
-      update: {
-        interpolate: "linear",
-        strokeOpacity: { value: 1 },
-      },
-      hover: {
-        strokeOpacity: { value: 0.5 },
-      },
-    },
-  };
-  const lines = [line1, line2];
+    };
+  });
 
   useEffect(() => {
     setSpec({
@@ -83,7 +70,7 @@ function LineChart(props: {}) {
           range: "height",
           nice: true,
           zero: true,
-          domain: [0, 0.2],
+          domain: [0, 0.4],
           //  domain: { data: VAR_DATASET, field: varY },
         },
         {
