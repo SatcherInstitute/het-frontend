@@ -79,7 +79,7 @@ function LandingPage() {
             height="300px"
             width="300px"
             alt="placeholder"
-            src="copd_usa.png"
+            src="img/copd_usa.png"
           />
         </Grid>
         <Grid item xs={12} sm={6} className={styles.LandingSquare}>
@@ -87,7 +87,7 @@ function LandingPage() {
             height="300px"
             width="300px"
             alt="placeholder"
-            src="penn_unemp.png"
+            src="img/penn_unemp.png"
           />
         </Grid>
         <Grid item xs={12} sm={6} className={styles.GreenLandingSquare}>
@@ -120,7 +120,7 @@ function LandingPage() {
             height="300px"
             width="300px"
             alt="placeholder"
-            src="diabetes_amin.png"
+            src="img/diabetes_amin.png"
           />
         </Grid>
         <Grid item xs={12} container className={styles.GreenLandingSquare}>

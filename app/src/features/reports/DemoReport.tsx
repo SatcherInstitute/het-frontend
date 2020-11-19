@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Paper, Grid } from "@material-ui/core";
-import LineChart from "../charts/LineChart";
 import UsaChloroplethMap from "../charts/UsaChloroplethMap";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
