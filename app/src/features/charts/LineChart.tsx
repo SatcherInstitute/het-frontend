@@ -7,7 +7,49 @@ function LineChart(props: {}) {
   const [spec, setSpec] = useState({});
 
   let varX = "start_week";
-  let varY = "total_deaths";
+  let varY = "hispanic";
+  let varY2 = "non_hispanic_asian";
+
+  const line1 = {
+    type: "line",
+    timeUnit: "yearmonthdate",
+    from: { data: "series" },
+    encode: {
+      enter: {
+        x: { scale: varX, field: varX },
+        y: { scale: varY, field: varY },
+        strokeWidth: { value: 2 },
+      },
+      update: {
+        interpolate: "linear",
+        strokeOpacity: { value: 1 },
+      },
+      hover: {
+        strokeOpacity: { value: 0.5 },
+      },
+    },
+  };
+  const line2 = {
+    type: "line",
+    timeUnit: "yearmonthdate",
+    from: { data: "series" },
+    encode: {
+      enter: {
+        x: { scale: varX, field: varX },
+        y: { scale: varY, field: varY2 },
+        strokeWidth: { value: 1 },
+        stroke: { value: "red" },
+      },
+      update: {
+        interpolate: "linear",
+        strokeOpacity: { value: 1 },
+      },
+      hover: {
+        strokeOpacity: { value: 0.5 },
+      },
+    },
+  };
+  const lines = [line1, line2];
 
   useEffect(() => {
     setSpec({
@@ -20,8 +62,7 @@ function LineChart(props: {}) {
       data: [
         {
           name: VAR_DATASET,
-          url:
-            "https://raw.githubusercontent.com/kkatzen/het-frontend/designjam2/app/public/covid_time_sample2.json",
+          url: "covid_time_sample2.json",
           format: {
             type: "json",
             parse: { varX: "date" },
@@ -42,7 +83,8 @@ function LineChart(props: {}) {
           range: "height",
           nice: true,
           zero: true,
-          domain: { data: VAR_DATASET, field: varY },
+          domain: [0, 0.2],
+          //  domain: { data: VAR_DATASET, field: varY },
         },
         {
           name: "color",
@@ -67,32 +109,12 @@ function LineChart(props: {}) {
               groupby: "c",
             },
           },
-          marks: [
-            {
-              type: "line",
-              timeUnit: "yearmonthdate",
-              from: { data: "series" },
-              encode: {
-                enter: {
-                  x: { scale: varX, field: varX },
-                  y: { scale: varY, field: varY },
-                  stroke: { scale: "color", field: "c" },
-                  strokeWidth: { value: 2 },
-                },
-                update: {
-                  interpolate: "linear",
-                  strokeOpacity: { value: 1 },
-                },
-                hover: {
-                  strokeOpacity: { value: 0.5 },
-                },
-              },
-            },
-          ],
+          marks: lines,
         },
       ],
     });
-  }, [varX, varY]);
+  }, [lines, varX, varY]);
+
   return (
     <div
       style={{
