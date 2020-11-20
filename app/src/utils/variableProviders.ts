@@ -1,17 +1,8 @@
-import { Breakdowns, Dataset, Row } from "./DatasetTypes";
+import { Breakdowns } from "./Breakdowns";
+import { Dataset, Row } from "./DatasetTypes";
+import STATE_FIPS_MAP from "./Fips";
 
-const USA_STRING = "the USA";
-
-export interface VariableProvider {
-  readonly variableId: string;
-  readonly variableName: string;
-  readonly description: string;
-  readonly datasetIds: readonly string[];
-  getData(datasets: Record<string, Dataset>, breakdowns: Breakdowns): Row[];
-  allowsBreakdowns(breakdowns: Breakdowns): boolean;
-}
-
-export abstract class BaseVariableProvider implements VariableProvider {
+export abstract class VariableProvider {
   readonly variableId: string;
   readonly variableName: string;
   readonly description: string;
@@ -52,9 +43,13 @@ export abstract class BaseVariableProvider implements VariableProvider {
   ): Row[];
 
   abstract allowsBreakdowns(breakdowns: Breakdowns): boolean;
+
+  static getUniqueDatasetIds(providers: VariableProvider[]): string[] {
+    return Array.from(new Set(providers.map((p) => p.datasetIds).flat()));
+  }
 }
 
-export class DiabetesProvider extends BaseVariableProvider {
+export class DiabetesProvider extends VariableProvider {
   constructor(variableId: string, variableName: string, description: string) {
     super(variableId, variableName, description, [
       "brfss_diabetes",
@@ -85,7 +80,7 @@ export class DiabetesProvider extends BaseVariableProvider {
       breakdowns.geography === "state"
         ? joined
         : joined.pivot("race", {
-            state_name: (series) => USA_STRING,
+            state_name: (series) => STATE_FIPS_MAP[0],
             diabetes_count: (series) => series.sum(),
             population: (series) => series.sum(),
           });
@@ -103,7 +98,7 @@ export class DiabetesProvider extends BaseVariableProvider {
 
   allowsBreakdowns(breakdowns: Breakdowns): boolean {
     return (
-      !breakdowns.date &&
+      !breakdowns.time &&
       (breakdowns.geography === "state" ||
         breakdowns.geography === "national") &&
       breakdowns.demographic === "race"
@@ -111,7 +106,7 @@ export class DiabetesProvider extends BaseVariableProvider {
   }
 }
 
-export class AcsPopulationProvider extends BaseVariableProvider {
+export class AcsPopulationProvider extends VariableProvider {
   constructor(variableId: string, variableName: string, description: string) {
     super(variableId, variableName, description, [
       "acs_state_population_by_race",
@@ -131,7 +126,7 @@ export class AcsPopulationProvider extends BaseVariableProvider {
         ? acs
         : acs.pivot("race", {
             // TODO rename column to geography or something general
-            state_name: (series) => USA_STRING,
+            state_name: (series) => STATE_FIPS_MAP[0],
             population: (series) => series.sum(),
           });
 
@@ -159,7 +154,7 @@ export class AcsPopulationProvider extends BaseVariableProvider {
 
   allowsBreakdowns(breakdowns: Breakdowns): boolean {
     return (
-      !breakdowns.date &&
+      !breakdowns.time &&
       (breakdowns.geography === "state" ||
         breakdowns.geography === "national") &&
       (!breakdowns.demographic || breakdowns.demographic === "race")

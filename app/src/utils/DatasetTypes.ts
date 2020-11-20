@@ -33,14 +33,6 @@ export interface Variable {
   readonly rows: readonly Row[];
 }
 
-export interface Breakdowns {
-  geography: "national" | "state" | "county";
-  // Note: this assumes only one demographic breakdown at a time. If we want to
-  // support more later we can refactor this to multiple boolean fields.
-  demographic?: "race" | "age" | "gender";
-  date?: boolean;
-}
-
 export class Dataset {
   readonly rows: Readonly<Row[]>;
   readonly metadata: Readonly<DatasetMetadata>;

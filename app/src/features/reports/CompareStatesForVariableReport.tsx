@@ -8,21 +8,7 @@ import useDatasetStore from "../../utils/useDatasetStore";
 import variableProviders, {
   VariableProvider,
 } from "../../utils/variableProviders";
-import { Breakdowns } from "../../utils/DatasetTypes";
-
-function getUniqueDatasetIds(providers: VariableProvider[]): string[] {
-  return Array.from(new Set(providers.map((p) => p.datasetIds).flat()));
-}
-
-const ByStateAndRace: Breakdowns = {
-  geography: "state",
-  demographic: "race",
-};
-
-const ByRace: Breakdowns = {
-  geography: "national",
-  demographic: "race",
-};
+import { Breakdowns } from "../../utils/Breakdowns";
 
 function CompareStatesForVariableReport(props: {
   state1: string;
@@ -33,7 +19,10 @@ function CompareStatesForVariableReport(props: {
   const variableProvider = variableProviders[props.variable];
   const acsProvider = variableProviders["population_pct"];
   const selectedStates = [props.state1, props.state2];
-  const requiredDatasets = getUniqueDatasetIds([variableProvider, acsProvider]);
+  const requiredDatasets = VariableProvider.getUniqueDatasetIds([
+    variableProvider,
+    acsProvider,
+  ]);
   return (
     <WithDatasets datasetIds={requiredDatasets}>
       {() => (
@@ -43,9 +32,15 @@ function CompareStatesForVariableReport(props: {
               <strong>{variableProvider.description}</strong>
               <VerticalGroupedBarChart
                 data={variableProvider
-                  .getData(datasetStore.datasets, ByStateAndRace)
+                  .getData(
+                    datasetStore.datasets,
+                    Breakdowns.byState().andRace()
+                  )
                   .concat(
-                    variableProvider.getData(datasetStore.datasets, ByRace)
+                    variableProvider.getData(
+                      datasetStore.datasets,
+                      Breakdowns.national().andRace()
+                    )
                   )
                   .filter((r) => selectedStates.includes(r.state_name))}
                 measure={variableProvider.variableId}
@@ -55,8 +50,16 @@ function CompareStatesForVariableReport(props: {
               <strong>{acsProvider.description}</strong>
               <StackedBarChart
                 data={acsProvider
-                  .getData(datasetStore.datasets, ByStateAndRace)
-                  .concat(acsProvider.getData(datasetStore.datasets, ByRace))
+                  .getData(
+                    datasetStore.datasets,
+                    Breakdowns.byState().andRace()
+                  )
+                  .concat(
+                    acsProvider.getData(
+                      datasetStore.datasets,
+                      Breakdowns.national().andRace()
+                    )
+                  )
                   .filter((r) => selectedStates.includes(r.state_name))}
                 measure={acsProvider.variableId}
               />
