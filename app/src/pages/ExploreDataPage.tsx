@@ -42,7 +42,7 @@ function ReportWrapper(props: { madLib: MadLib }) {
     case 0:
       return <DemoReport madLib={props.madLib} />;
     case 1:
-      return <TellMeAboutReport madLib={props.madLib} />;
+      return <TellMeAboutReport variable={getPhraseValue(props.madLib, 1)} />;
     case 2:
       return (
         <CompareStatesForVariableReport

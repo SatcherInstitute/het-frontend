@@ -2,7 +2,6 @@ import React from "react";
 import { Grid } from "@material-ui/core";
 import TimeReport from "./TimeReport";
 import TellMeAboutReport from "./TellMeAboutReport";
-import { MADLIB_LIST } from "../../utils/MadLibs";
 import Divider from "@material-ui/core/Divider";
 import WithDatasets from "../../utils/WithDatasets";
 import VerticalGroupedBarChart from "../charts/VerticalGroupedBarChart";
@@ -12,6 +11,7 @@ import variableProviders, {
   VariableProvider,
 } from "../../utils/variableProviders";
 import { Breakdowns } from "../../utils/Breakdowns";
+import { DIABETES_COUNT_ID } from "../../utils/variableProviders";
 
 function ChartDumpReport() {
   const datasetStore = useDatasetStore();
@@ -74,7 +74,7 @@ function ChartDumpReport() {
                 </li>
               </ul>
             </div>
-            <TellMeAboutReport madLib={MADLIB_LIST[1]} />
+            <TellMeAboutReport variable={DIABETES_COUNT_ID} />
 
             <Divider />
 
