@@ -28,7 +28,50 @@ import {
   useSearchParams,
   linkToMadLib,
 } from "../utils/urlutils";
+import CompareStatesForVariableReport from "../features/reports/CompareStatesForVariableReport";
 
+function getPhraseValue(
+  madlib: MadLib,
+  segmentIndex: number,
+  phraseSelections: PhraseSelections
+): string {
+  const segment = madlib.phrase[segmentIndex];
+  return typeof segment === "string"
+    ? segment
+    : segment[phraseSelections[segmentIndex]];
+}
+
+function ReportWrapper(props: {
+  madLibIndex: number;
+  phraseSelections: PhraseSelections;
+}) {
+  const madlib = MADLIB_LIST[props.madLibIndex];
+  switch (props.madLibIndex) {
+    case 0:
+      return (
+        <DemoReport madlib={madlib} phraseSelections={props.phraseSelections} />
+      );
+    case 1:
+      return (
+        <TellMeAboutReport
+          madlib={madlib}
+          phraseSelections={props.phraseSelections}
+        />
+      );
+    case 2:
+      return (
+        <CompareStatesForVariableReport
+          state1={getPhraseValue(madlib, 3, props.phraseSelections)}
+          state2={getPhraseValue(madlib, 5, props.phraseSelections)}
+          variable={getPhraseValue(madlib, 1, props.phraseSelections)}
+        />
+      );
+    default:
+      return <p>Report not found</p>;
+  }
+}  
+        
+        
 function ExploreDataPage() {
   const [shareModalOpen, setShareModalOpen] = React.useState(false);
   const params = useSearchParams();
@@ -37,19 +80,19 @@ function ExploreDataPage() {
     // Until then, it's best to just clear them so they can't become mismatched
     clearSearchParams([MADLIB_PHRASE_PARAM, MADLIB_SELECTIONS_PARAM]);
   }, []);
-  const [phraseIndex, setPhraseIndex] = useState<number>(
+  const [madLibIndex, setMadLibIndex] = useState(0);
     Number(params[MADLIB_PHRASE_PARAM]) | 0
   );
 
-  let defaultValuesWithOverrides = MADLIB_LIST[phraseIndex].defaultSelections;
+  let defaultValuesWithOverrides = MADLIB_LIST[madLibIndex].defaultSelections;
   if (params[MADLIB_SELECTIONS_PARAM]) {
     params[MADLIB_SELECTIONS_PARAM].split(",").forEach((override) => {
       const [key, value] = override.split(":");
       // Validate that key is in valid range
-      if (!Object.keys(MADLIB_LIST[phraseIndex].phrase).includes(key)) return;
+      if (!Object.keys(MADLIB_LIST[madLibIndex].phrase).includes(key)) return;
       // Validate that value is in valid range
       if (
-        !Object.keys(MADLIB_LIST[phraseIndex].phrase[Number(key)]).includes(
+        !Object.keys(MADLIB_LIST[madLibIndex].phrase[Number(key)]).includes(
           value
         )
       )
@@ -62,8 +105,8 @@ function ExploreDataPage() {
   );
 
   useEffect(() => {
-    setPhraseSelections({ ...MADLIB_LIST[phraseIndex].defaultSelections });
-  }, [phraseIndex]);
+    setPhraseSelections({ ...MADLIB_LIST[madLibIndex].defaultSelections });
+  }, [madLibIndex]);
 
   return (
     <React.Fragment>
@@ -76,7 +119,7 @@ function ExploreDataPage() {
         <DialogTitle id="alert-dialog-title">Link to this Report</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            {linkToMadLib(phraseIndex, phraseSelections, true)}
+            {linkToMadLib(madLibIndex, phraseSelections, true)}
           </DialogContentText>
         </DialogContent>
       </Dialog>
@@ -88,8 +131,8 @@ function ExploreDataPage() {
           indicators={false}
           animation="slide"
           navButtonsAlwaysVisible={true}
-          index={phraseIndex}
-          onChange={setPhraseIndex}
+          index={madLibIndex}
+          onChange={setMadLibIndex}
         >
           {MADLIB_LIST.map((madlib: MadLib, i) => (
             <Paper elevation={3} className={styles.CarouselItem} key={i}>
@@ -105,7 +148,7 @@ function ExploreDataPage() {
       </div>
       <div className={styles.ReportContainer}>
         <h1>
-          {getMadLibPhraseText(MADLIB_LIST[phraseIndex], phraseSelections)}
+          {getMadLibPhraseText(MADLIB_LIST[madLibIndex], phraseSelections)}
           <IconButton
             aria-label="delete"
             color="primary"
@@ -114,18 +157,10 @@ function ExploreDataPage() {
             <ShareIcon />
           </IconButton>
         </h1>
-        {phraseIndex === 0 && (
-          <DemoReport
-            madlib={MADLIB_LIST[0]}
-            phraseSelections={phraseSelections}
-          />
-        )}
-        {phraseIndex === 1 && (
-          <TellMeAboutReport
-            madlib={MADLIB_LIST[1]}
-            phraseSelections={phraseSelections}
-          />
-        )}
+        <ReportWrapper
+          madLibIndex={madLibIndex}
+          phraseSelections={phraseSelections}
+        />
       </div>
     </React.Fragment>
   );
@@ -134,7 +169,7 @@ function ExploreDataPage() {
 function CarouselMadLib(props: {
   madlib: MadLib;
   phraseSelections: PhraseSelections;
-  setPhraseSelections: (newArray: PhraseSelections) => void;
+  Selections: (newArray: PhraseSelections) => void;
 }) {
   return (
     <React.Fragment>
@@ -151,11 +186,11 @@ function CarouselMadLib(props: {
                   defaultValue={props.madlib.defaultSelections[index]}
                   value={props.phraseSelections[index]}
                   onChange={(event) => {
-                    let phraseIndex: number = Number(event.target.name);
+                    let madLibIndex: number = Number(event.target.name);
                     let updatedArray: PhraseSelections = {
                       ...props.phraseSelections,
                     };
-                    updatedArray[phraseIndex] = Number(event.target.value);
+                    updatedArray[madLibIndex] = Number(event.target.value);
                     props.setPhraseSelections(updatedArray);
                   }}
                 >
