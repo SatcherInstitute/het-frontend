@@ -19,7 +19,7 @@ const VAR_COUNTY_FIPS = "COUNTY_FIPS";
 
 function UsaChloroplethMap(props: {
   data?: Record<string, any>[];
-  dataUrl: string; // Takes CSV or JSON
+  dataUrl?: string; // Takes CSV or JSON
   varField: string;
   legendTitle: string;
   filterVar?: string;
@@ -99,12 +99,12 @@ function UsaChloroplethMap(props: {
     // TODO - update all charts so we can deprecate dataUrl option
     let varDataset = {
       name: VAR_DATASET,
-      format: { type: props.dataUrl.split(".").pop() },
       transform: varTransformer,
     };
     if (props.data) {
       varDataset.values = props.data;
     } else {
+      varDataset.format = { type: props.dataUrl.split(".").pop() };
       varDataset.url = props.dataUrl;
     }
 

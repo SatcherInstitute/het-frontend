@@ -126,7 +126,6 @@ function TellMeAboutReport(props: { madlib: MadLib; variable: string }) {
                 datasetStore.datasets,
                 Breakdowns.byState().andRace()
               )}
-              dataUrl="tmp/brfss.json"
               operation="sum"
             />
           </Grid>
