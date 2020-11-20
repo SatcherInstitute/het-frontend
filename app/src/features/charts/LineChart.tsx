@@ -1,5 +1,3 @@
-//@ts-nocheck
-
 import React from "react";
 import { Vega } from "react-vega";
 
@@ -15,7 +13,7 @@ function LineChart(props: {
     type: "quantitative",
   }));
 
-  const liteSpec = {
+  const liteSpec: any = {
     $schema: "https://vega.github.io/schema/vega-lite/v4.json",
     data: props.data,
     width: 400,
@@ -87,7 +85,7 @@ function LineChart(props: {
     ],
   };
 
-  return <Vega spec={liteSpec} width={500} />;
+  return <Vega spec={liteSpec} />;
 }
 
 export default LineChart;
