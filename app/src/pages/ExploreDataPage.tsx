@@ -7,6 +7,7 @@ import Select from "@material-ui/core/Select";
 import FormControl from "@material-ui/core/FormControl";
 import MenuItem from "@material-ui/core/MenuItem";
 import DemoReport from "../features/reports/DemoReport";
+import TimeReport from "../features/reports/TimeReport";
 import TellMeAboutReport from "../features/reports/TellMeAboutReport";
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -68,6 +69,9 @@ function ReportWrapper(props: {
           variable={getPhraseValue(madlib, 1, props.phraseSelections)}
         />
       );
+    case 3:
+      return <TimeReport />;
+
     default:
       return <p>Report not found</p>;
   }

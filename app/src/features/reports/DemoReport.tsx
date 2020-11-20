@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Paper, Grid } from "@material-ui/core";
-import LineChart from "../charts/LineChart";
 import UsaChloroplethMap from "../charts/UsaChloroplethMap";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -78,9 +77,6 @@ function DemoReport(props: {
 
   return (
     <Grid container spacing={1} alignItems="flex-start">
-      <Grid item xs={12}>
-        <LineChart />
-      </Grid>
       <Grid item xs={12} sm={12} md={6}>
         {props.phraseSelections[5] === 0 && (
           <UsaChloroplethMap

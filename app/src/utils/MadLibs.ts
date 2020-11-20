@@ -55,6 +55,10 @@ const MADLIB_LIST: MadLib[] = [
     ],
     defaultSelections: { 1: 0, 3: 13, 5: 0 },
   },
+  {
+    phrase: ["Show me PLACEHOLDER time series data."],
+    defaultSelections: {},
+  },
 ];
 
 export { MADLIB_LIST, getMadLibPhraseText };

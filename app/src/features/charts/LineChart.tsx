@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from "react";
 import { Vega } from "react-vega";
-import * as vegaLiteImport from "vega-lite";
 import { stocks, raceTime } from "./stock.ts";
 
 const VAR_DATASET = "dataset";
