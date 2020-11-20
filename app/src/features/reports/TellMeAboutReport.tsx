@@ -11,7 +11,6 @@ import styles from "./Report.module.scss";
 import Select from "@material-ui/core/Select";
 import FormControl from "@material-ui/core/FormControl";
 import MenuItem from "@material-ui/core/MenuItem";
-import { MadLib } from "../../utils/MadLibs";
 import WithDatasets from "../../utils/WithDatasets";
 import useDatasetStore from "../../utils/useDatasetStore";
 import variableProviders, {
@@ -48,7 +47,7 @@ function CountyLevelTable(countyList: County[], valueName: string) {
   );
 }
 
-function TellMeAboutReport(props: { madlib: MadLib; variable: string }) {
+function TellMeAboutReport(props: { variable: string }) {
   const datasetStore = useDatasetStore();
   const variableProvider = variableProviders[props.variable];
   const requiredDatasets = VariableProvider.getUniqueDatasetIds([
