@@ -11,7 +11,7 @@ import styles from "./Report.module.scss";
 import Select from "@material-ui/core/Select";
 import FormControl from "@material-ui/core/FormControl";
 import MenuItem from "@material-ui/core/MenuItem";
-import { MadLib, PhraseSelections } from "../../utils/MadLibs";
+import { MadLib } from "../../utils/MadLibs";
 
 /*
 Corresponds to:
@@ -47,10 +47,7 @@ function CountyLevelTable(countyList: County[]) {
   );
 }
 
-function TellMeAboutReport(props: {
-  madlib: MadLib;
-  phraseSelections: PhraseSelections;
-}) {
+function TellMeAboutReport(props: { madLib: MadLib }) {
   const [countyList, setCountyList] = useState<County[]>([]);
   const [race, setRace] = useState<string>("All");
 
@@ -58,7 +55,7 @@ function TellMeAboutReport(props: {
     setCountyList([]);
     setRace("All");
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.phraseSelections[1]]);
+  }, [props.madLib.activeSelections[1]]);
 
   const signalListeners: any = {
     click: (...args: any) => {
@@ -69,7 +66,7 @@ function TellMeAboutReport(props: {
         let newCountyDatum = {
           id: clickedData.id,
           name: clickedData.properties.name,
-          value: clickedData[FIELDS[props.phraseSelections[1]].field],
+          value: clickedData[FIELDS[props.madLib.activeSelections[1]].field],
         };
         setCountyList([...countyList, newCountyDatum]);
       }
@@ -116,8 +113,8 @@ function TellMeAboutReport(props: {
         </FormControl>
         <UsaChloroplethMap
           signalListeners={signalListeners}
-          varField={FIELDS[props.phraseSelections[1]].field}
-          legendTitle={FIELDS[props.phraseSelections[1]].legend}
+          varField={FIELDS[props.madLib.activeSelections[1]].field}
+          legendTitle={FIELDS[props.madLib.activeSelections[1]].legend}
           filterVar="BRFSS2019_IMPLIED_RACE"
           filterValue={race}
           dataUrl="tmp/brfss.json"

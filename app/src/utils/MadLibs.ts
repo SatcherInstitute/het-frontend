@@ -8,18 +8,21 @@ export type PhraseSelections = Record<number, number>;
 export type PhraseSegment = string | Record<number, string>;
 
 export interface MadLib {
+  readonly index: number;
   readonly phrase: PhraseSegment[];
   readonly defaultSelections: PhraseSelections;
+  readonly activeSelections: PhraseSelections;
 }
 
-function getMadLibPhraseText(
-  madLib: MadLib,
-  phraseSelections: PhraseSelections
-): string {
+function getMadLibPhraseText(madLib: MadLib): string {
   let madLibText = "";
   madLib.phrase.forEach((phraseSegment, index) => {
     if (phraseSegment.constructor === Object) {
-      madLibText += " " + phraseSegment[phraseSelections[index]] + " ";
+      let selection =
+        madLib.activeSelections && madLib.activeSelections[index]
+          ? madLib.activeSelections[index]
+          : madLib.defaultSelections[index];
+      madLibText += " " + phraseSegment[selection] + " ";
     } else {
       madLibText += phraseSegment;
     }
@@ -29,6 +32,7 @@ function getMadLibPhraseText(
 
 const MADLIB_LIST: MadLib[] = [
   {
+    index: 0,
     phrase: [
       "Where are the",
       { 0: "highest", 1: "lowest" },
@@ -39,12 +43,16 @@ const MADLIB_LIST: MadLib[] = [
       "?",
     ],
     defaultSelections: { 1: 0, 3: 0, 5: 0 },
+    activeSelections: { 1: 0, 3: 0, 5: 0 },
   },
   {
+    index: 1,
     phrase: ["Tell me about", { 0: "COPD", 1: "diabetes" }, "in the USA."],
     defaultSelections: { 1: 0 },
+    activeSelections: { 1: 0 },
   },
   {
+    index: 2,
     phrase: [
       "Compare",
       { 0: "diabetes_per_100k" },
@@ -54,10 +62,13 @@ const MADLIB_LIST: MadLib[] = [
       STATE_FIPS_MAP,
     ],
     defaultSelections: { 1: 0, 3: 13, 5: 0 },
+    activeSelections: { 1: 0, 3: 13, 5: 0 },
   },
   {
-    phrase: ["Show me PLACEHOLDER time series data."],
-    defaultSelections: {},
+    index: 3,
+    phrase: ["Show me ALL THE CHARTS!!!!"],
+    defaultSelections: { 0: 0 },
+    activeSelections: { 0: 0 },
   },
 ];
 
