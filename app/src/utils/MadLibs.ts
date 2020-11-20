@@ -41,7 +41,7 @@ const MADLIB_LIST: MadLib[] = [
     defaultSelections: { 1: 0, 3: 0, 5: 0 },
   },
   {
-    phrase: ["Tell me about", { 0: "COPD", 1: "diabetes" }, "in the USA."],
+    phrase: ["Tell me about", { 0: "diabetes_count" }, "in the USA."],
     defaultSelections: { 1: 0 },
   },
   {

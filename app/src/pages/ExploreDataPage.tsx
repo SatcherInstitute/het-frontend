@@ -55,7 +55,7 @@ function ReportWrapper(props: {
       return (
         <TellMeAboutReport
           madlib={madlib}
-          phraseSelections={props.phraseSelections}
+          variable={getPhraseValue(madlib, 1, props.phraseSelections)}
         />
       );
     case 2:
@@ -77,7 +77,7 @@ function ExploreDataPage() {
   useEffect(() => {
     // TODO - it would be nice to have the params stay and update when selections are made
     // Until then, it's best to just clear them so they can't become mismatched
-    clearSearchParams([MADLIB_PHRASE_PARAM, MADLIB_SELECTIONS_PARAM]);
+    // clearSearchParams([MADLIB_PHRASE_PARAM, MADLIB_SELECTIONS_PARAM]);
   }, []);
   const [madLibIndex, setMadLibIndex] = useState(
     Number(params[MADLIB_PHRASE_PARAM]) | 0

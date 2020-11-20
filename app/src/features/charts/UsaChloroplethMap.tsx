@@ -14,10 +14,11 @@ const GEO_DATASET = "GEO_DATASET";
 const GEO_ID = "id";
 
 const VAR_DATASET = "VAR_DATASET";
-const VAR_STATE_FIPS = "FIPS";
+const VAR_STATE_FIPS = "state_fips_code";
 const VAR_COUNTY_FIPS = "COUNTY_FIPS";
 
 function UsaChloroplethMap(props: {
+  data?: Record<string, any>[];
   dataUrl: string; // Takes CSV or JSON
   varField: string;
   legendTitle: string;
@@ -95,22 +96,30 @@ function UsaChloroplethMap(props: {
       legend["format"] = "0.1%";
     }
 
+    let varDataset = {
+      name: VAR_DATASET,
+      format: { type: props.dataUrl.split(".").pop() },
+      transform: varTransformer,
+    };
+    if (props.data) {
+      varDataset.values = props.data;
+    } else {
+      varDataset.url = props.dataUrl;
+    }
+
     // TODO - read in JSON instead of CSV
     setSpec({
       $schema: "https://vega.github.io/schema/vega/v5.json",
       description:
         "A choropleth map depicting U.S. diabetesloyment temp_maxs by county in 2009.",
       data: [
-        {
-          name: VAR_DATASET,
-          url: props.dataUrl,
-          format: { type: props.dataUrl.split(".").pop() },
-          transform: varTransformer,
-        },
+        varDataset,
+
         {
           name: GEO_DATASET,
           transform: geoTransformers,
-          url: "counties-10m.json",
+          url:
+            "https://raw.githubusercontent.com/kkatzen/het-frontend/designjam2/app/public/counties-10m.json",
           format: {
             type: "topojson",
             feature: props.stateFips ? "counties" : "states",
@@ -184,17 +193,7 @@ function UsaChloroplethMap(props: {
         },
       ],
     });
-  }, [
-    width,
-    props.varField,
-    props.legendTitle,
-    props.filterVar,
-    props.filterValue,
-    props.dataUrl,
-    props.operation,
-    props.stateFips,
-    props.numberFormat,
-  ]);
+  }, [width, props.varField, props.legendTitle, props.filterVar, props.filterValue, props.dataUrl, props.operation, props.stateFips, props.numberFormat, props.data]);
 
   return (
     <div
