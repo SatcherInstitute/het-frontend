@@ -108,7 +108,6 @@ function UsaChloroplethMap(props: {
       varDataset.url = props.dataUrl;
     }
 
-    // TODO - read in JSON instead of CSV
     setSpec({
       $schema: "https://vega.github.io/schema/vega/v5.json",
       description:

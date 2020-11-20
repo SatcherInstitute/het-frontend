@@ -2,6 +2,8 @@ import { Breakdowns } from "./Breakdowns";
 import { Dataset, Row } from "./DatasetTypes";
 import STATE_FIPS_MAP from "./Fips";
 
+// TODO - do we want these to be a type instead? for example:
+// export type DatasetId = "diabetes_count" | "diabetes_per_100k";
 export const DIABETES_COUNT_ID = "diabetes_count";
 export const DIABETES_PER_100K_ID = "diabetes_per_100k";
 
