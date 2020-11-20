@@ -4,6 +4,7 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import { LinkWithStickyParams } from "../utils/urlutils";
+import { linkToMadLib } from "../utils/urlutils";
 
 function LandingPage() {
   return (
@@ -69,7 +70,7 @@ function LandingPage() {
           <p>
             Florida has the highest cases of COPD in the united states.
             <br />
-            <LinkWithStickyParams to={`/exploredata?mlp=1&mls=1:0`}>
+            <LinkWithStickyParams to={linkToMadLib(1, { 1: 0 })}>
               <Button variant="outlined">Explore Data</Button>
             </LinkWithStickyParams>
           </p>
@@ -98,7 +99,7 @@ function LandingPage() {
             County level look at where the highest rates of unemployment are in
             the state of Pennsylvania
             <br />
-            <LinkWithStickyParams to={`/exploredata?mlp=0&mls=5:42`}>
+            <LinkWithStickyParams to={linkToMadLib(0, { 5: 42 })}>
               <Button variant="outlined">Explore Data</Button>
             </LinkWithStickyParams>
           </p>
@@ -110,7 +111,7 @@ function LandingPage() {
           <p>
             Explore racial breakdowns of Diabetes data in the United States
             <br />
-            <LinkWithStickyParams to={`/exploredata?mlp=1&mls=1:1`}>
+            <LinkWithStickyParams to={linkToMadLib(1, { 1: 1 })}>
               <Button variant="outlined">Explore Data</Button>
             </LinkWithStickyParams>
           </p>

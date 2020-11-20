@@ -23,27 +23,37 @@ import {
 import styles from "./ExploreDataPage.module.scss";
 import {
   clearSearchParams,
-  buildMadLibSelectionParams,
-  MADLIB_PHRASE,
-  MADLIB_SELECTIONS,
+  MADLIB_PHRASE_PARAM,
+  MADLIB_SELECTIONS_PARAM,
   useSearchParams,
+  linkToMadLib,
 } from "../utils/urlutils";
 
 function ExploreDataPage() {
   const [shareModalOpen, setShareModalOpen] = React.useState(false);
   const params = useSearchParams();
   useEffect(() => {
-    clearSearchParams([MADLIB_PHRASE, MADLIB_SELECTIONS]);
+    // TODO - it would be nice to have the params stay and update when selections are made
+    // Until then, it's best to just clear them so they can't become mismatched
+    clearSearchParams([MADLIB_PHRASE_PARAM, MADLIB_SELECTIONS_PARAM]);
   }, []);
   const [phraseIndex, setPhraseIndex] = useState<number>(
-    Number(params[MADLIB_PHRASE]) | 0
+    Number(params[MADLIB_PHRASE_PARAM]) | 0
   );
 
   let defaultValuesWithOverrides = MADLIB_LIST[phraseIndex].defaultSelections;
-  if (params[MADLIB_SELECTIONS]) {
-    params[MADLIB_SELECTIONS].split(",").forEach((override) => {
-      console.log("override", override);
+  if (params[MADLIB_SELECTIONS_PARAM]) {
+    params[MADLIB_SELECTIONS_PARAM].split(",").forEach((override) => {
       const [key, value] = override.split(":");
+      // Validate that key is in valid range
+      if (!Object.keys(MADLIB_LIST[phraseIndex].phrase).includes(key)) return;
+      // Validate that value is in valid range
+      if (
+        !Object.keys(MADLIB_LIST[phraseIndex].phrase[Number(key)]).includes(
+          value
+        )
+      )
+        return;
       defaultValuesWithOverrides[Number(key)] = Number(value);
     });
   }
@@ -66,8 +76,7 @@ function ExploreDataPage() {
         <DialogTitle id="alert-dialog-title">Link to this Report</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            {window.location.host}/exploredata?mlp={phraseIndex}&
-            {buildMadLibSelectionParams(phraseSelections)}
+            {linkToMadLib(phraseIndex, phraseSelections, true)}
           </DialogContentText>
         </DialogContent>
       </Dialog>
@@ -101,7 +110,6 @@ function ExploreDataPage() {
             aria-label="delete"
             color="primary"
             onClick={() => setShareModalOpen(true)}
-            autoFocus
           >
             <ShareIcon />
           </IconButton>
