@@ -1,6 +1,6 @@
 //@ts-nocheck
 
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Vega } from "react-vega";
 
 function LineChart(props: {
@@ -87,16 +87,7 @@ function LineChart(props: {
     ],
   };
 
-  return (
-    <div
-      style={{
-        width: "80%",
-        margin: "auto",
-      }}
-    >
-      <Vega spec={liteSpec} width={500} />
-    </div>
-  );
+  return <Vega spec={liteSpec} width={500} />;
 }
 
 export default LineChart;
