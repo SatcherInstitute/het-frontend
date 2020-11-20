@@ -96,6 +96,7 @@ function UsaChloroplethMap(props: {
       legend["format"] = "0.1%";
     }
 
+    // TODO - update all charts so we can deprecate dataUrl option
     let varDataset = {
       name: VAR_DATASET,
       format: { type: props.dataUrl.split(".").pop() },
@@ -193,7 +194,18 @@ function UsaChloroplethMap(props: {
         },
       ],
     });
-  }, [width, props.varField, props.legendTitle, props.filterVar, props.filterValue, props.dataUrl, props.operation, props.stateFips, props.numberFormat, props.data]);
+  }, [
+    width,
+    props.varField,
+    props.legendTitle,
+    props.filterVar,
+    props.filterValue,
+    props.dataUrl,
+    props.operation,
+    props.stateFips,
+    props.numberFormat,
+    props.data,
+  ]);
 
   return (
     <div

@@ -19,25 +19,20 @@ import variableProviders, {
 } from "../../utils/variableProviders";
 import { Breakdowns } from "../../utils/Breakdowns";
 
-/*
-Corresponds to:
-Tell me about {0:"copd", 1:"diabetes"} in USA ?
-*/
-
 interface County {
   id: string;
   name: string;
   value: number;
 }
 
-function CountyLevelTable(countyList: County[]) {
+function CountyLevelTable(countyList: County[], valueName: string) {
   return (
     <TableContainer component={Paper}>
       <Table>
         <TableHead>
           <TableRow>
             <TableCell>Name</TableCell>
-            <TableCell>Cases</TableCell>
+            <TableCell>{valueName}</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -56,7 +51,6 @@ function CountyLevelTable(countyList: County[]) {
 function TellMeAboutReport(props: { madlib: MadLib; variable: string }) {
   const datasetStore = useDatasetStore();
   const variableProvider = variableProviders[props.variable];
-  console.log("variableProvider", variableProvider);
   const requiredDatasets = VariableProvider.getUniqueDatasetIds([
     variableProvider,
   ]);
@@ -79,7 +73,7 @@ function TellMeAboutReport(props: { madlib: MadLib; variable: string }) {
         let newCountyDatum = {
           id: clickedData.id,
           name: clickedData.properties.name,
-          value: clickedData[FIELDS[props.variable].field],
+          value: clickedData[props.variable],
         };
         setCountyList([...countyList, newCountyDatum]);
       }
@@ -89,11 +83,7 @@ function TellMeAboutReport(props: { madlib: MadLib; variable: string }) {
     },
   };
 
-  const FIELDS: Record<string, any> = {
-    //  "COPD": { field: "COPD_YES", legend: "# COPD cases" },
-    diabetes_count: { field: "diabetes_count", legend: "# Diabetes cases" },
-  };
-
+  // TODO - filter from the dataset provider instead of here
   const RACES = [
     "All",
     "American Indian/Alaskan Native, Non-Hispanic",
@@ -128,8 +118,8 @@ function TellMeAboutReport(props: { madlib: MadLib; variable: string }) {
             </FormControl>
             <UsaChloroplethMap
               signalListeners={signalListeners}
-              varField={FIELDS[props.variable].field}
-              legendTitle={FIELDS[props.variable].legend}
+              varField={props.variable}
+              legendTitle={variableProvider.variableName}
               filterVar="race"
               filterValue={race}
               data={variableProvider.getData(
@@ -145,7 +135,7 @@ function TellMeAboutReport(props: { madlib: MadLib; variable: string }) {
               Click on some states to see data in this table, shift click on map
               to reset.
             </p>
-            {CountyLevelTable(countyList)}
+            {CountyLevelTable(countyList, variableProvider.variableName)}
           </Grid>
         </Grid>
       )}
