@@ -11,12 +11,16 @@ import variableProviders, {
   VariableProvider,
 } from "../../utils/variableProviders";
 import { Breakdowns } from "../../utils/Breakdowns";
-import { DIABETES_COUNT_ID } from "../../utils/variableProviders";
+import {
+  DIABETES_COUNT_ID,
+  DIABETES_PER_100K_ID,
+  POPULATION_PCT_ID,
+} from "../../utils/variableProviders";
 
 function ChartDumpReport() {
   const datasetStore = useDatasetStore();
-  const variableProvider = variableProviders["diabetes_per_100k"];
-  const acsProvider = variableProviders["population_pct"];
+  const variableProvider = variableProviders[DIABETES_PER_100K_ID];
+  const acsProvider = variableProviders[POPULATION_PCT_ID];
   const selectedStates = ["Alabama", "Alaska"];
   const requiredDatasets = VariableProvider.getUniqueDatasetIds([
     variableProvider,
@@ -36,7 +40,6 @@ function ChartDumpReport() {
             <Divider />
             <div style={{ width: "500px", margin: "auto", textAlign: "left" }}>
               <h1>Time Series</h1>
-              <h4>Show variable A broken down by X</h4>
               <b>Example</b>
               <ul>
                 <li>Show [covid death rates] broken down by [race] in [USA]</li>
@@ -48,7 +51,6 @@ function ChartDumpReport() {
 
             <div style={{ width: "500px", margin: "auto", textAlign: "left" }}>
               <h1>Choropleth</h1>
-              <h4>Show variable A for each state or county</h4>
               <b>Examples</b>
               <ul>
                 <li>

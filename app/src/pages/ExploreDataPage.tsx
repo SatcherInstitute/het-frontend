@@ -73,16 +73,14 @@ function ExploreDataPage() {
   if (params[MADLIB_SELECTIONS_PARAM]) {
     params[MADLIB_SELECTIONS_PARAM].split(",").forEach((override) => {
       const [key, value] = override.split(":");
-      // Validate that key is in valid range
-      if (!Object.keys(MADLIB_LIST[initalIndex].phrase).includes(key)) return;
-      // Validate that value is in valid range
+      let phrase = MADLIB_LIST[initalIndex].phrase;
       if (
-        !Object.keys(MADLIB_LIST[initalIndex].phrase[Number(key)]).includes(
-          value
-        )
-      )
-        return;
-      defaultValuesWithOverrides[Number(key)] = Number(value);
+        Object.keys(phrase).includes(key) &&
+        Object.keys(phrase[Number(key)]).includes(value)
+      ) {
+        defaultValuesWithOverrides[Number(key)] = Number(value);
+      }
+      console.log(defaultValuesWithOverrides);
     });
   }
 

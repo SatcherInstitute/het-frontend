@@ -20,10 +20,9 @@ function getMadLibPhraseText(madLib: MadLib): string {
   let madLibText = "";
   madLib.phrase.forEach((phraseSegment, index) => {
     if (phraseSegment.constructor === Object) {
-      let selection =
-        madLib.activeSelections && madLib.activeSelections[index]
-          ? madLib.activeSelections[index]
-          : madLib.defaultSelections[index];
+      let selection = madLib.activeSelections[index]
+        ? madLib.activeSelections[index]
+        : madLib.defaultSelections[index];
       madLibText += " " + phraseSegment[selection] + " ";
     } else {
       madLibText += phraseSegment;
@@ -32,6 +31,7 @@ function getMadLibPhraseText(madLib: MadLib): string {
   return madLibText;
 }
 
+// TODO - refactor in a MAP?
 const MADLIB_LIST: MadLib[] = [
   {
     index: 0,
