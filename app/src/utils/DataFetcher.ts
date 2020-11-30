@@ -6,8 +6,6 @@ import { MetadataMap, Row } from "./DatasetTypes";
 import { diabetes } from "./FakeData";
 import FakeMetadataMap from "./FakeMetadataMap";
 import { DataFrame } from "data-forge";
-import { reshapeColsToRows } from "./datasetutils";
-import STATE_FIPS_MAP from "./Fips";
 
 async function getDiabetesFrame() {
   const r = await fetch(
