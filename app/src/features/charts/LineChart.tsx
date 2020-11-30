@@ -3,7 +3,7 @@ import { Vega } from "react-vega";
 import { Row } from "../../utils/DatasetTypes";
 
 function LineChart(props: {
-  data: Row[]; // for instance, race
+  data: Row[];
   breakdownVar: string; // for instance, race
   variable: string; // for instance, rate
   timeVariable: string; // for instance, rate

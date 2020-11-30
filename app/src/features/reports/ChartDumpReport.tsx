@@ -1,6 +1,5 @@
 import React from "react";
 import { Grid } from "@material-ui/core";
-import TimeReport from "./TimeReport";
 import TellMeAboutReport from "./TellMeAboutReport";
 import Divider from "@material-ui/core/Divider";
 import WithDatasets from "../../utils/WithDatasets";
@@ -41,7 +40,6 @@ function ChartDumpReport() {
                 <li>Show [covid death rates] broken down by [race] in [USA]</li>
               </ul>
             </div>
-            <TimeReport />
             <CovidReport
               variable={"covid_deaths_per_100k"}
               geography={STATE_FIPS_MAP[1]}
