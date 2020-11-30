@@ -34,6 +34,13 @@ import AboutUsPage from "./pages/AboutUsPage";
 
 const MOBILE_BREAKPOINT = 600;
 
+const PAGE_URL_TO_NAMES: Record<string, string> = {
+  "/": "Homepage",
+  [ABOUT_US_PAGE_LINK]: "About Us",
+  [DATA_CATALOG_PAGE_LINK]: "Data Sources & Methodology",
+  [EXPLORE_DATA_PAGE_LINK]: "Explore the Data",
+};
+
 startMetadataLoad();
 
 function MobileAppToolbar() {
@@ -53,18 +60,11 @@ function MobileAppToolbar() {
           <ChevronLeftIcon />
         </Button>
         <List>
-          <ListItemLink href="/">
-            <ListItemText primary="Homepage" />
-          </ListItemLink>
-          <ListItemLink href={ABOUT_US_PAGE_LINK}>
-            <ListItemText primary="About Us" />
-          </ListItemLink>
-          <ListItemLink href={DATA_CATALOG_PAGE_LINK}>
-            <ListItemText primary="Data Sources & Methodology" />
-          </ListItemLink>
-          <ListItemLink href={EXPLORE_DATA_PAGE_LINK}>
-            <ListItemText primary="Explore the Data" />
-          </ListItemLink>
+          {Object.keys(PAGE_URL_TO_NAMES).map((pageUrl) => (
+            <ListItemLink href={pageUrl}>
+              <ListItemText primary={PAGE_URL_TO_NAMES[pageUrl]} />
+            </ListItemLink>
+          ))}
         </List>
       </Drawer>
     </Toolbar>
@@ -79,21 +79,15 @@ function AppToolbar() {
           Health Equity Tracker
         </LinkWithStickyParams>
       </Typography>
-      <Button className={styles.NavButton}>
-        <LinkWithStickyParams to={ABOUT_US_PAGE_LINK}>
-          About us
-        </LinkWithStickyParams>
-      </Button>
-      <Button className={styles.NavButton}>
-        <LinkWithStickyParams to={DATA_CATALOG_PAGE_LINK}>
-          Data Sources & Methodology
-        </LinkWithStickyParams>
-      </Button>
-      <Button className={styles.NavButton}>
-        <LinkWithStickyParams to={EXPLORE_DATA_PAGE_LINK}>
-          Explore the Data
-        </LinkWithStickyParams>
-      </Button>
+      {[ABOUT_US_PAGE_LINK, DATA_CATALOG_PAGE_LINK, EXPLORE_DATA_PAGE_LINK].map(
+        (pageUrl) => (
+          <Button className={styles.NavButton}>
+            <LinkWithStickyParams to={pageUrl}>
+              {PAGE_URL_TO_NAMES[pageUrl]}
+            </LinkWithStickyParams>
+          </Button>
+        )
+      )}
       <Button className={styles.NavButton}>
         <a href="https://satcherinstitute.github.io/data-visualization/02_covid19_death_disparities/">
           Prototypes
