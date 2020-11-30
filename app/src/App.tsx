@@ -60,8 +60,8 @@ function MobileAppToolbar() {
           <ChevronLeftIcon />
         </Button>
         <List>
-          {Object.keys(PAGE_URL_TO_NAMES).map((pageUrl) => (
-            <ListItemLink href={pageUrl}>
+          {Object.keys(PAGE_URL_TO_NAMES).map((pageUrl, index) => (
+            <ListItemLink href={pageUrl} key={index}>
               <ListItemText primary={PAGE_URL_TO_NAMES[pageUrl]} />
             </ListItemLink>
           ))}
@@ -100,7 +100,11 @@ function AppToolbar() {
 function App() {
   const [width, setWidth] = useState(window.innerWidth);
   useEffect(() => {
-    window.addEventListener("resize", () => setWidth(window.innerWidth));
+    function handleResize() {
+      setWidth(window.innerWidth);
+    }
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   const datasetStore = useDatasetStoreProvider();
