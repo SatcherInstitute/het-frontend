@@ -24,8 +24,15 @@ import {
   DatasetProvider,
   startMetadataLoad,
 } from "./utils/useDatasetStore";
-import { LinkWithStickyParams } from "./utils/urlutils";
+import {
+  LinkWithStickyParams,
+  EXPLORE_DATA_PAGE_LINK,
+  DATA_CATALOG_PAGE_LINK,
+  ABOUT_US_PAGE_LINK,
+} from "./utils/urlutils";
 import AboutUsPage from "./pages/AboutUsPage";
+
+const MOBILE_BREAKPOINT = 600;
 
 startMetadataLoad();
 
@@ -49,13 +56,13 @@ function MobileAppToolbar() {
           <ListItemLink href="/">
             <ListItemText primary="Homepage" />
           </ListItemLink>
-          <ListItemLink href="/aboutus">
+          <ListItemLink href={ABOUT_US_PAGE_LINK}>
             <ListItemText primary="About Us" />
           </ListItemLink>
-          <ListItemLink href="/datacatalog">
+          <ListItemLink href={DATA_CATALOG_PAGE_LINK}>
             <ListItemText primary="Data Sources & Methodology" />
           </ListItemLink>
-          <ListItemLink href="/exploredata">
+          <ListItemLink href={EXPLORE_DATA_PAGE_LINK}>
             <ListItemText primary="Explore the Data" />
           </ListItemLink>
         </List>
@@ -73,15 +80,17 @@ function AppToolbar() {
         </LinkWithStickyParams>
       </Typography>
       <Button className={styles.NavButton}>
-        <LinkWithStickyParams to="/aboutus">About us</LinkWithStickyParams>
+        <LinkWithStickyParams to={ABOUT_US_PAGE_LINK}>
+          About us
+        </LinkWithStickyParams>
       </Button>
       <Button className={styles.NavButton}>
-        <LinkWithStickyParams to="/datacatalog">
+        <LinkWithStickyParams to={DATA_CATALOG_PAGE_LINK}>
           Data Sources & Methodology
         </LinkWithStickyParams>
       </Button>
       <Button className={styles.NavButton}>
-        <LinkWithStickyParams to="/exploredata">
+        <LinkWithStickyParams to={EXPLORE_DATA_PAGE_LINK}>
           Explore the Data
         </LinkWithStickyParams>
       </Button>
@@ -97,15 +106,8 @@ function AppToolbar() {
 function App() {
   const [width, setWidth] = useState(window.innerWidth);
   useEffect(() => {
-    /* Inside of a "useEffect" hook add an event listener that updates
-           the "width" state variable when the window size changes */
     window.addEventListener("resize", () => setWidth(window.innerWidth));
-
-    /* passing an empty array as the dependencies of the effect will cause this
-           effect to only run when the component mounts, and not each time it updates.
-           We only want the listener to be added once */
   }, []);
-  const breakpoint = 600;
 
   const datasetStore = useDatasetStoreProvider();
   return (
@@ -115,13 +117,22 @@ function App() {
           <div className={styles.Content}>
             <Router>
               <AppBar position="static">
-                {width > breakpoint ? <AppToolbar /> : <MobileAppToolbar />}
+                {width > MOBILE_BREAKPOINT ? (
+                  <AppToolbar />
+                ) : (
+                  <MobileAppToolbar />
+                )}
               </AppBar>
-
               <Switch>
-                <Route path="/aboutus" component={AboutUsPage} />
-                <Route path="/datacatalog" component={DataCatalogPage} />
-                <Route path="/exploredata" component={ExploreDataPage} />
+                <Route path={ABOUT_US_PAGE_LINK} component={AboutUsPage} />
+                <Route
+                  path={DATA_CATALOG_PAGE_LINK}
+                  component={DataCatalogPage}
+                />
+                <Route
+                  path={EXPLORE_DATA_PAGE_LINK}
+                  component={ExploreDataPage}
+                />
                 <Route exact path="/" component={LandingPage} />
                 <Route component={NotFoundPage} />
               </Switch>
