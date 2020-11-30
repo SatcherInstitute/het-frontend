@@ -102,13 +102,11 @@ function TimeReport() {
     });
   });
 
-  const data = { values: newValues };
-
   return (
     <Grid container spacing={1} alignItems="flex-start">
       <Grid item xs={12}>
         <LineChart
-          data={data}
+          data={newValues}
           breakdownVar="race"
           variable="rate"
           timeVariable="start_week"

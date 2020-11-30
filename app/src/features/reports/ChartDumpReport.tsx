@@ -7,20 +7,16 @@ import WithDatasets from "../../utils/WithDatasets";
 import VerticalGroupedBarChart from "../charts/VerticalGroupedBarChart";
 import StackedBarChart from "../charts/StackedBarChart";
 import useDatasetStore from "../../utils/useDatasetStore";
-import variableProviders, {
-  VariableProvider,
-} from "../../utils/variableProviders";
+import variableProviders from "../../utils/variableProviders";
 import { Breakdowns } from "../../utils/Breakdowns";
-import {
-  DIABETES_COUNT_ID,
-  DIABETES_PER_100K_ID,
-  POPULATION_PCT_ID,
-} from "../../utils/variableProviders";
+import CovidReport from "./CovidReport";
+import STATE_FIPS_MAP from "../../utils/Fips";
+import VariableProvider from "../../utils/variables/VariableProvider";
 
 function ChartDumpReport() {
   const datasetStore = useDatasetStore();
-  const variableProvider = variableProviders[DIABETES_PER_100K_ID];
-  const acsProvider = variableProviders[POPULATION_PCT_ID];
+  const variableProvider = variableProviders["diabetes_per_100k"];
+  const acsProvider = variableProviders["population_pct"];
   const selectedStates = ["Alabama", "Alaska"];
   const requiredDatasets = VariableProvider.getUniqueDatasetIds([
     variableProvider,
@@ -46,6 +42,10 @@ function ChartDumpReport() {
               </ul>
             </div>
             <TimeReport />
+            <CovidReport
+              variable={"covid_deaths_per_100k"}
+              geography={STATE_FIPS_MAP[1]}
+            />
 
             <Divider />
 
@@ -76,7 +76,7 @@ function ChartDumpReport() {
                 </li>
               </ul>
             </div>
-            <TellMeAboutReport variable={DIABETES_COUNT_ID} />
+            <TellMeAboutReport variable={"diabetes_count"} />
 
             <Divider />
 
@@ -122,7 +122,11 @@ function ChartDumpReport() {
                     Breakdowns.national().andRace()
                   )
                 )
-                .filter((r) => selectedStates.includes(r.state_name))}
+                .filter(
+                  (r) =>
+                    selectedStates.includes(r.state_name) &&
+                    r.hispanic_or_latino_and_race !== "Total"
+                )}
               measure={acsProvider.variableId}
             />
           </Grid>
