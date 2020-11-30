@@ -65,7 +65,7 @@ function ExploreDataPage() {
   useEffect(() => {
     // TODO - it would be nice to have the params stay and update when selections are made
     // Until then, it's best to just clear them so they can't become mismatched
-    clearSearchParams([MADLIB_PHRASE_PARAM, MADLIB_SELECTIONS_PARAM]);
+    // clearSearchParams([MADLIB_PHRASE_PARAM, MADLIB_SELECTIONS_PARAM]);
   }, []);
 
   const initalIndex = Number(params[MADLIB_PHRASE_PARAM]) | 0;
@@ -80,7 +80,6 @@ function ExploreDataPage() {
       ) {
         defaultValuesWithOverrides[Number(key)] = Number(value);
       }
-      console.log(defaultValuesWithOverrides);
     });
   }
 

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Paper, Grid } from "@material-ui/core";
 import UsaChloroplethMap from "../charts/UsaChloroplethMap";
+import TwoVarBarChart from "../charts/TwoVarBarChart";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -50,7 +51,7 @@ function CountyLevelTable(countyList: County[], valueName: string) {
 function TellMeAboutReport(props: { variable: string }) {
   const datasetStore = useDatasetStore();
   const variableProvider = variableProviders[props.variable];
-  const requiredDatasets = VariableProvider.getUniqueDatasetIds([
+  let requiredDatasets = VariableProvider.getUniqueDatasetIds([
     variableProvider,
   ]);
 
@@ -93,47 +94,21 @@ function TellMeAboutReport(props: { variable: string }) {
     "White, Non-Hispanic",
   ];
 
+  console.log(datasetStore.datasets);
+
   return (
     <WithDatasets datasetIds={requiredDatasets}>
       {() => (
         <Grid container spacing={1} alignItems="flex-start">
-          <Grid item xs={12} sm={12} md={6}>
-            Filter results by race:
-            <FormControl>
-              <Select
-                name="raceSelect"
-                value={race}
-                onChange={(e) => {
-                  setRace(e.target.value as string);
-                  setCountyList([]);
-                }}
-              >
-                {RACES.map((race) => (
-                  <MenuItem key={race} value={race}>
-                    {race}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-            <UsaChloroplethMap
-              signalListeners={signalListeners}
-              varField={props.variable}
-              legendTitle={variableProvider.variableName}
-              filterVar="race"
-              filterValue={race}
+          <Grid item xs={12}>
+            <TwoVarBarChart
               data={variableProvider.getData(
                 datasetStore.datasets,
-                Breakdowns.byState().andRace()
+                Breakdowns.national().andRace()
               )}
-              operation="sum"
+              measure={variableProvider.variableId}
+              compareMeasure="population"
             />
-          </Grid>
-          <Grid item xs={12} sm={12} md={6} className={styles.PaddedGrid}>
-            <p>
-              Click on some states to see data in this table, shift click on map
-              to reset.
-            </p>
-            {CountyLevelTable(countyList, variableProvider.variableName)}
           </Grid>
         </Grid>
       )}
