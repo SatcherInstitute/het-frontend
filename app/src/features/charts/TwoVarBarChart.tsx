@@ -11,6 +11,8 @@ function getSpec(
   compareMeasure: string
 ): any {
   const BAR_HEIGHT = 40;
+  const MEASURE_COLOR = "#4c78a8";
+  const COMPARE_MEASURE_COLOR = "#89B7D5";
 
   return {
     $schema: "https://vega.github.io/schema/vega/v5.json",
@@ -44,11 +46,17 @@ function getSpec(
           enter: {
             tooltip: {
               signal:
-                "datum." + dim + " + ', " + measure + ":' + datum." + measure,
+                "datum." +
+                dim +
+                " + ', " +
+                measure +
+                ":' + datum." +
+                measure +
+                "+'%'",
             },
           },
           update: {
-            fill: { value: "#4c78a8" },
+            fill: { value: MEASURE_COLOR },
             ariaRoleDescription: { value: "bar" },
             x: { scale: "x", field: measure },
             x2: { scale: "x", value: 0 },
@@ -71,11 +79,12 @@ function getSpec(
                 " + ', " +
                 compareMeasure +
                 ":' + datum." +
-                compareMeasure,
+                compareMeasure +
+                "+'%'",
             },
           },
           update: {
-            fill: { value: "#89B7D5" },
+            fill: { value: COMPARE_MEASURE_COLOR },
             ariaRoleDescription: { value: "bar" },
             x: { scale: "x", field: compareMeasure },
             x2: { scale: "x", value: 0 },
@@ -95,25 +104,9 @@ function getSpec(
             baseline: { value: "middle" },
             dx: { value: 3 },
             fill: { value: "black" },
-            description: {
-              signal:
-                '"' +
-                dim +
-                ': " + (isValid(datum["' +
-                dim +
-                '"]) ? datum["' +
-                dim +
-                '"] : ""+datum["' +
-                dim +
-                '"]) + "; ' +
-                measure +
-                ': " + (format(datum["' +
-                measure +
-                '"], ""))',
-            },
             x: { scale: "x", field: measure },
             y: { scale: "y", field: dim, band: 0.8 },
-            text: { signal: 'format(datum["' + measure + '"], "")' },
+            text: { signal: 'format(datum["' + measure + '"], "") + "%"' },
           },
         },
       },
@@ -130,7 +123,9 @@ function getSpec(
             fill: { value: "black" },
             x: { scale: "x", field: compareMeasure },
             y: { scale: "y", field: dim, band: 0.3 },
-            text: { signal: 'format(datum["' + compareMeasure + '"], "")' },
+            text: {
+              signal: 'format(datum["' + compareMeasure + '"], "") + "%"',
+            },
           },
         },
       },
@@ -158,6 +153,12 @@ function getSpec(
         range: { step: { signal: "y_step" } },
         paddingInner: 0.1,
         paddingOuter: 0.05,
+      },
+      {
+        name: "variables",
+        type: "ordinal",
+        domain: [measure, compareMeasure],
+        range: [MEASURE_COLOR, COMPARE_MEASURE_COLOR],
       },
     ],
     axes: [
@@ -193,6 +194,22 @@ function getSpec(
         zindex: 0,
       },
     ],
+    legends: [
+      {
+        stroke: "variables",
+        title: "Legend",
+        padding: 4,
+        encode: {
+          symbols: {
+            enter: {
+              strokeWidth: { value: 2 },
+              size: { value: 50 },
+            },
+          },
+        },
+      },
+    ],
+
     // TODO need to add a legend
   };
 }
