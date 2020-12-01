@@ -89,6 +89,31 @@ function CovidReport(props: { variable: VariableId; geography: string }) {
                     measure="population_pct"
                   />
                 )}
+                <LineChart
+                  data={data}
+                  breakdownVar="hispanic_or_latino_and_race"
+                  variable={covidProvider.variableId}
+                  timeVariable="date"
+                />
+                <SimpleHorizontalBarChart
+                  data={mostRecent}
+                  breakdownVar="hispanic_or_latino_and_race"
+                  measure={covidProvider.variableId}
+                />
+                <SimpleHorizontalBarChart
+                  data={populationData.filter(
+                    (row) => row.state_name === props.geography
+                  )}
+                  breakdownVar="hispanic_or_latino_and_race"
+                  measure={popProvider.variableId}
+                />
+                <SimpleHorizontalBarChart
+                  data={populationDataStandardized.filter(
+                    (row) => row.state_name === props.geography
+                  )}
+                  breakdownVar="hispanic_or_latino_and_race"
+                  measure={popProvider.variableId}
+                />
               </>
             );
           }}
