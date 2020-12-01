@@ -4,7 +4,9 @@ import TellMeAboutReport from "./TellMeAboutReport";
 import Divider from "@material-ui/core/Divider";
 import WithDatasets from "../../utils/WithDatasets";
 import VerticalGroupedBarChart from "../charts/VerticalGroupedBarChart";
+import TableChart from "../charts/TableChart";
 import StackedBarChart from "../charts/StackedBarChart";
+import PieChart from "../charts/PieChart";
 import useDatasetStore from "../../utils/useDatasetStore";
 import variableProviders from "../../utils/variableProviders";
 import { Breakdowns } from "../../utils/Breakdowns";
@@ -33,6 +35,44 @@ function ChartDumpReport() {
             </h4>
           </Grid>
           <Grid item xs={12}>
+            <div style={{ width: "500px", margin: "auto", textAlign: "left" }}>
+              <h1>Table</h1>
+            </div>
+            <TableChart
+              data={acsProvider
+                .getData(datasetStore.datasets, Breakdowns.byState().andRace())
+                .concat(
+                  acsProvider.getData(
+                    datasetStore.datasets,
+                    Breakdowns.national().andRace()
+                  )
+                )
+                .filter(
+                  (r) =>
+                    selectedStates.includes(r.state_name) &&
+                    r.hispanic_or_latino_and_race !== "Total"
+                )}
+              columns={[
+                "state_name",
+                "hispanic_or_latino_and_race",
+                "population",
+              ]}
+            />
+            <Divider />
+            <div style={{ width: "500px", margin: "auto", textAlign: "left" }}>
+              <h1>Pie Chart</h1>
+            </div>
+            <PieChart
+              data={acsProvider
+                .getData(datasetStore.datasets, Breakdowns.byState().andRace())
+                .filter(
+                  (r) =>
+                    r.state_name === "Alabama" &&
+                    r.hispanic_or_latino_and_race !== "Total"
+                )}
+              categoryField="hispanic_or_latino_and_race"
+              valueField="population_pct"
+            />
             <Divider />
             <div style={{ width: "500px", margin: "auto", textAlign: "left" }}>
               <h1>Time Series</h1>
