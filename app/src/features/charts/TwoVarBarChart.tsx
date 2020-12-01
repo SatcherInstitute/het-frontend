@@ -135,10 +135,8 @@ function getSpec(
         name: "x",
         type: "linear",
         // How do we know when to use compareMeasure vs measure for the scale domain
-        // We want scale domain to start at 0
         domain: { data: RAW_DATASET, field: measure },
         range: [0, { signal: "width" }],
-        padding: 10,
         nice: true,
         zero: true,
       },
@@ -197,7 +195,7 @@ function getSpec(
     legends: [
       {
         stroke: "variables",
-        title: "Legend",
+        title: "Variables",
         padding: 4,
         encode: {
           symbols: {
@@ -209,8 +207,6 @@ function getSpec(
         },
       },
     ],
-
-    // TODO need to add a legend
   };
 }
 
