@@ -24,7 +24,6 @@ const StyledTableHeader = withStyles((theme: Theme) =>
 )(TableCell);
 
 function TableChart(props: { data: Row[]; fields?: Field[] }) {
-  console.log(props);
   const tableColumns: Field[] =
     props.fields === undefined
       ? Object.keys(props.data[0]).map((name) => ({
@@ -32,7 +31,6 @@ function TableChart(props: { data: Row[]; fields?: Field[] }) {
           displayName: name,
         }))
       : props.fields;
-  console.log(tableColumns);
 
   return (
     <TableContainer component={Paper}>
