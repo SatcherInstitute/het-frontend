@@ -1,5 +1,5 @@
 import React from "react";
-import { Vega, VisualizationSpec } from "react-vega";
+import { Vega } from "react-vega";
 import { Row } from "../../utils/DatasetTypes";
 
 const RAW_DATASET = "raw_dataset";
@@ -16,8 +16,6 @@ function getSpec(
 
   return {
     $schema: "https://vega.github.io/schema/vega/v5.json",
-    description:
-      "Bar chart with text labels. Apply scale padding to make the frame cover the labels.",
     background: "white",
     padding: 5,
     height: 500,
@@ -45,14 +43,7 @@ function getSpec(
         encode: {
           enter: {
             tooltip: {
-              signal:
-                "datum." +
-                dim +
-                " + ', " +
-                measure +
-                ":' + datum." +
-                measure +
-                "+'%'",
+              signal: `datum. ${dim} + ', ${measure}: ' + datum. ${measure}+'%'`,
             },
           },
           update: {
@@ -73,14 +64,7 @@ function getSpec(
         encode: {
           enter: {
             tooltip: {
-              signal:
-                "datum." +
-                dim +
-                " + ', " +
-                compareMeasure +
-                ":' + datum." +
-                compareMeasure +
-                "+'%'",
+              signal: `datum. ${dim} + ', ${compareMeasure}: ' + datum. ${compareMeasure}+'%'`,
             },
           },
           update: {
@@ -106,7 +90,9 @@ function getSpec(
             fill: { value: "black" },
             x: { scale: "x", field: measure },
             y: { scale: "y", field: dim, band: 0.8 },
-            text: { signal: 'format(datum["' + measure + '"], "") + "%"' },
+            text: {
+              signal: `format(datum["${measure}"], "") + "%"`,
+            },
           },
         },
       },
@@ -124,7 +110,7 @@ function getSpec(
             x: { scale: "x", field: compareMeasure },
             y: { scale: "y", field: dim, band: 0.3 },
             text: {
-              signal: 'format(datum["' + compareMeasure + '"], "") + "%"',
+              signal: `format(datum["${compareMeasure}"], "") + "%"`,
             },
           },
         },
