@@ -1,4 +1,4 @@
-import { DataFrame, IDataFrame } from "data-forge";
+import { DataFrame } from "data-forge";
 import { Breakdowns } from "../Breakdowns";
 import { Dataset, Row } from "../DatasetTypes";
 import VariableProvider from "./VariableProvider";
