@@ -6,6 +6,7 @@ import WithDatasets from "../../utils/WithDatasets";
 import VerticalGroupedBarChart from "../charts/VerticalGroupedBarChart";
 import TableChart from "../charts/TableChart";
 import StackedBarChart from "../charts/StackedBarChart";
+import PieChart from "../charts/PieChart";
 import useDatasetStore from "../../utils/useDatasetStore";
 import variableProviders from "../../utils/variableProviders";
 import { Breakdowns } from "../../utils/Breakdowns";
@@ -55,6 +56,21 @@ function ChartDumpReport() {
                 "hispanic_or_latino_and_race",
                 "population",
               ]}
+            />
+            <Divider />
+            <div style={{ width: "500px", margin: "auto", textAlign: "left" }}>
+              <h1>Pie Chart</h1>
+            </div>
+            <PieChart
+              data={acsProvider
+                .getData(datasetStore.datasets, Breakdowns.byState().andRace())
+                .filter(
+                  (r) =>
+                    r.state_name === "Alabama" &&
+                    r.hispanic_or_latino_and_race !== "Total"
+                )}
+              categoryField="hispanic_or_latino_and_race"
+              valueField="population_pct"
             />
             <Divider />
             <div style={{ width: "500px", margin: "auto", textAlign: "left" }}>
