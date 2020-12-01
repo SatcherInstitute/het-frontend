@@ -1,15 +1,16 @@
 import STATE_FIPS_MAP from "./Fips";
 import { VariableId } from "./variableProviders";
 
-// Map of phrase segment index to its selected value
+// Map of phrase segment id to its selected value
 export type PhraseSelections = Record<number, number>;
 
 // Each phrase segment of the mad lib is either a string of text
 // or a map of IDs to string options that can fill in a blank
 export type PhraseSegment = string | Record<number, string>;
+export type MadLibId = "diabetes" | "compare" | "dump" | "covid";
 
 export interface MadLib {
-  readonly index: number;
+  readonly id: MadLibId;
   readonly phrase: PhraseSegment[];
   readonly defaultSelections: PhraseSelections;
   readonly activeSelections: PhraseSelections;
@@ -42,24 +43,9 @@ const VARIABLES: Record<string, VariableId> = {
   8: "covid_hosp_per_100k",
 };
 
-// TODO - refactor in a MAP?
 const MADLIB_LIST: MadLib[] = [
   {
-    index: 0,
-    phrase: [
-      "Where are the",
-      { 0: "highest", 1: "lowest" },
-      "rates of",
-      { 0: "unemployment" },
-      "in",
-      STATE_FIPS_MAP,
-      "?",
-    ],
-    defaultSelections: { 1: 0, 3: 0, 5: 0 },
-    activeSelections: { 1: 0, 3: 0, 5: 0 },
-  },
-  {
-    index: 1,
+    id: "diabetes",
     phrase: [
       "Tell me about",
       { 0: "diabetes_count", 1: "diabetes_per_100k" },
@@ -69,7 +55,7 @@ const MADLIB_LIST: MadLib[] = [
     activeSelections: { 1: 0 },
   },
   {
-    index: 2,
+    id: "compare",
     phrase: [
       "Compare",
       { 0: "diabetes_per_100k" },
@@ -82,13 +68,13 @@ const MADLIB_LIST: MadLib[] = [
     activeSelections: { 1: 0, 3: 13, 5: 0 },
   },
   {
-    index: 3,
+    id: "dump",
     phrase: ["Show me ALL THE CHARTS!!!!"],
     defaultSelections: { 0: 0 },
     activeSelections: { 0: 0 },
   },
   {
-    index: 4,
+    id: "covid",
     phrase: ["Tell me about", VARIABLES, " in ", STATE_FIPS_MAP],
     defaultSelections: { 1: 0, 3: 0 },
     activeSelections: { 1: 0, 3: 0 },
