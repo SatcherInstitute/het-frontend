@@ -4,6 +4,7 @@ import TellMeAboutReport from "./TellMeAboutReport";
 import Divider from "@material-ui/core/Divider";
 import WithDatasets from "../../utils/WithDatasets";
 import VerticalGroupedBarChart from "../charts/VerticalGroupedBarChart";
+import TableChart from "../charts/TableChart";
 import StackedBarChart from "../charts/StackedBarChart";
 import useDatasetStore from "../../utils/useDatasetStore";
 import variableProviders from "../../utils/variableProviders";
@@ -32,6 +33,29 @@ function ChartDumpReport() {
             </h4>
           </Grid>
           <Grid item xs={12}>
+            <div style={{ width: "500px", margin: "auto", textAlign: "left" }}>
+              <h1>Table</h1>
+            </div>
+            <TableChart
+              data={acsProvider
+                .getData(datasetStore.datasets, Breakdowns.byState().andRace())
+                .concat(
+                  acsProvider.getData(
+                    datasetStore.datasets,
+                    Breakdowns.national().andRace()
+                  )
+                )
+                .filter(
+                  (r) =>
+                    selectedStates.includes(r.state_name) &&
+                    r.hispanic_or_latino_and_race !== "Total"
+                )}
+              columns={[
+                "hispanic_or_latino_and_race",
+                "state_name",
+                "population",
+              ]}
+            />
             <Divider />
             <div style={{ width: "500px", margin: "auto", textAlign: "left" }}>
               <h1>Time Series</h1>
