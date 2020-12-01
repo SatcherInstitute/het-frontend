@@ -205,7 +205,6 @@ function TwoVarBarChart(props: {
   thinMeasure: string;
   breakdownVar: string;
 }) {
-  console.log(props);
   return (
     <Vega
       spec={getSpec(
