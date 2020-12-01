@@ -80,7 +80,7 @@ function TellMeAboutReport(props: { variable: VariableId }) {
     },
   };
 
-  // TODO - filter from the dataset provider instead of here
+  // TODO - Legends should be scaled exactly the same the across compared charts. Looks misleading otherwise.
   const RACES = [
     "the USA",
     "American Indian/Alaskan Native, Non-Hispanic",
@@ -93,55 +93,45 @@ function TellMeAboutReport(props: { variable: VariableId }) {
 
   return (
     <WithDatasets datasetIds={requiredDatasets}>
-      {() => {
-        let dataset =
-          race === "the USA"
-            ? variableProvider.getData(
-                datasetStore.datasets,
-                Breakdowns.byState().andRace()
-              )
-            : variableProvider
+      {() => (
+        <Grid container spacing={1} alignItems="flex-start">
+          <Grid item xs={12} sm={12} md={6}>
+            Filter results by race:
+            <FormControl>
+              <Select
+                name="raceSelect"
+                value={race}
+                onChange={(e) => {
+                  setRace(e.target.value as string);
+                  setCountyList([]);
+                }}
+              >
+                {RACES.map((race) => (
+                  <MenuItem key={race} value={race}>
+                    {race}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <UsaChloroplethMap
+              signalListeners={signalListeners}
+              varField={props.variable}
+              legendTitle={variableProvider.variableName}
+              data={variableProvider
                 .getData(datasetStore.datasets, Breakdowns.byState().andRace())
-                .filter((r) => r.race === race);
-
-        return (
-          <Grid container spacing={1} alignItems="flex-start">
-            <Grid item xs={12} sm={12} md={6}>
-              Filter results by race:
-              <FormControl>
-                <Select
-                  name="raceSelect"
-                  value={race}
-                  onChange={(e) => {
-                    setRace(e.target.value as string);
-                    setCountyList([]);
-                  }}
-                >
-                  {RACES.map((race) => (
-                    <MenuItem key={race} value={race}>
-                      {race}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-              <UsaChloroplethMap
-                signalListeners={signalListeners}
-                varField={props.variable}
-                legendTitle={variableProvider.variableName}
-                data={dataset}
-                operation={props.variable.endsWith("_count") ? "sum" : "mean"}
-              />
-            </Grid>
-            <Grid item xs={12} sm={12} md={6} className={styles.PaddedGrid}>
-              <p>
-                Click on some states to see data in this table, shift click on
-                map to reset.
-              </p>
-              {CountyLevelTable(countyList, variableProvider.variableName)}
-            </Grid>
+                .filter((r) => race === "the USA" || r.race === race)}
+              operation={props.variable.endsWith("_count") ? "sum" : "mean"}
+            />
           </Grid>
-        );
-      }}
+          <Grid item xs={12} sm={12} md={6} className={styles.PaddedGrid}>
+            <p>
+              Click on some states to see data in this table, shift click on map
+              to reset.
+            </p>
+            {CountyLevelTable(countyList, variableProvider.variableName)}
+          </Grid>
+        </Grid>
+      )}
     </WithDatasets>
   );
 }

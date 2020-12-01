@@ -68,6 +68,7 @@ function UsaChloroplethMap(props: {
     let tooltipValue = 'datum.properties.name + ": " + ' + tooltipDatum;
 
     /* SET UP LEGEND */
+    // TODO - Legends should be scaled exactly the same the across compared charts. Looks misleading otherwise.
     let legend: any = {
       fill: "colorScale",
       orient: "top-right",
