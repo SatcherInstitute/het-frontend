@@ -51,8 +51,8 @@ function ChartDumpReport() {
                     r.hispanic_or_latino_and_race !== "Total"
                 )}
               columns={[
-                "hispanic_or_latino_and_race",
                 "state_name",
+                "hispanic_or_latino_and_race",
                 "population",
               ]}
             />
