@@ -1,4 +1,5 @@
 import STATE_FIPS_MAP from "./Fips";
+import { VariableId } from "./variableProviders";
 
 // Map of phrase segment index to its selected value
 export type PhraseSelections = Record<number, number>;
@@ -29,7 +30,7 @@ function getMadLibPhraseText(madLib: MadLib): string {
   return madLibText;
 }
 
-const VARIABLES = {
+const VARIABLES: Record<string, VariableId> = {
   0: "covid_cases",
   1: "covid_deaths",
   2: "covid_hosp",
