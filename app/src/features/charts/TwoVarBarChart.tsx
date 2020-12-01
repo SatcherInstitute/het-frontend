@@ -11,6 +11,8 @@ function getSpec(
   thinMeasure: string
 ): any {
   const BAR_HEIGHT = 40;
+  const BAR_PADDING = 0.1;
+  const THIN_RATIO = 0.3;
   const THICK_MEASURE_COLOR = "#4c78a8";
   const THIN_MEASURE_COLOR = "#89B7D5";
 
@@ -19,7 +21,7 @@ function getSpec(
     background: "white",
     padding: 5,
     height: 500,
-    width: 500,
+    width: 800,
     style: "cell",
     data: [
       {
@@ -72,8 +74,12 @@ function getSpec(
             ariaRoleDescription: { value: "bar" },
             x: { scale: "x", field: thinMeasure },
             x2: { scale: "x", value: 0 },
-            yc: { scale: "y", field: dim, offset: BAR_HEIGHT / 2 },
-            height: { scale: "y", band: 0.2 },
+            yc: {
+              scale: "y",
+              field: dim,
+              offset: (BAR_HEIGHT - BAR_HEIGHT * BAR_PADDING) / 2,
+            },
+            height: { scale: "y", band: THIN_RATIO },
           },
         },
       },
@@ -134,8 +140,7 @@ function getSpec(
           sort: { op: "min", field: thickMeasure, order: "descending" },
         },
         range: { step: { signal: "y_step" } },
-        paddingInner: 0.1,
-        paddingOuter: 0.05,
+        paddingInner: BAR_PADDING,
       },
       {
         name: "variables",
