@@ -43,12 +43,10 @@ function ReportWrapper(props: { madLib: MadLib }) {
   let variableId: VariableId;
   switch (props.madLib.index) {
     case 0:
-      return <DemoReport madLib={props.madLib} />;
-    case 1:
       // TODO we should add type safety to these instead of casting.
       variableId = getPhraseValue(props.madLib, 1) as VariableId;
       return <TellMeAboutReport variable={variableId} />;
-    case 2:
+    case 1:
       variableId = getPhraseValue(props.madLib, 1) as VariableId;
       return (
         <CompareStatesForVariableReport
@@ -57,9 +55,9 @@ function ReportWrapper(props: { madLib: MadLib }) {
           variable={variableId}
         />
       );
-    case 3:
+    case 2:
       return <ChartDumpReport />;
-    case 4:
+    case 3:
       variableId = getPhraseValue(props.madLib, 1) as VariableId;
       return (
         <CovidReport

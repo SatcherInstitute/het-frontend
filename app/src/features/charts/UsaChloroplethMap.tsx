@@ -22,8 +22,6 @@ function UsaChloroplethMap(props: {
   dataUrl?: string; // Takes CSV or JSON
   varField: string;
   legendTitle: string;
-  filterVar?: string;
-  filterValue?: string;
   signalListeners: any;
   operation?: AggregationOperation;
   stateFips?: number;
@@ -37,13 +35,7 @@ function UsaChloroplethMap(props: {
   useEffect(() => {
     /* SET UP VARIABLE DATSET */
     let varTransformer: any[] = [];
-    // If user wants data filtered, we first apply the filter
-    if (props.filterVar && props.filterValue && props.filterValue !== "All") {
-      varTransformer.push({
-        type: "filter",
-        expr: "datum." + props.filterVar + " === '" + props.filterValue + "'",
-      });
-    }
+
     // Next we perform the aggregation based on requested operation
     if (props.operation) {
       varTransformer.push({
@@ -70,10 +62,6 @@ function UsaChloroplethMap(props: {
     if (props.stateFips) {
       // The first two characters of a county FIPS are the state FIPS
       let stateFipsVar = "slice(datum.id,0,2) == " + props.stateFips;
-      geoTransformers.push({
-        type: "filter",
-        expr: stateFipsVar,
-      });
     }
 
     /* SET UP TOOLTIP */
@@ -114,7 +102,6 @@ function UsaChloroplethMap(props: {
         "A choropleth map depicting U.S. diabetesloyment temp_maxs by county in 2009.",
       data: [
         varDataset,
-
         {
           name: GEO_DATASET,
           transform: geoTransformers,
@@ -197,14 +184,14 @@ function UsaChloroplethMap(props: {
     width,
     props.varField,
     props.legendTitle,
-    props.filterVar,
-    props.filterValue,
     props.dataUrl,
     props.operation,
     props.stateFips,
     props.numberFormat,
     props.data,
   ]);
+
+  console.log(props.data);
 
   return (
     <div

@@ -34,20 +34,6 @@ const MADLIB_LIST: MadLib[] = [
   {
     index: 0,
     phrase: [
-      "Where are the",
-      { 0: "highest", 1: "lowest" },
-      "rates of",
-      { 0: "unemployment" },
-      "in",
-      STATE_FIPS_MAP,
-      "?",
-    ],
-    defaultSelections: { 1: 0, 3: 0, 5: 0 },
-    activeSelections: { 1: 0, 3: 0, 5: 0 },
-  },
-  {
-    index: 1,
-    phrase: [
       "Tell me about",
       { 0: "diabetes_count", 1: "diabetes_per_100k" },
       "in the USA.",
@@ -56,7 +42,7 @@ const MADLIB_LIST: MadLib[] = [
     activeSelections: { 1: 0 },
   },
   {
-    index: 2,
+    index: 1,
     phrase: [
       "Compare",
       { 0: "diabetes_per_100k" },
@@ -69,13 +55,13 @@ const MADLIB_LIST: MadLib[] = [
     activeSelections: { 1: 0, 3: 13, 5: 0 },
   },
   {
-    index: 3,
+    index: 2,
     phrase: ["Show me ALL THE CHARTS!!!!"],
     defaultSelections: { 0: 0 },
     activeSelections: { 0: 0 },
   },
   {
-    index: 4,
+    index: 3,
     phrase: [
       "Tell me about",
       { 0: "covid_cases_per_100k", 1: "covid_deaths_per_100k" },
