@@ -4,7 +4,6 @@ import { Paper } from "@material-ui/core";
 import Select from "@material-ui/core/Select";
 import FormControl from "@material-ui/core/FormControl";
 import MenuItem from "@material-ui/core/MenuItem";
-import DemoReport from "../features/reports/DemoReport";
 import ChartDumpReport from "../features/reports/ChartDumpReport";
 import TellMeAboutReport from "../features/reports/TellMeAboutReport";
 import Dialog from "@material-ui/core/Dialog";

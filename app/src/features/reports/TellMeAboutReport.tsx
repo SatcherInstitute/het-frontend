@@ -102,7 +102,7 @@ function TellMeAboutReport(props: { variable: VariableId }) {
               )
             : variableProvider
                 .getData(datasetStore.datasets, Breakdowns.byState().andRace())
-                .filter((r) => r.race == race);
+                .filter((r) => r.race === race);
 
         return (
           <Grid container spacing={1} alignItems="flex-start">
@@ -129,7 +129,7 @@ function TellMeAboutReport(props: { variable: VariableId }) {
                 varField={props.variable}
                 legendTitle={variableProvider.variableName}
                 data={dataset}
-                operation="sum"
+                operation={props.variable.endsWith("_count") ? "sum" : "mean"}
               />
             </Grid>
             <Grid item xs={12} sm={12} md={6} className={styles.PaddedGrid}>

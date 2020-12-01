@@ -59,10 +59,6 @@ function UsaChloroplethMap(props: {
         values: [props.varField],
       },
     ];
-    if (props.stateFips) {
-      // The first two characters of a county FIPS are the state FIPS
-      let stateFipsVar = "slice(datum.id,0,2) == " + props.stateFips;
-    }
 
     /* SET UP TOOLTIP */
     let tooltipDatum =
