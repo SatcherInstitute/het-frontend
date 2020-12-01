@@ -2,11 +2,9 @@ import React from "react";
 import { Vega } from "react-vega";
 import { Row } from "../../utils/DatasetTypes";
 
-const RAW_DATASET = "raw_dataset";
-
 function getSpec(
   data: Record<string, any>[],
-  dim: string,
+  breakdownVar: string,
   thickMeasure: string,
   thinMeasure: string
 ): any {
@@ -15,6 +13,7 @@ function getSpec(
   const THIN_RATIO = 0.3;
   const THICK_MEASURE_COLOR = "#4c78a8";
   const THIN_MEASURE_COLOR = "#89B7D5";
+  const DATASET = "DATASET";
 
   return {
     $schema: "https://vega.github.io/schema/vega/v5.json",
@@ -25,7 +24,7 @@ function getSpec(
     style: "cell",
     data: [
       {
-        name: RAW_DATASET,
+        name: DATASET,
         values: data,
       },
     ],
@@ -41,11 +40,11 @@ function getSpec(
         name: "thickMeasure_bars",
         type: "rect",
         style: ["bar"],
-        from: { data: RAW_DATASET },
+        from: { data: DATASET },
         encode: {
           enter: {
             tooltip: {
-              signal: `datum. ${dim} + ', ${thickMeasure}: ' + datum. ${thickMeasure}+'%'`,
+              signal: `datum. ${breakdownVar} + ', ${thickMeasure}: ' + datum. ${thickMeasure}+'%'`,
             },
           },
           update: {
@@ -53,7 +52,7 @@ function getSpec(
             ariaRoleDescription: { value: "bar" },
             x: { scale: "x", field: thickMeasure },
             x2: { scale: "x", value: 0 },
-            y: { scale: "y", field: dim },
+            y: { scale: "y", field: breakdownVar },
             height: { scale: "y", band: 1 },
           },
         },
@@ -62,11 +61,11 @@ function getSpec(
         name: "thinMeasure_bars",
         type: "rect",
         style: ["bar"],
-        from: { data: RAW_DATASET },
+        from: { data: DATASET },
         encode: {
           enter: {
             tooltip: {
-              signal: `datum. ${dim} + ', ${thinMeasure}: ' + datum. ${thinMeasure}+'%'`,
+              signal: `datum. ${breakdownVar} + ', ${thinMeasure}: ' + datum. ${thinMeasure}+'%'`,
             },
           },
           update: {
@@ -76,7 +75,7 @@ function getSpec(
             x2: { scale: "x", value: 0 },
             yc: {
               scale: "y",
-              field: dim,
+              field: breakdownVar,
               offset: (BAR_HEIGHT - BAR_HEIGHT * BAR_PADDING) / 2,
             },
             height: { scale: "y", band: THIN_RATIO },
@@ -87,7 +86,7 @@ function getSpec(
         name: "thickMeasure_text_labels",
         type: "text",
         style: ["text"],
-        from: { data: RAW_DATASET },
+        from: { data: DATASET },
         encode: {
           update: {
             align: { value: "left" },
@@ -95,7 +94,7 @@ function getSpec(
             dx: { value: 3 },
             fill: { value: "black" },
             x: { scale: "x", field: thickMeasure },
-            y: { scale: "y", field: dim, band: 0.8 },
+            y: { scale: "y", field: breakdownVar, band: 0.8 },
             text: {
               signal: `format(datum["${thickMeasure}"], "") + "%"`,
             },
@@ -106,7 +105,7 @@ function getSpec(
         name: "thinMeasure_text_labels",
         type: "text",
         style: ["text"],
-        from: { data: RAW_DATASET },
+        from: { data: DATASET },
         encode: {
           update: {
             align: { value: "left" },
@@ -114,7 +113,7 @@ function getSpec(
             dx: { value: 3 },
             fill: { value: "black" },
             x: { scale: "x", field: thinMeasure },
-            y: { scale: "y", field: dim, band: 0.3 },
+            y: { scale: "y", field: breakdownVar, band: 0.3 },
             text: {
               signal: `format(datum["${thinMeasure}"], "") + "%"`,
             },
@@ -126,7 +125,7 @@ function getSpec(
       {
         name: "x",
         type: "linear",
-        domain: { data: RAW_DATASET, field: thickMeasure },
+        domain: { data: DATASET, field: thickMeasure },
         range: [0, { signal: "width" }],
         nice: true,
         zero: true,
@@ -135,8 +134,8 @@ function getSpec(
         name: "y",
         type: "band",
         domain: {
-          data: RAW_DATASET,
-          field: dim,
+          data: DATASET,
+          field: breakdownVar,
           sort: { op: "min", field: thickMeasure, order: "descending" },
         },
         range: { step: { signal: "y_step" } },
@@ -178,7 +177,7 @@ function getSpec(
         scale: "y",
         orient: "left",
         grid: false,
-        title: dim,
+        title: breakdownVar,
         zindex: 0,
       },
     ],

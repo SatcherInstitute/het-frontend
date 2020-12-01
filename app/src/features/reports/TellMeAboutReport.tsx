@@ -52,7 +52,7 @@ function CountyLevelTable(countyList: County[], valueName: string) {
 function TellMeAboutReport(props: { variable: VariableId }) {
   const datasetStore = useDatasetStore();
   const variableProvider = variableProviders[props.variable];
-  let requiredDatasets = VariableProvider.getUniqueDatasetIds([
+  const requiredDatasets = VariableProvider.getUniqueDatasetIds([
     variableProvider,
   ]);
 
@@ -93,8 +93,6 @@ function TellMeAboutReport(props: { variable: VariableId }) {
     "Other race, Non-Hispanic",
     "White, Non-Hispanic",
   ];
-
-  console.log(datasetStore.datasets);
 
   return (
     <WithDatasets datasetIds={requiredDatasets}>
