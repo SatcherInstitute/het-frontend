@@ -1,7 +1,7 @@
 import { Breakdowns } from "../Breakdowns";
 import { Dataset, Row } from "../DatasetTypes";
 import { per100k } from "../datasetutils";
-import { THE_USA_STRING } from "../Fips";
+import { USA_DISPLAY_NAME, ALL_RACES_DISPLAY_NAME } from "../Fips";
 import { VariableId } from "../variableProviders";
 import VariableProvider from "./VariableProvider";
 
@@ -19,22 +19,18 @@ class DiabetesProvider extends VariableProvider {
     breakdowns: Breakdowns
   ): Row[] {
     const brfss_diabetes = datasets["brfss_diabetes"];
-    const diabetesFrame = brfss_diabetes.toDataFrame();
+    let df = brfss_diabetes.toDataFrame();
 
-    let df = diabetesFrame;
-    if (
-      breakdowns.geography === "national" &&
-      breakdowns.demographic === "race"
-    ) {
+    if (breakdowns.geography === "national") {
       df = df.pivot("race", {
-        state_name: (series) => THE_USA_STRING,
+        state_name: (series) => USA_DISPLAY_NAME,
         diabetes_count: (series) => series.sum(),
         diabetes_no: (series) => series.sum(),
       });
     }
     if (!breakdowns.demographic) {
       df = df.pivot(["state_name", "state_fips_code"], {
-        race: (series) => THE_USA_STRING,
+        race: (series) => ALL_RACES_DISPLAY_NAME,
         diabetes_count: (series) => series.sum(),
         diabetes_no: (series) => series.sum(),
       });

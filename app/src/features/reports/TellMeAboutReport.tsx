@@ -17,7 +17,7 @@ import useDatasetStore from "../../utils/useDatasetStore";
 import variableProviders, { VariableId } from "../../utils/variableProviders";
 import { Breakdowns } from "../../utils/Breakdowns";
 import VariableProvider from "../../utils/variables/VariableProvider";
-import { THE_USA_STRING } from "../../utils/Fips";
+import { ALL_RACES_DISPLAY_NAME } from "../../utils/Fips";
 import Alert from "@material-ui/lab/Alert";
 
 interface County {
@@ -57,11 +57,11 @@ function TellMeAboutReport(props: { variable: VariableId }) {
   ]);
 
   const [countyList, setCountyList] = useState<County[]>([]);
-  const [race, setRace] = useState<string>(THE_USA_STRING);
+  const [race, setRace] = useState<string>(ALL_RACES_DISPLAY_NAME);
 
   useEffect(() => {
     setCountyList([]);
-    setRace(THE_USA_STRING);
+    setRace(ALL_RACES_DISPLAY_NAME);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.variable]);
 
@@ -85,7 +85,7 @@ function TellMeAboutReport(props: { variable: VariableId }) {
 
   // TODO - Legends should be scaled exactly the same the across compared charts. Looks misleading otherwise.
   const RACES = [
-    THE_USA_STRING,
+    ALL_RACES_DISPLAY_NAME,
     "American Indian/Alaskan Native, Non-Hispanic",
     "Asian, Non-Hispanic",
     "Black, Non-Hispanic",
@@ -98,12 +98,12 @@ function TellMeAboutReport(props: { variable: VariableId }) {
     <WithDatasets datasetIds={requiredDatasets}>
       {() => {
         const breakdowns =
-          race === THE_USA_STRING
+          race === ALL_RACES_DISPLAY_NAME
             ? Breakdowns.byState()
             : Breakdowns.byState().andRace();
         let dataset = variableProvider
           .getData(datasetStore.datasets, breakdowns)
-          .filter((r) => race === THE_USA_STRING || r.race === race);
+          .filter((r) => r.race === race);
 
         return (
           <Grid container spacing={1} alignItems="flex-start">
@@ -143,7 +143,7 @@ function TellMeAboutReport(props: { variable: VariableId }) {
             <Grid item xs={12} sm={12} md={6} className={styles.PaddedGrid}>
               <TableChart
                 data={dataset}
-                columns={["state_name", props.variable]}
+                columns={["state_name", variableProvider.variableName]}
               />
             </Grid>
           </Grid>

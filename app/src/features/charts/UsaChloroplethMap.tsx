@@ -30,9 +30,6 @@ function UsaChloroplethMap(props: {
   const [spec, setSpec] = useState({});
 
   useEffect(() => {
-    /* SET UP VARIABLE DATSET */
-    let varTransformer: any[] = [];
-
     /* SET UP GEO DATSET */
     // Transform geo dataset by adding varField from VAR_DATASET
     const fipsKey = props.stateFips ? VAR_COUNTY_FIPS : VAR_STATE_FIPS;
@@ -74,7 +71,6 @@ function UsaChloroplethMap(props: {
       data: [
         {
           name: VAR_DATASET,
-          transform: varTransformer,
           values: props.data,
         },
         {
