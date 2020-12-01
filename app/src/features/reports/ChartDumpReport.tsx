@@ -11,9 +11,8 @@ import useDatasetStore from "../../utils/useDatasetStore";
 import variableProviders from "../../utils/variableProviders";
 import { Breakdowns } from "../../utils/Breakdowns";
 import CovidReport from "./CovidReport";
-import STATE_FIPS_MAP from "../../utils/Fips";
+import { STATE_FIPS_MAP } from "../../utils/Fips";
 import VariableProvider from "../../utils/variables/VariableProvider";
-import DemoReport from "./DemoReport";
 
 function ChartDumpReport() {
   const datasetStore = useDatasetStore();
@@ -116,23 +115,6 @@ function ChartDumpReport() {
               </ul>
             </div>
             <TellMeAboutReport variable={"diabetes_count"} />
-            <DemoReport
-              madLib={{
-                index: 0,
-                phrase: [
-                  "Where are the",
-                  { 0: "highest", 1: "lowest" },
-                  "rates of",
-                  { 0: "unemployment" },
-                  "in",
-                  STATE_FIPS_MAP,
-                  "?",
-                ],
-                defaultSelections: { 1: 0, 3: 0, 5: 37 },
-                activeSelections: { 1: 0, 3: 0, 5: 37 },
-              }}
-            />
-
             <Divider />
 
             <div style={{ width: "500px", margin: "auto", textAlign: "left" }}>

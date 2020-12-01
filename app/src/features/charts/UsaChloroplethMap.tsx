@@ -4,7 +4,6 @@ import React, { useState, useEffect } from "react";
 import { Vega } from "react-vega";
 import { useResponsiveWidth } from "../../utils/useResponsiveWidth";
 
-type AggregationOperation = "sum" | "mean";
 type NumberFormat = "raw" | "percentage";
 
 const HEIGHT_WIDTH_RATIO = 0.5;
@@ -18,12 +17,10 @@ const VAR_STATE_FIPS = "state_fips_code";
 const VAR_COUNTY_FIPS = "COUNTY_FIPS";
 
 function UsaChloroplethMap(props: {
-  data?: Record<string, any>[];
-  dataUrl?: string; // Takes CSV or JSON
+  data: Record<string, any>[];
   varField: string;
   legendTitle: string;
   signalListeners: any;
-  operation?: AggregationOperation;
   stateFips?: number;
   numberFormat?: NumberFormat;
 }) {
@@ -35,17 +32,6 @@ function UsaChloroplethMap(props: {
   useEffect(() => {
     /* SET UP VARIABLE DATSET */
     let varTransformer: any[] = [];
-
-    // Next we perform the aggregation based on requested operation
-    if (props.operation) {
-      varTransformer.push({
-        type: "aggregate",
-        groupby: [VAR_STATE_FIPS],
-        fields: [props.varField], // field name to aggregate on
-        ops: [props.operation],
-        as: [props.varField], // field name of the aggregation
-      });
-    }
 
     /* SET UP GEO DATSET */
     // Transform geo dataset by adding varField from VAR_DATASET
@@ -81,24 +67,16 @@ function UsaChloroplethMap(props: {
       legend["format"] = "0.1%";
     }
 
-    // TODO - update all charts so we can deprecate dataUrl option
-    let varDataset = {
-      name: VAR_DATASET,
-      transform: varTransformer,
-    };
-    if (props.data) {
-      varDataset.values = props.data;
-    } else {
-      varDataset.format = { type: props.dataUrl.split(".").pop() };
-      varDataset.url = props.dataUrl;
-    }
-
     setSpec({
       $schema: "https://vega.github.io/schema/vega/v5.json",
       description:
         "A choropleth map depicting U.S. diabetesloyment temp_maxs by county in 2009.",
       data: [
-        varDataset,
+        {
+          name: VAR_DATASET,
+          transform: varTransformer,
+          values: props.data,
+        },
         {
           name: GEO_DATASET,
           transform: geoTransformers,
@@ -181,14 +159,11 @@ function UsaChloroplethMap(props: {
     width,
     props.varField,
     props.legendTitle,
-    props.dataUrl,
     props.operation,
     props.stateFips,
     props.numberFormat,
     props.data,
   ]);
-
-  console.log(props.data);
 
   return (
     <div

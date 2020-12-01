@@ -1,5 +1,7 @@
-const STATE_FIPS_MAP = {
-  0: "the USA",
+export const THE_USA_STRING = "the USA";
+
+export const STATE_FIPS_MAP = {
+  0: THE_USA_STRING,
   1: "Alabama",
   2: "Alaska",
   4: "Arizona",
@@ -58,5 +60,3 @@ const STATE_FIPS_MAP = {
     72: "Puerto Rico",
     78: "Virgin Islands"
 */
-
-export default STATE_FIPS_MAP;

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Paper, Grid } from "@material-ui/core";
 import UsaChloroplethMap from "../charts/UsaChloroplethMap";
+import TableChart from "../charts/TableChart";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -16,6 +17,8 @@ import useDatasetStore from "../../utils/useDatasetStore";
 import variableProviders, { VariableId } from "../../utils/variableProviders";
 import { Breakdowns } from "../../utils/Breakdowns";
 import VariableProvider from "../../utils/variables/VariableProvider";
+import { THE_USA_STRING } from "../../utils/Fips";
+import Alert from "@material-ui/lab/Alert";
 
 interface County {
   id: string;
@@ -54,11 +57,11 @@ function TellMeAboutReport(props: { variable: VariableId }) {
   ]);
 
   const [countyList, setCountyList] = useState<County[]>([]);
-  const [race, setRace] = useState<string>("the USA");
+  const [race, setRace] = useState<string>(THE_USA_STRING);
 
   useEffect(() => {
     setCountyList([]);
-    setRace("the USA");
+    setRace(THE_USA_STRING);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.variable]);
 
@@ -82,7 +85,7 @@ function TellMeAboutReport(props: { variable: VariableId }) {
 
   // TODO - Legends should be scaled exactly the same the across compared charts. Looks misleading otherwise.
   const RACES = [
-    "the USA",
+    THE_USA_STRING,
     "American Indian/Alaskan Native, Non-Hispanic",
     "Asian, Non-Hispanic",
     "Black, Non-Hispanic",
@@ -93,45 +96,59 @@ function TellMeAboutReport(props: { variable: VariableId }) {
 
   return (
     <WithDatasets datasetIds={requiredDatasets}>
-      {() => (
-        <Grid container spacing={1} alignItems="flex-start">
-          <Grid item xs={12} sm={12} md={6}>
-            Filter results by race:
-            <FormControl>
-              <Select
-                name="raceSelect"
-                value={race}
-                onChange={(e) => {
-                  setRace(e.target.value as string);
-                  setCountyList([]);
-                }}
-              >
-                {RACES.map((race) => (
-                  <MenuItem key={race} value={race}>
-                    {race}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-            <UsaChloroplethMap
-              signalListeners={signalListeners}
-              varField={props.variable}
-              legendTitle={variableProvider.variableName}
-              data={variableProvider
-                .getData(datasetStore.datasets, Breakdowns.byState().andRace())
-                .filter((r) => race === "the USA" || r.race === race)}
-              operation={props.variable.endsWith("_count") ? "sum" : "mean"}
-            />
+      {() => {
+        const breakdowns =
+          race === THE_USA_STRING
+            ? Breakdowns.byState()
+            : Breakdowns.byState().andRace();
+        let dataset = variableProvider
+          .getData(datasetStore.datasets, breakdowns)
+          .filter((r) => race === THE_USA_STRING || r.race === race);
+
+        return (
+          <Grid container spacing={1} alignItems="flex-start">
+            <Grid item xs={12} sm={12} md={6}>
+              <Alert severity="error">
+                TODO: Have a constant legend, as changing legend is misleading
+              </Alert>
+              Filter results by race:
+              <FormControl>
+                <Select
+                  name="raceSelect"
+                  value={race}
+                  onChange={(e) => {
+                    setRace(e.target.value as string);
+                    setCountyList([]);
+                  }}
+                >
+                  {RACES.map((race) => (
+                    <MenuItem key={race} value={race}>
+                      {race}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+              <UsaChloroplethMap
+                signalListeners={signalListeners}
+                varField={props.variable}
+                legendTitle={variableProvider.variableName}
+                data={dataset}
+              />
+              <p>
+                Click on some states to see data in this table, shift click on
+                map to reset.
+              </p>
+              {CountyLevelTable(countyList, variableProvider.variableName)}
+            </Grid>
+            <Grid item xs={12} sm={12} md={6} className={styles.PaddedGrid}>
+              <TableChart
+                data={dataset}
+                columns={["state_name", props.variable]}
+              />
+            </Grid>
           </Grid>
-          <Grid item xs={12} sm={12} md={6} className={styles.PaddedGrid}>
-            <p>
-              Click on some states to see data in this table, shift click on map
-              to reset.
-            </p>
-            {CountyLevelTable(countyList, variableProvider.variableName)}
-          </Grid>
-        </Grid>
-      )}
+        );
+      }}
     </WithDatasets>
   );
 }
