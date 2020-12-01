@@ -29,6 +29,18 @@ function getMadLibPhraseText(madLib: MadLib): string {
   return madLibText;
 }
 
+const VARIABLES = {
+  0: "covid_cases",
+  1: "covid_deaths",
+  2: "covid_hosp",
+  3: "covid_cases_pct_of_geo",
+  4: "covid_deaths_pct_of_geo",
+  5: "covid_hosp_pct_of_geo",
+  6: "covid_deaths_per_100k",
+  7: "covid_cases_per_100k",
+  8: "covid_hosp_per_100k",
+};
+
 // TODO - refactor in a MAP?
 const MADLIB_LIST: MadLib[] = [
   {
@@ -76,12 +88,7 @@ const MADLIB_LIST: MadLib[] = [
   },
   {
     index: 4,
-    phrase: [
-      "Tell me about",
-      { 0: "covid_cases_per_100k", 1: "covid_deaths_per_100k" },
-      " in ",
-      STATE_FIPS_MAP,
-    ],
+    phrase: ["Tell me about", VARIABLES, " in ", STATE_FIPS_MAP],
     defaultSelections: { 1: 0, 3: 0 },
     activeSelections: { 1: 0, 3: 0 },
   },
