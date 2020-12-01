@@ -84,8 +84,9 @@ function CovidReport(props: { variable: VariableId; geography: string }) {
                     data={mostRecent.filter(
                       (r) => r.hispanic_or_latino_and_race !== "Total"
                     )}
-                    compareMeasure={covidProvider.variableId}
-                    measure="population_pct"
+                    thickMeasure="population_pct"
+                    thinMeasure={covidProvider.variableId}
+                    breakdownVar="hispanic_or_latino_and_race"
                   />
                 )}
                 <LineChart

@@ -7,12 +7,12 @@ const RAW_DATASET = "raw_dataset";
 function getSpec(
   data: Record<string, any>[],
   dim: string,
-  measure: string,
-  compareMeasure: string
+  thickMeasure: string,
+  thinMeasure: string
 ): any {
   const BAR_HEIGHT = 40;
-  const MEASURE_COLOR = "#4c78a8";
-  const COMPARE_MEASURE_COLOR = "#89B7D5";
+  const THICK_MEASURE_COLOR = "#4c78a8";
+  const THIN_MEASURE_COLOR = "#89B7D5";
 
   return {
     $schema: "https://vega.github.io/schema/vega/v5.json",
@@ -36,20 +36,20 @@ function getSpec(
     ],
     marks: [
       {
-        name: "layer1_measure_bars",
+        name: "thickMeasure_bars",
         type: "rect",
         style: ["bar"],
         from: { data: RAW_DATASET },
         encode: {
           enter: {
             tooltip: {
-              signal: `datum. ${dim} + ', ${measure}: ' + datum. ${measure}+'%'`,
+              signal: `datum. ${dim} + ', ${thickMeasure}: ' + datum. ${thickMeasure}+'%'`,
             },
           },
           update: {
-            fill: { value: MEASURE_COLOR },
+            fill: { value: THICK_MEASURE_COLOR },
             ariaRoleDescription: { value: "bar" },
-            x: { scale: "x", field: measure },
+            x: { scale: "x", field: thickMeasure },
             x2: { scale: "x", value: 0 },
             y: { scale: "y", field: dim },
             height: { scale: "y", band: 1 },
@@ -57,20 +57,20 @@ function getSpec(
         },
       },
       {
-        name: "layer2_compare_measure_bars",
+        name: "thinMeasure_bars",
         type: "rect",
         style: ["bar"],
         from: { data: RAW_DATASET },
         encode: {
           enter: {
             tooltip: {
-              signal: `datum. ${dim} + ', ${compareMeasure}: ' + datum. ${compareMeasure}+'%'`,
+              signal: `datum. ${dim} + ', ${thinMeasure}: ' + datum. ${thinMeasure}+'%'`,
             },
           },
           update: {
-            fill: { value: COMPARE_MEASURE_COLOR },
+            fill: { value: THIN_MEASURE_COLOR },
             ariaRoleDescription: { value: "bar" },
-            x: { scale: "x", field: compareMeasure },
+            x: { scale: "x", field: thinMeasure },
             x2: { scale: "x", value: 0 },
             yc: { scale: "y", field: dim, offset: BAR_HEIGHT / 2 },
             height: { scale: "y", band: 0.2 },
@@ -78,7 +78,7 @@ function getSpec(
         },
       },
       {
-        name: "layer3_text_labels",
+        name: "thickMeasure_text_labels",
         type: "text",
         style: ["text"],
         from: { data: RAW_DATASET },
@@ -88,16 +88,16 @@ function getSpec(
             baseline: { value: "middle" },
             dx: { value: 3 },
             fill: { value: "black" },
-            x: { scale: "x", field: measure },
+            x: { scale: "x", field: thickMeasure },
             y: { scale: "y", field: dim, band: 0.8 },
             text: {
-              signal: `format(datum["${measure}"], "") + "%"`,
+              signal: `format(datum["${thickMeasure}"], "") + "%"`,
             },
           },
         },
       },
       {
-        name: "layer4_value_label_text_on_layer2_bars",
+        name: "thinMeasure_text_labels",
         type: "text",
         style: ["text"],
         from: { data: RAW_DATASET },
@@ -107,10 +107,10 @@ function getSpec(
             baseline: { value: "middle" },
             dx: { value: 3 },
             fill: { value: "black" },
-            x: { scale: "x", field: compareMeasure },
+            x: { scale: "x", field: thinMeasure },
             y: { scale: "y", field: dim, band: 0.3 },
             text: {
-              signal: `format(datum["${compareMeasure}"], "") + "%"`,
+              signal: `format(datum["${thinMeasure}"], "") + "%"`,
             },
           },
         },
@@ -120,8 +120,7 @@ function getSpec(
       {
         name: "x",
         type: "linear",
-        // How do we know when to use compareMeasure vs measure for the scale domain
-        domain: { data: RAW_DATASET, field: measure },
+        domain: { data: RAW_DATASET, field: thickMeasure },
         range: [0, { signal: "width" }],
         nice: true,
         zero: true,
@@ -132,7 +131,7 @@ function getSpec(
         domain: {
           data: RAW_DATASET,
           field: dim,
-          sort: { op: "min", field: measure, order: "descending" },
+          sort: { op: "min", field: thickMeasure, order: "descending" },
         },
         range: { step: { signal: "y_step" } },
         paddingInner: 0.1,
@@ -141,8 +140,8 @@ function getSpec(
       {
         name: "variables",
         type: "ordinal",
-        domain: [measure, compareMeasure],
-        range: [MEASURE_COLOR, COMPARE_MEASURE_COLOR],
+        domain: [thickMeasure, thinMeasure],
+        range: [THICK_MEASURE_COLOR, THIN_MEASURE_COLOR],
       },
     ],
     axes: [
@@ -164,7 +163,7 @@ function getSpec(
         scale: "x",
         orient: "bottom",
         grid: false,
-        title: measure,
+        title: `${thickMeasure} and ${thinMeasure} `,
         labelFlush: true,
         labelOverlap: true,
         tickCount: { signal: "ceil(width/40)" },
@@ -198,17 +197,18 @@ function getSpec(
 
 function TwoVarBarChart(props: {
   data: Row[];
-  measure: string;
-  compareMeasure: string;
+  thickMeasure: string;
+  thinMeasure: string;
+  breakdownVar: string;
 }) {
   console.log(props);
   return (
     <Vega
       spec={getSpec(
         props.data,
-        "hispanic_or_latino_and_race",
-        props.measure,
-        props.compareMeasure
+        props.breakdownVar,
+        props.thickMeasure,
+        props.thinMeasure
       )}
     />
   );
