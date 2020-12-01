@@ -10,9 +10,6 @@ function getSpec(
   measure: string,
   compareMeasure: string
 ): any {
-  measure = "covid_cases_pct_of_geo";
-  compareMeasure = "population_pct";
-
   const BAR_HEIGHT = 40;
 
   return {
@@ -45,7 +42,10 @@ function getSpec(
         from: { data: RAW_DATASET },
         encode: {
           enter: {
-            tooltip: { signal: "datum." + dim + " + ':' + datum." + measure },
+            tooltip: {
+              signal:
+                "datum." + dim + " + ', " + measure + ":' + datum." + measure,
+            },
           },
           update: {
             fill: { value: "#4c78a8" },
@@ -65,7 +65,13 @@ function getSpec(
         encode: {
           enter: {
             tooltip: {
-              signal: "datum." + dim + " + ':' + datum." + compareMeasure,
+              signal:
+                "datum." +
+                dim +
+                " + ', " +
+                compareMeasure +
+                ":' + datum." +
+                compareMeasure,
             },
           },
           update: {
@@ -135,7 +141,7 @@ function getSpec(
         type: "linear",
         // How do we know when to use compareMeasure vs measure for the scale domain
         // We want scale domain to start at 0
-        domain: { data: RAW_DATASET, field: compareMeasure },
+        domain: { data: RAW_DATASET, field: measure },
         range: [0, { signal: "width" }],
         padding: 10,
         nice: true,

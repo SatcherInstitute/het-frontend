@@ -80,17 +80,19 @@ function CovidReport(props: { variable: VariableId; geography: string }) {
             // TODO why is the line chart showing one day earlier?
             return (
               <>
-                <Grid container spacing={1} alignItems="flex-start">
-                  <Grid item xs={12}>
-                    <TwoVarBarChart
-                      data={mostRecent.filter(
-                        (r) => r.hispanic_or_latino_and_race !== "Total"
-                      )}
-                      measure={covidProvider.variableId}
-                      compareMeasure="population"
-                    />
+                {covidProvider.variableId.endsWith("pct_of_geo") && (
+                  <Grid container spacing={1} alignItems="flex-start">
+                    <Grid item xs={12}>
+                      <TwoVarBarChart
+                        data={mostRecent.filter(
+                          (r) => r.hispanic_or_latino_and_race !== "Total"
+                        )}
+                        compareMeasure={covidProvider.variableId}
+                        measure="population_pct"
+                      />
+                    </Grid>
                   </Grid>
-                </Grid>
+                )}
                 <LineChart
                   data={data}
                   breakdownVar="hispanic_or_latino_and_race"
