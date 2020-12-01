@@ -1,4 +1,4 @@
-import STATE_FIPS_MAP from "./Fips";
+import { STATE_FIPS_MAP } from "./Fips";
 import { VariableId } from "./variableProviders";
 
 // Map of phrase segment index to its selected value
