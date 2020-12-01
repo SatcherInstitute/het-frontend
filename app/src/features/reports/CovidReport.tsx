@@ -1,12 +1,14 @@
 import React from "react";
 import { Grid } from "@material-ui/core";
 import LineChart from "../charts/LineChart";
+import TableChart from "../charts/TableChart";
 import WithDatasets from "../../utils/WithDatasets";
 import useDatasetStore from "../../utils/useDatasetStore";
 import variableProviders, { VariableId } from "../../utils/variableProviders";
 import { Breakdowns } from "../../utils/Breakdowns";
 import SimpleHorizontalBarChart from "../charts/SimpleHorizontalBarChart";
 import VariableProvider from "../../utils/variables/VariableProvider";
+import TwoVarBarChart from "../charts/TwoVarBarChart";
 
 function asDate(dateStr: string) {
   const parts = dateStr.split("-").map(Number);
@@ -78,6 +80,17 @@ function CovidReport(props: { variable: VariableId; geography: string }) {
             // TODO why is the line chart showing one day earlier?
             return (
               <>
+                <Grid container spacing={1} alignItems="flex-start">
+                  <Grid item xs={12}>
+                    <TwoVarBarChart
+                      data={mostRecent.filter(
+                        (r) => r.hispanic_or_latino_and_race !== "Total"
+                      )}
+                      measure={covidProvider.variableId}
+                      compareMeasure="population"
+                    />
+                  </Grid>
+                </Grid>
                 <LineChart
                   data={data}
                   breakdownVar="hispanic_or_latino_and_race"

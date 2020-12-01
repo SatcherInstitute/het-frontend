@@ -10,8 +10,10 @@ function getSpec(
   measure: string,
   compareMeasure: string
 ): any {
-  measure = "population";
-  compareMeasure = "diabetes_count";
+  measure = "covid_cases_pct_of_geo";
+  compareMeasure = "population_pct";
+
+  const BAR_HEIGHT = 40;
 
   return {
     $schema: "https://vega.github.io/schema/vega/v5.json",
@@ -29,7 +31,7 @@ function getSpec(
       },
     ],
     signals: [
-      { name: "y_step", value: 20 },
+      { name: "y_step", value: BAR_HEIGHT },
       {
         name: "height",
         update: "bandspace(domain('y').length, 0.1, 0.05) * y_step",
@@ -42,6 +44,9 @@ function getSpec(
         style: ["bar"],
         from: { data: RAW_DATASET },
         encode: {
+          enter: {
+            tooltip: { signal: "datum." + dim + " + ':' + datum." + measure },
+          },
           update: {
             fill: { value: "#4c78a8" },
             ariaRoleDescription: { value: "bar" },
@@ -58,12 +63,17 @@ function getSpec(
         style: ["bar"],
         from: { data: RAW_DATASET },
         encode: {
+          enter: {
+            tooltip: {
+              signal: "datum." + dim + " + ':' + datum." + compareMeasure,
+            },
+          },
           update: {
-            fill: { value: "red" },
+            fill: { value: "#89B7D5" },
             ariaRoleDescription: { value: "bar" },
             x: { scale: "x", field: compareMeasure },
             x2: { scale: "x", value: 0 },
-            y: { scale: "y", field: dim },
+            yc: { scale: "y", field: dim, offset: BAR_HEIGHT / 2 },
             height: { scale: "y", band: 0.2 },
           },
         },
@@ -96,8 +106,25 @@ function getSpec(
                 '"], ""))',
             },
             x: { scale: "x", field: measure },
-            y: { scale: "y", field: dim, band: 0.5 },
+            y: { scale: "y", field: dim, band: 0.8 },
             text: { signal: 'format(datum["' + measure + '"], "")' },
+          },
+        },
+      },
+      {
+        name: "layer4_value_label_text_on_layer2_bars",
+        type: "text",
+        style: ["text"],
+        from: { data: RAW_DATASET },
+        encode: {
+          update: {
+            align: { value: "left" },
+            baseline: { value: "middle" },
+            dx: { value: 3 },
+            fill: { value: "black" },
+            x: { scale: "x", field: compareMeasure },
+            y: { scale: "y", field: dim, band: 0.3 },
+            text: { signal: 'format(datum["' + compareMeasure + '"], "")' },
           },
         },
       },
@@ -106,7 +133,9 @@ function getSpec(
       {
         name: "x",
         type: "linear",
-        domain: { data: RAW_DATASET, field: measure },
+        // How do we know when to use compareMeasure vs measure for the scale domain
+        // We want scale domain to start at 0
+        domain: { data: RAW_DATASET, field: compareMeasure },
         range: [0, { signal: "width" }],
         padding: 10,
         nice: true,
@@ -158,7 +187,7 @@ function getSpec(
         zindex: 0,
       },
     ],
-    config: {},
+    // TODO need to add a legend
   };
 }
 
@@ -170,7 +199,12 @@ function TwoVarBarChart(props: {
   console.log(props);
   return (
     <Vega
-      spec={getSpec(props.data, "race", props.measure, props.compareMeasure)}
+      spec={getSpec(
+        props.data,
+        "hispanic_or_latino_and_race",
+        props.measure,
+        props.compareMeasure
+      )}
     />
   );
 }
