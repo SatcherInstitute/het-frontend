@@ -1,14 +1,14 @@
 import STATE_FIPS_MAP from "./Fips";
 import { VariableId } from "./variableProviders";
 
-// Map of phrase segment id to its selected value
+// Map of phrase segment index to its selected value
 export type PhraseSelections = Record<number, number>;
 
 // Each phrase segment of the mad lib is either a string of text
 // or a map of IDs to string options that can fill in a blank
 export type PhraseSegment = string | Record<number, string>;
-export type MadLibId = "diabetes" | "compare" | "dump" | "covid";
 
+export type MadLibId = "diabetes" | "compare" | "dump" | "covid";
 export interface MadLib {
   readonly id: MadLibId;
   readonly phrase: PhraseSegment[];
