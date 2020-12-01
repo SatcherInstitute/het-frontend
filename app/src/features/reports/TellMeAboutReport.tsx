@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Paper, Grid } from "@material-ui/core";
 import UsaChloroplethMap from "../charts/UsaChloroplethMap";
-import TwoVarBarChart from "../charts/TwoVarBarChart";
+import TableChart from "../charts/TableChart";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -17,6 +17,8 @@ import useDatasetStore from "../../utils/useDatasetStore";
 import variableProviders, { VariableId } from "../../utils/variableProviders";
 import { Breakdowns } from "../../utils/Breakdowns";
 import VariableProvider from "../../utils/variables/VariableProvider";
+import { ALL_RACES_DISPLAY_NAME } from "../../utils/Fips";
+import Alert from "@material-ui/lab/Alert";
 
 interface County {
   id: string;
@@ -55,11 +57,11 @@ function TellMeAboutReport(props: { variable: VariableId }) {
   ]);
 
   const [countyList, setCountyList] = useState<County[]>([]);
-  const [race, setRace] = useState<string>("All");
+  const [race, setRace] = useState<string>(ALL_RACES_DISPLAY_NAME);
 
   useEffect(() => {
     setCountyList([]);
-    setRace("All");
+    setRace(ALL_RACES_DISPLAY_NAME);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.variable]);
 
@@ -81,9 +83,9 @@ function TellMeAboutReport(props: { variable: VariableId }) {
     },
   };
 
-  // TODO - filter from the dataset provider instead of here
+  // TODO - Legends should be scaled exactly the same the across compared charts. Looks misleading otherwise.
   const RACES = [
-    "All",
+    ALL_RACES_DISPLAY_NAME,
     "American Indian/Alaskan Native, Non-Hispanic",
     "Asian, Non-Hispanic",
     "Black, Non-Hispanic",
@@ -96,20 +98,59 @@ function TellMeAboutReport(props: { variable: VariableId }) {
 
   return (
     <WithDatasets datasetIds={requiredDatasets}>
-      {() => (
-        <Grid container spacing={1} alignItems="flex-start">
-          <Grid item xs={12}>
-            <TwoVarBarChart
-              data={variableProvider.getData(
-                datasetStore.datasets,
-                Breakdowns.national().andRace()
-              )}
-              measure={variableProvider.variableId}
-              compareMeasure="population"
-            />
+      {() => {
+        const breakdowns =
+          race === ALL_RACES_DISPLAY_NAME
+            ? Breakdowns.byState()
+            : Breakdowns.byState().andRace();
+        let dataset = variableProvider
+          .getData(datasetStore.datasets, breakdowns)
+          .filter((r) => r.race === race);
+
+        return (
+          <Grid container spacing={1} alignItems="flex-start">
+            <Grid item xs={12} sm={12} md={6}>
+              <Alert severity="error">
+                TODO: Have a constant legend, as changing legend is misleading
+              </Alert>
+              Filter results by race:
+              <FormControl>
+                <Select
+                  name="raceSelect"
+                  value={race}
+                  onChange={(e) => {
+                    setRace(e.target.value as string);
+                    setCountyList([]);
+                  }}
+                >
+                  {RACES.map((race) => (
+                    <MenuItem key={race} value={race}>
+                      {race}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+              <UsaChloroplethMap
+                signalListeners={signalListeners}
+                varField={props.variable}
+                legendTitle={variableProvider.variableName}
+                data={dataset}
+              />
+              <p>
+                Click on some states to see data in this table, shift click on
+                map to reset.
+              </p>
+              {CountyLevelTable(countyList, variableProvider.variableName)}
+            </Grid>
+            <Grid item xs={12} sm={12} md={6} className={styles.PaddedGrid}>
+              <TableChart
+                data={dataset}
+                columns={["state_name", variableProvider.variableName]}
+              />
+            </Grid>
           </Grid>
-        </Grid>
-      )}
+        );
+      }}
     </WithDatasets>
   );
 }
