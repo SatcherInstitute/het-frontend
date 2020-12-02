@@ -44,7 +44,8 @@ function Map(props: {
   useEffect(() => {
     console.log("use effect props.fipsGeo");
     setState(getStateGeoFromPropFips());
-  }, [getStateGeoFromPropFips, props.fipsGeo]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.fipsGeo]);
 
   const [state, setState] = useState<Geo | undefined>(
     getStateGeoFromPropFips()
@@ -54,7 +55,8 @@ function Map(props: {
   useEffect(() => {
     props.updateGeoCallback(state ? state.fips : 0);
     console.log("use effect state");
-  }, [props, state]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state]);
 
   const signalListeners: any = {
     click: (...args: any) => {
