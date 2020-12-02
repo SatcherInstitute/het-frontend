@@ -4,7 +4,7 @@ import { Grid } from "@material-ui/core";
 import TellMeAboutReport from "./TellMeAboutReport";
 import Divider from "@material-ui/core/Divider";
 import WithDatasets from "../../utils/WithDatasets";
-import VerticalGroupedBarChart from "../charts/VerticalGroupedBarChart";
+import GroupedBarChart from "../charts/GroupedBarChart";
 import TableChart from "../charts/TableChart";
 import StackedBarChart from "../charts/StackedBarChart";
 import PieChart from "../charts/PieChart";
@@ -123,7 +123,7 @@ function ChartDumpReport() {
                 </li>
               </ul>
             </div>
-            <VerticalGroupedBarChart
+            <GroupedBarChart
               data={variableProvider
                 .getData(datasetStore.datasets, Breakdowns.byState().andRace())
                 .concat(
@@ -134,6 +134,20 @@ function ChartDumpReport() {
                 )
                 .filter((r) => selectedStates.includes(r.state_name))}
               measure={variableProvider.variableId}
+              bars="vertical"
+            />
+            <GroupedBarChart
+              data={variableProvider
+                .getData(datasetStore.datasets, Breakdowns.byState().andRace())
+                .concat(
+                  variableProvider.getData(
+                    datasetStore.datasets,
+                    Breakdowns.national().andRace()
+                  )
+                )
+                .filter((r) => selectedStates.includes(r.state_name))}
+              measure={variableProvider.variableId}
+              bars="horizontal"
             />
             <Divider />
 

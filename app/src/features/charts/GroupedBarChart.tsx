@@ -2,12 +2,25 @@ import React from "react";
 import { Vega, VisualizationSpec } from "react-vega";
 import { Row } from "../../utils/DatasetTypes";
 
+type BarOrientation = "horizontal" | "vertical";
+
 function getSpec(
   data: Record<string, any>[],
   dim1: string,
   dim2: string,
-  measure: string
+  measure: string,
+  bars: BarOrientation
 ): VisualizationSpec {
+  const axisWithMeasure = {
+    aggregate: "sum",
+    field: measure,
+    axis: { grid: false, title: "", ticks: false },
+  };
+  const axisWithDimension2 = {
+    field: dim2,
+    axis: { title: "", labels: false },
+  };
+
   return {
     $schema: "https://vega.github.io/schema/vega-lite/v4.json",
     data: { values: data },
@@ -20,15 +33,8 @@ function getSpec(
         spacing: 10,
         title: "",
       },
-      y: {
-        aggregate: "sum",
-        field: measure,
-        axis: { grid: false, title: "", ticks: false },
-      },
-      x: {
-        field: dim2,
-        axis: { title: "", labels: false },
-      },
+      y: bars === "horizontal" ? axisWithDimension2 : axisWithMeasure,
+      x: bars === "horizontal" ? axisWithMeasure : axisWithDimension2,
       color: {
         field: dim2,
         type: "nominal",
@@ -43,10 +49,22 @@ function getSpec(
   };
 }
 
-function VerticalGroupedBarChart(props: { data: Row[]; measure: string }) {
+function GroupedBarChart(props: {
+  data: Row[];
+  measure: string;
+  bars: BarOrientation;
+}) {
   return (
-    <Vega spec={getSpec(props.data, "state_name", "race", props.measure)} />
+    <Vega
+      spec={getSpec(
+        props.data,
+        "state_name",
+        "race",
+        props.measure,
+        props.bars
+      )}
+    />
   );
 }
 
-export default VerticalGroupedBarChart;
+export default GroupedBarChart;
