@@ -39,8 +39,25 @@ function getPhraseValue(madLib: MadLib, segmentIndex: number): string {
     : segment[madLib.activeSelections[segmentIndex]];
 }
 
-function ReportWrapper(props: { madLib: MadLib }) {
+function ReportWrapper(props: { madLib: MadLib; setMadLib: Function }) {
   let variableId: VariableId;
+
+  function updateGeo(fips: number, geoIndex: number) {
+    // props.setMadLib
+
+    console.log(fips);
+    console.log(geoIndex);
+
+    let updatedArray: PhraseSelections = {
+      ...props.madLib.activeSelections,
+    };
+    updatedArray[geoIndex] = fips;
+    props.setMadLib({
+      ...props.madLib,
+      activeSelections: updatedArray,
+    });
+  }
+
   switch (props.madLib.id) {
     case "diabetes":
       // TODO we should add type safety to these instead of casting.
@@ -66,7 +83,14 @@ function ReportWrapper(props: { madLib: MadLib }) {
         />
       );
     case "mapnav":
-      return <CompareMapNavReport />;
+      return (
+        <CompareMapNavReport
+          fipsGeo1={props.madLib.activeSelections[1]}
+          fipsGeo2={props.madLib.activeSelections[3]}
+          updateGeo1Callback={(fips: number) => updateGeo(fips, 1)}
+          updateGeo2Callback={(fips: number) => updateGeo(fips, 3)}
+        />
+      );
     default:
       return <p>Report not found</p>;
   }
@@ -153,7 +177,7 @@ function ExploreDataPage() {
             <ShareIcon />
           </IconButton>
         </h1>
-        <ReportWrapper madLib={madLib} />
+        <ReportWrapper madLib={madLib} setMadLib={setMadLib} />
       </div>
     </React.Fragment>
   );

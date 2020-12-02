@@ -17,7 +17,7 @@ import useDatasetStore from "../../utils/useDatasetStore";
 import variableProviders, { VariableId } from "../../utils/variableProviders";
 import { Breakdowns } from "../../utils/Breakdowns";
 import VariableProvider from "../../utils/variables/VariableProvider";
-import { ALL_RACES_DISPLAY_NAME } from "../../utils/Fips";
+import { ALL_RACES_DISPLAY_NAME, STATE_FIPS_MAP } from "../../utils/Fips";
 import Alert from "@material-ui/lab/Alert";
 import Breadcrumbs from "@material-ui/core/Breadcrumbs";
 import Link from "@material-ui/core/Link";
@@ -28,9 +28,31 @@ interface Geo {
   name: string;
 }
 
-function Map(props: { data: Record<string, any>[] }) {
-  const [state, setState] = useState<Geo | undefined>();
+function Map(props: {
+  fipsGeo: number;
+  data: Record<string, any>[];
+  updateGeoCallback: Function;
+}) {
+  function getStateGeoFromPropFips() {
+    return props.fipsGeo === 0
+      ? undefined
+      : { fips: props.fipsGeo, name: STATE_FIPS_MAP[props.fipsGeo] };
+  }
+
+  console.log(props.fipsGeo);
+
+  useEffect(() => {
+    setState(getStateGeoFromPropFips());
+  }, [getStateGeoFromPropFips, props.fipsGeo]);
+
+  const [state, setState] = useState<Geo | undefined>(
+    getStateGeoFromPropFips()
+  );
   const [county, setCounty] = useState<Geo | undefined>();
+
+  useEffect(() => {
+    props.updateGeoCallback(state ? state.fips : 0);
+  }, [props, state]);
 
   const signalListeners: any = {
     click: (...args: any) => {
@@ -48,10 +70,7 @@ function Map(props: { data: Record<string, any>[] }) {
   let dataset =
     state === undefined
       ? props.data
-      : props.data.filter((r) => {
-          console.log(r.state_fips_code === state.fips.toString());
-          return r.state_fips_code === state.fips.toString();
-        });
+      : props.data.filter((r) => r.state_fips_code === state.fips.toString());
 
   return (
     <div>
@@ -103,12 +122,19 @@ function Map(props: { data: Record<string, any>[] }) {
   );
 }
 
-function CompareMapNavReport(props: {}) {
+function CompareMapNavReport(props: {
+  fipsGeo1: number;
+  fipsGeo2: number;
+  updateGeo1Callback: Function;
+  updateGeo2Callback: Function;
+}) {
   const datasetStore = useDatasetStore();
   const variableProvider = variableProviders["diabetes_count"];
   const requiredDatasets = VariableProvider.getUniqueDatasetIds([
     variableProvider,
   ]);
+
+  console.log(props.fipsGeo1);
 
   return (
     <WithDatasets datasetIds={requiredDatasets}>
@@ -121,10 +147,18 @@ function CompareMapNavReport(props: {}) {
         return (
           <Grid container spacing={1} alignItems="flex-start">
             <Grid item xs={6}>
-              <Map data={dataset} />
+              <Map
+                data={dataset}
+                fipsGeo={props.fipsGeo1}
+                updateGeoCallback={(e: number) => props.updateGeo1Callback(e)}
+              />
             </Grid>
             <Grid item xs={6}>
-              <Map data={dataset} />
+              <Map
+                data={dataset}
+                fipsGeo={props.fipsGeo2}
+                updateGeoCallback={(e: number) => props.updateGeo2Callback(e)}
+              />
             </Grid>
           </Grid>
         );

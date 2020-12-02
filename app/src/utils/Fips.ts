@@ -2,7 +2,7 @@
 export const ALL_RACES_DISPLAY_NAME = "All races";
 export const USA_DISPLAY_NAME = "the USA";
 
-export const STATE_FIPS_MAP = {
+export const STATE_FIPS_MAP: Record<number, string> = {
   0: USA_DISPLAY_NAME,
   1: "Alabama",
   2: "Alaska",
