@@ -31,12 +31,6 @@ function Map(props: {
 
   console.log(props.fipsGeo);
 
-  useEffect(() => {
-    console.log("use effect props.fipsGeo");
-    setState(getStateGeoFromPropFips());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.fipsGeo]);
-
   const [state, setState] = useState<Geo | undefined>(
     getStateGeoFromPropFips()
   );
@@ -47,6 +41,13 @@ function Map(props: {
     console.log("use effect state");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state]);
+
+  useEffect(() => {
+    console.log("use effect props.fipsGeo");
+    setState(getStateGeoFromPropFips());
+    setCounty(undefined);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.fipsGeo]);
 
   const signalListeners: any = {
     click: (...args: any) => {
