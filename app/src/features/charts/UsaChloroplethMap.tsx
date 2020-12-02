@@ -16,7 +16,6 @@ const VAR_DATASET = "VAR_DATASET";
 const VAR_STATE_FIPS = "state_fips_code";
 const VAR_COUNTY_FIPS = "COUNTY_FIPS";
 
-// TODO - Should gracefully handle if the data isn't available
 function UsaChloroplethMap(props: {
   data: Record<string, any>[];
   varField: string;
@@ -173,7 +172,17 @@ function UsaChloroplethMap(props: {
         },
       ],
     });
-  }, [width, props.varField, props.legendTitle, props.operation, props.stateFips, props.numberFormat, props.data, props.countyFips, props.hideLegend]);
+  }, [
+    width,
+    props.varField,
+    props.legendTitle,
+    props.operation,
+    props.stateFips,
+    props.numberFormat,
+    props.data,
+    props.countyFips,
+    props.hideLegend,
+  ]);
 
   return (
     <div

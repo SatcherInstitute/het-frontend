@@ -43,11 +43,6 @@ function ReportWrapper(props: { madLib: MadLib; setMadLib: Function }) {
   let variableId: VariableId;
 
   function updateGeo(fips: number, geoIndex: number) {
-    // props.setMadLib
-
-    console.log(fips);
-    console.log(geoIndex);
-
     let updatedArray: PhraseSelections = {
       ...props.madLib.activeSelections,
     };

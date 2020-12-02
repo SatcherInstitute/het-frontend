@@ -29,8 +29,6 @@ function Map(props: {
       : { fips: props.fipsGeo, name: STATE_FIPS_MAP[props.fipsGeo] };
   }
 
-  console.log(props.fipsGeo);
-
   const [state, setState] = useState<Geo | undefined>(
     getStateGeoFromPropFips()
   );
@@ -38,12 +36,10 @@ function Map(props: {
 
   useEffect(() => {
     props.updateGeoCallback(state ? state.fips : 0);
-    console.log("use effect state");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state]);
 
   useEffect(() => {
-    console.log("use effect props.fipsGeo");
     setState(getStateGeoFromPropFips());
     setCounty(undefined);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -128,8 +124,6 @@ function CompareMapNavReport(props: {
   const requiredDatasets = VariableProvider.getUniqueDatasetIds([
     variableProvider,
   ]);
-
-  console.log(props.fipsGeo1);
 
   return (
     <WithDatasets datasetIds={requiredDatasets}>
