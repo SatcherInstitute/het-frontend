@@ -25,7 +25,7 @@ function UsaChloroplethMap(props: {
   stateFips?: number;
   countyFips?: number;
   numberFormat?: NumberFormat;
-  maxGeoSelection?: number;
+  hideLegend?: boolean;
 }) {
   const [ref, width] = useResponsiveWidth();
 
@@ -70,6 +70,7 @@ function UsaChloroplethMap(props: {
 
     /* SET UP LEGEND */
     // TODO - Legends should be scaled exactly the same the across compared charts. Looks misleading otherwise.
+    let legendList = [];
     let legend: any = {
       fill: "colorScale",
       orient: "top-right",
@@ -80,6 +81,9 @@ function UsaChloroplethMap(props: {
     };
     if (props.numberFormat === "percentage") {
       legend["format"] = "0.1%";
+    }
+    if (!props.hideLegend) {
+      legendList.push(legend);
     }
 
     setSpec({
@@ -132,7 +136,7 @@ function UsaChloroplethMap(props: {
           range: { scheme: "yellowgreenblue", count: 7 },
         },
       ],
-      legends: [legend],
+      legends: legendList,
       marks: [
         {
           type: "shape",
@@ -169,16 +173,7 @@ function UsaChloroplethMap(props: {
         },
       ],
     });
-  }, [
-    width,
-    props.varField,
-    props.legendTitle,
-    props.operation,
-    props.stateFips,
-    props.numberFormat,
-    props.data,
-    props.countyFips,
-  ]);
+  }, [width, props.varField, props.legendTitle, props.operation, props.stateFips, props.numberFormat, props.data, props.countyFips, props.hideLegend]);
 
   return (
     <div

@@ -101,11 +101,11 @@ function Map(props: {
       <UsaChloroplethMap
         signalListeners={signalListeners}
         varField={"diabetes_count"}
-        legendTitle="variableProvider.variableName"
+        legendTitle="Diabetes Count"
         data={dataset}
+        hideLegend={state ? true : false}
         stateFips={state ? state.fips : undefined}
         countyFips={county ? county.fips : undefined}
-        maxGeoSelection={1}
       />
       {state !== undefined && (
         <Alert severity="error">
