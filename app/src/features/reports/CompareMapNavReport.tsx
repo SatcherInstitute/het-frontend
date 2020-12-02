@@ -1,23 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { Paper, Grid } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 import UsaChloroplethMap from "../charts/UsaChloroplethMap";
 import TableChart from "../charts/TableChart";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import styles from "./Report.module.scss";
-import Select from "@material-ui/core/Select";
-import FormControl from "@material-ui/core/FormControl";
-import MenuItem from "@material-ui/core/MenuItem";
 import WithDatasets from "../../utils/WithDatasets";
 import useDatasetStore from "../../utils/useDatasetStore";
-import variableProviders, { VariableId } from "../../utils/variableProviders";
+import variableProviders from "../../utils/variableProviders";
 import { Breakdowns } from "../../utils/Breakdowns";
 import VariableProvider from "../../utils/variables/VariableProvider";
-import { ALL_RACES_DISPLAY_NAME, STATE_FIPS_MAP } from "../../utils/Fips";
+import { STATE_FIPS_MAP } from "../../utils/Fips";
 import Alert from "@material-ui/lab/Alert";
 import Breadcrumbs from "@material-ui/core/Breadcrumbs";
 import Link from "@material-ui/core/Link";
@@ -63,7 +53,7 @@ function Map(props: {
       // Is this a county or a state??
       const clickedData = args[1];
       console.log(clickedData);
-      if (clickedData.id.length == 2) {
+      if (clickedData.id.length === 2) {
         setState({ fips: clickedData.id, name: clickedData.properties.name });
       } else {
         setCounty({ fips: clickedData.id, name: clickedData.properties.name });
