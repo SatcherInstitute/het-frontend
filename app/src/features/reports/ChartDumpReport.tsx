@@ -12,7 +12,6 @@ import useDatasetStore from "../../utils/useDatasetStore";
 import variableProviders from "../../utils/variableProviders";
 import { Breakdowns } from "../../utils/Breakdowns";
 import CovidReport from "./CovidReport";
-import { STATE_FIPS_MAP } from "../../utils/Fips";
 import VariableProvider from "../../utils/variables/VariableProvider";
 
 function ChartDumpReport() {
@@ -81,13 +80,8 @@ function ChartDumpReport() {
                 <li>Show [covid death rates] broken down by [race] in [USA]</li>
               </ul>
             </div>
-            <CovidReport
-              variable={"covid_deaths_per_100k"}
-              geography={STATE_FIPS_MAP[1]}
-            />
-
+            <CovidReport variable="covid_cases" stateFips="00" />
             <Divider />
-
             <div style={{ width: "500px", margin: "auto", textAlign: "left" }}>
               <h1>Choropleth</h1>
               <b>Examples</b>
@@ -117,7 +111,6 @@ function ChartDumpReport() {
             </div>
             <TellMeAboutReport variable={"diabetes_count"} />
             <Divider />
-
             <div style={{ width: "500px", margin: "auto", textAlign: "left" }}>
               <h1>Vertical Grouped Bar Chart</h1>
               <b>Examples</b>
@@ -140,7 +133,6 @@ function ChartDumpReport() {
               measure={variableProvider.variableId}
             />
             <Divider />
-
             <div style={{ width: "500px", margin: "auto", textAlign: "left" }}>
               <h1>Stacked Bar Chart</h1>
               <b>Examples</b>

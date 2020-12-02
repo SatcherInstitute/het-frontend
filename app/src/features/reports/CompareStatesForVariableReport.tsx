@@ -22,6 +22,7 @@ function CompareStatesForVariableReport(props: {
     variableProvider,
     acsProvider,
   ]);
+
   return (
     <WithDatasets datasetIds={requiredDatasets}>
       {() => (

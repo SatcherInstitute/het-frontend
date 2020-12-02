@@ -1,5 +1,6 @@
 import React from "react";
 import { Grid } from "@material-ui/core";
+import TableChart from "../charts/TableChart";
 import LineChart from "../charts/LineChart";
 import WithDatasets from "../../utils/WithDatasets";
 import useDatasetStore from "../../utils/useDatasetStore";
@@ -23,6 +24,9 @@ function CovidReport(props: { variable: VariableId; stateFips: string }) {
     popProvider,
   ]);
 
+  console.log(props.variable);
+  console.log(props.stateFips);
+
   return (
     <Grid container spacing={1} alignItems="flex-start">
       <Grid item xs={12}>
@@ -39,11 +43,7 @@ function CovidReport(props: { variable: VariableId; stateFips: string }) {
                   Breakdowns.national().andTime().andRace(true)
                 )
               )
-              .filter((row) =>
-                props.stateFips === "00"
-                  ? row.state_fips_code === undefined
-                  : row.state_fips_code === props.stateFips
-              )
+              .filter((row) => row.state_fips_code === props.stateFips)
               .filter(
                 (row) =>
                   !row.hispanic_or_latino_and_race.includes(
@@ -93,20 +93,21 @@ function CovidReport(props: { variable: VariableId; stateFips: string }) {
                   breakdownVar="hispanic_or_latino_and_race"
                   measure={covidProvider.variableId}
                 />
+                <TableChart
+                  data={populationData.filter(
+                    (row) => row.state_fips_code === props.stateFips
+                  )}
+                />
                 <SimpleHorizontalBarChart
-                  data={populationData.filter((row) =>
-                    props.stateFips === "00"
-                      ? row.state_fips_code === undefined
-                      : row.state_fips_code === props.stateFips
+                  data={populationData.filter(
+                    (row) => row.state_fips_code === props.stateFips
                   )}
                   breakdownVar="hispanic_or_latino_and_race"
                   measure={popProvider.variableId}
                 />
                 <SimpleHorizontalBarChart
-                  data={populationDataStandardized.filter((row) =>
-                    props.stateFips === "00"
-                      ? row.state_fips_code === undefined
-                      : row.state_fips_code === props.stateFips
+                  data={populationDataStandardized.filter(
+                    (row) => row.state_fips_code === props.stateFips
                   )}
                   breakdownVar="hispanic_or_latino_and_race"
                   measure={popProvider.variableId}
