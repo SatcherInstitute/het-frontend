@@ -22,9 +22,13 @@ function UsaChloroplethMap(props: {
   legendTitle: string;
   signalListeners: any;
   stateFips?: number;
+  countyFips?: number;
   numberFormat?: NumberFormat;
+  maxGeoSelection?: number;
 }) {
   const [ref, width] = useResponsiveWidth();
+
+  console.log(props.countyFips);
 
   // Initial spec state is set in useEffect
   const [spec, setSpec] = useState({});
@@ -32,7 +36,8 @@ function UsaChloroplethMap(props: {
   useEffect(() => {
     /* SET UP GEO DATSET */
     // Transform geo dataset by adding varField from VAR_DATASET
-    const fipsKey = props.stateFips ? VAR_COUNTY_FIPS : VAR_STATE_FIPS;
+    const fipsKey =
+      props.stateFips || props.countyFips ? VAR_COUNTY_FIPS : VAR_STATE_FIPS;
     let geoTransformers: any[] = [
       {
         type: "lookup",
@@ -42,6 +47,20 @@ function UsaChloroplethMap(props: {
         values: [props.varField],
       },
     ];
+    if (props.stateFips && !props.countyFips) {
+      // The first two characters of a county FIPS are the state FIPS
+      let stateFipsVar = "slice(datum.id,0,2) == " + props.stateFips;
+      geoTransformers.push({
+        type: "filter",
+        expr: stateFipsVar,
+      });
+    }
+    if (props.countyFips) {
+      geoTransformers.push({
+        type: "filter",
+        expr: `datum.id === "${props.countyFips}"`,
+      });
+    }
 
     /* SET UP TOOLTIP */
     let tooltipDatum =
@@ -151,15 +170,7 @@ function UsaChloroplethMap(props: {
         },
       ],
     });
-  }, [
-    width,
-    props.varField,
-    props.legendTitle,
-    props.operation,
-    props.stateFips,
-    props.numberFormat,
-    props.data,
-  ]);
+  }, [width, props.varField, props.legendTitle, props.operation, props.stateFips, props.numberFormat, props.data, props.countyFips]);
 
   return (
     <div

@@ -4,6 +4,7 @@ import { Paper } from "@material-ui/core";
 import Select from "@material-ui/core/Select";
 import FormControl from "@material-ui/core/FormControl";
 import MenuItem from "@material-ui/core/MenuItem";
+import CompareMapNavReport from "../features/reports/CompareMapNavReport";
 import ChartDumpReport from "../features/reports/ChartDumpReport";
 import TellMeAboutReport from "../features/reports/TellMeAboutReport";
 import Dialog from "@material-ui/core/Dialog";
@@ -64,6 +65,8 @@ function ReportWrapper(props: { madLib: MadLib }) {
           geography={getPhraseValue(props.madLib, 3)}
         />
       );
+    case "mapnav":
+      return <CompareMapNavReport />;
     default:
       return <p>Report not found</p>;
   }
