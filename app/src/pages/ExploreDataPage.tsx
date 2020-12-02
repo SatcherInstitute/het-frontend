@@ -87,10 +87,10 @@ function ExploreDataPage() {
   if (params[MADLIB_SELECTIONS_PARAM]) {
     params[MADLIB_SELECTIONS_PARAM].split(",").forEach((override) => {
       const [phraseSegmentIndex, value] = override.split(":");
-      let phrases: PhraseSegment[] = MADLIB_LIST[initalIndex].phrase;
+      let phraseSegments: PhraseSegment[] = MADLIB_LIST[initalIndex].phrase;
       if (
-        Object.keys(phrases).includes(phraseSegmentIndex) &&
-        Object.keys(phrases[Number(phraseSegmentIndex)]).includes(value)
+        Object.keys(phraseSegments).includes(phraseSegmentIndex) &&
+        Object.keys(phraseSegments[Number(phraseSegmentIndex)]).includes(value)
       ) {
         defaultValuesWithOverrides[Number(phraseSegmentIndex)] = value;
       }

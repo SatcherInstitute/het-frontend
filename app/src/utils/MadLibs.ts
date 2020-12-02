@@ -1,5 +1,3 @@
-//@ts-nocheck
-
 import { STATE_FIPS_MAP } from "./Fips";
 import { VariableId } from "./variableProviders";
 
@@ -50,6 +48,7 @@ function getMadLibPhraseText(madLib: MadLib): string {
   "8": "covid_hosp_per_100k",
 };*/
 
+// @ts-ignore
 const COVID_VARIABLES: Record<VariableId, string> = {
   covid_cases: "COVID Cases",
   covid_deaths: "COVID Deaths",
@@ -62,6 +61,7 @@ const COVID_VARIABLES: Record<VariableId, string> = {
   covid_hosp_per_100k: "COVID Hospitalizations per 100k",
 };
 
+// @ts-ignore
 const DIABETES_VARIABLES: Record<VariableId, string> = {
   diabetes_count: "Diabetes Count",
   diabetes_per_100k: "Diabetes per 100k",
