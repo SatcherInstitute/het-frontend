@@ -74,11 +74,7 @@ function ChartDumpReport() {
             />
             <Divider />
             <div style={{ width: "500px", margin: "auto", textAlign: "left" }}>
-              <h1>Time Series</h1>
-              <b>Example</b>
-              <ul>
-                <li>Show [covid death rates] broken down by [race] in [USA]</li>
-              </ul>
+              <h1>Time Series & Two Variable Bar Chart</h1>
             </div>
             <CovidReport variable="covid_cases" stateFips="00" />
             <Divider />
