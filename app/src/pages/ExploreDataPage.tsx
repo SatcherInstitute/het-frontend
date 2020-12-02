@@ -47,9 +47,6 @@ function ReportWrapper(props: { madLib: MadLib }) {
       return <TellMeAboutReport variable={variableId} />;
     case "compare":
       variableId = getPhraseValue(props.madLib, 1) as VariableId;
-      console.log(getPhraseValue(props.madLib, 1));
-      console.log(getPhraseValue(props.madLib, 3));
-      console.log(getPhraseValue(props.madLib, 5));
       return (
         <CompareStatesForVariableReport
           stateFips1={getPhraseValue(props.madLib, 3)}
@@ -88,7 +85,6 @@ function ExploreDataPage() {
   const initalIndex = foundIndex !== -1 ? foundIndex : 0;
   let defaultValuesWithOverrides = MADLIB_LIST[initalIndex].defaultSelections;
   if (params[MADLIB_SELECTIONS_PARAM]) {
-    console.log(params[MADLIB_SELECTIONS_PARAM]);
     params[MADLIB_SELECTIONS_PARAM].split(",").forEach((override) => {
       const [phraseSegmentIndex, value] = override.split(":");
       let phrases: PhraseSegment[] = MADLIB_LIST[initalIndex].phrase;

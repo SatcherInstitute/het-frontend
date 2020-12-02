@@ -1,6 +1,5 @@
 import React from "react";
 import { Grid } from "@material-ui/core";
-import TableChart from "../charts/TableChart";
 import LineChart from "../charts/LineChart";
 import WithDatasets from "../../utils/WithDatasets";
 import useDatasetStore from "../../utils/useDatasetStore";
@@ -24,9 +23,6 @@ function CovidReport(props: { variable: VariableId; stateFips: string }) {
     covidProvider,
     popProvider,
   ]);
-
-  console.log(props.variable);
-  console.log(props.stateFips);
 
   return (
     <Grid container spacing={1} alignItems="flex-start">
@@ -103,11 +99,6 @@ function CovidReport(props: { variable: VariableId; stateFips: string }) {
                   data={mostRecent}
                   breakdownVar="hispanic_or_latino_and_race"
                   measure={covidProvider.variableId}
-                />
-                <TableChart
-                  data={populationData.filter(
-                    (row) => row.state_fips_code === props.stateFips
-                  )}
                 />
                 <SimpleHorizontalBarChart
                   data={populationData.filter(
