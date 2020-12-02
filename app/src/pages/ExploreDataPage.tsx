@@ -35,7 +35,7 @@ function getPhraseValue(madLib: MadLib, segmentIndex: number): string {
   const segment = madLib.phrase[segmentIndex];
   return typeof segment === "string"
     ? segment
-    : segment[madLib.activeSelections[segmentIndex]];
+    : madLib.activeSelections[segmentIndex];
 }
 
 function ReportWrapper(props: { madLib: MadLib }) {
@@ -47,10 +47,13 @@ function ReportWrapper(props: { madLib: MadLib }) {
       return <TellMeAboutReport variable={variableId} />;
     case "compare":
       variableId = getPhraseValue(props.madLib, 1) as VariableId;
+      console.log(getPhraseValue(props.madLib, 1));
+      console.log(getPhraseValue(props.madLib, 3));
+      console.log(getPhraseValue(props.madLib, 5));
       return (
         <CompareStatesForVariableReport
-          state1={getPhraseValue(props.madLib, 3)}
-          state2={getPhraseValue(props.madLib, 5)}
+          stateFips1={getPhraseValue(props.madLib, 3)}
+          stateFips2={getPhraseValue(props.madLib, 5)}
           variable={variableId}
         />
       );
@@ -61,7 +64,7 @@ function ReportWrapper(props: { madLib: MadLib }) {
       return (
         <CovidReport
           variable={variableId}
-          geography={getPhraseValue(props.madLib, 3)}
+          stateFips={getPhraseValue(props.madLib, 3)}
         />
       );
     default:
@@ -85,14 +88,15 @@ function ExploreDataPage() {
   const initalIndex = foundIndex !== -1 ? foundIndex : 0;
   let defaultValuesWithOverrides = MADLIB_LIST[initalIndex].defaultSelections;
   if (params[MADLIB_SELECTIONS_PARAM]) {
+    console.log(params[MADLIB_SELECTIONS_PARAM]);
     params[MADLIB_SELECTIONS_PARAM].split(",").forEach((override) => {
-      const [key, value] = override.split(":");
-      let phrase = MADLIB_LIST[initalIndex].phrase;
+      const [phraseSegmentIndex, value] = override.split(":");
+      let phrases: PhraseSegment[] = MADLIB_LIST[initalIndex].phrase;
       if (
-        Object.keys(phrase).includes(key) &&
-        Object.keys(phrase[Number(key)]).includes(value)
+        Object.keys(phrases).includes(phraseSegmentIndex) &&
+        Object.keys(phrases[Number(phraseSegmentIndex)]).includes(value)
       ) {
-        defaultValuesWithOverrides[Number(key)] = Number(value);
+        defaultValuesWithOverrides[Number(phraseSegmentIndex)] = value;
       }
     });
   }
@@ -175,20 +179,21 @@ function CarouselMadLib(props: {
                   defaultValue={props.madLib.defaultSelections[index]}
                   value={props.madLib.activeSelections[index]}
                   onChange={(event) => {
-                    let index: number = Number(event.target.name);
-                    let updatedArray: PhraseSelections = {
+                    let phraseIndex: number = Number(event.target.name);
+                    let updatePhraseSelections: PhraseSelections = {
                       ...props.madLib.activeSelections,
                     };
-                    updatedArray[index] = Number(event.target.value);
+                    updatePhraseSelections[phraseIndex] = event.target
+                      .value as string;
                     props.setMadLib({
                       ...props.madLib,
-                      activeSelections: updatedArray,
+                      activeSelections: updatePhraseSelections,
                     });
                   }}
                 >
-                  {Object.keys(phraseSegment).map((key: string) => (
-                    <MenuItem key={key} value={Number(key)}>
-                      {phraseSegment[Number(key)]}
+                  {Object.entries(phraseSegment).map(([key, value]) => (
+                    <MenuItem key={key} value={key}>
+                      {value}
                     </MenuItem>
                   ))}
                 </Select>
