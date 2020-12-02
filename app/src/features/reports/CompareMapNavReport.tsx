@@ -116,12 +116,12 @@ function Map(props: {
         countyFips={county ? county.fips : undefined}
         maxGeoSelection={1}
       />
-      {county === undefined && <TableChart data={dataset} />}
-      {county !== undefined && (
+      {state !== undefined && (
         <Alert severity="error">
           This dataset does not provide county level data
         </Alert>
       )}
+      {county === undefined && <TableChart data={dataset} />}
     </div>
   );
 }
