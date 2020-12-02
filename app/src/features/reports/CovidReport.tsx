@@ -1,6 +1,5 @@
 import React from "react";
 import { Grid } from "@material-ui/core";
-import TableChart from "../charts/TableChart";
 import LineChart from "../charts/LineChart";
 import WithDatasets from "../../utils/WithDatasets";
 import useDatasetStore from "../../utils/useDatasetStore";
