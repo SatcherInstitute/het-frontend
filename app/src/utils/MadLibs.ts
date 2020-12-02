@@ -1,4 +1,4 @@
-import { STATE_FIPS_MAP } from "./Fips";
+import { USA_FIPS, STATE_FIPS_MAP } from "./Fips";
 import { VariableId } from "./variableProviders";
 
 // Map of phrase segment index to its selected value
@@ -36,18 +36,6 @@ function getMadLibPhraseText(madLib: MadLib): string {
   return madLibText;
 }
 
-/*const COVID_VARIABLES: Record<string, VariableId> = {
-  "0": "covid_cases",
-  "1": "covid_deaths",
-  "2": "covid_hosp",
-  "3": "covid_cases_pct_of_geo",
-  "4": "covid_deaths_pct_of_geo",
-  "5": "covid_hosp_pct_of_geo",
-  "6": "covid_deaths_per_100k",
-  "7": "covid_cases_per_100k",
-  "8": "covid_hosp_per_100k",
-};*/
-
 // @ts-ignore
 const COVID_VARIABLES: Record<VariableId, string> = {
   covid_cases: "COVID Cases",
@@ -71,8 +59,8 @@ const MADLIB_LIST: MadLib[] = [
   {
     id: "covid",
     phrase: ["Tell me about", COVID_VARIABLES, " in ", STATE_FIPS_MAP],
-    defaultSelections: { 1: "covid_cases", 3: "00" },
-    activeSelections: { 1: "covid_cases", 3: "00" },
+    defaultSelections: { 1: "covid_cases", 3: USA_FIPS },
+    activeSelections: { 1: "covid_cases", 3: USA_FIPS },
   },
   {
     id: "diabetes",
@@ -90,8 +78,8 @@ const MADLIB_LIST: MadLib[] = [
       " compared to ",
       STATE_FIPS_MAP,
     ],
-    defaultSelections: { 1: "diabetes_per_100k", 3: "13", 5: "00" },
-    activeSelections: { 1: "diabetes_per_100k", 3: "13", 5: "00" },
+    defaultSelections: { 1: "diabetes_per_100k", 3: "13", 5: USA_FIPS },
+    activeSelections: { 1: "diabetes_per_100k", 3: "13", 5: USA_FIPS },
   },
   {
     id: "dump",
