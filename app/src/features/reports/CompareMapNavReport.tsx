@@ -42,6 +42,7 @@ function Map(props: {
   console.log(props.fipsGeo);
 
   useEffect(() => {
+    console.log("use effect props.fipsGeo");
     setState(getStateGeoFromPropFips());
   }, [getStateGeoFromPropFips, props.fipsGeo]);
 
@@ -52,6 +53,7 @@ function Map(props: {
 
   useEffect(() => {
     props.updateGeoCallback(state ? state.fips : 0);
+    console.log("use effect state");
   }, [props, state]);
 
   const signalListeners: any = {
