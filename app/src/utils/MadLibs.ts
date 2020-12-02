@@ -32,7 +32,6 @@ function getMadLibPhraseText(madLib: MadLib): string {
       madLibText += " " + phraseSelector[selectionKey] + " ";
     }
   });
-  console.log(madLibText);
   return madLibText;
 }
 
