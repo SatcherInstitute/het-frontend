@@ -187,11 +187,14 @@ function CarouselMadLib(props: {
                     });
                   }}
                 >
-                  {Object.entries(phraseSegment).map(([key, value]) => (
-                    <MenuItem key={key} value={key}>
-                      {value}
-                    </MenuItem>
-                  ))}
+                  {Object.entries(phraseSegment)
+                    .sort((a, b) => a[0].localeCompare(b[0]))
+                    .map(([key, value]) => (
+                      // TODO - we may want to not have this alphabetized by default
+                      <MenuItem key={value} value={key}>
+                        {value}
+                      </MenuItem>
+                    ))}
                 </Select>
               </FormControl>
             )}
