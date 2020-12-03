@@ -4,7 +4,7 @@ import { Grid } from "@material-ui/core";
 import TellMeAboutReport from "./TellMeAboutReport";
 import Divider from "@material-ui/core/Divider";
 import WithDatasets from "../../utils/WithDatasets";
-import VerticalGroupedBarChart from "../charts/VerticalGroupedBarChart";
+import GroupedBarChart from "../charts/GroupedBarChart";
 import TableChart from "../charts/TableChart";
 import StackedBarChart from "../charts/StackedBarChart";
 import PieChart from "../charts/PieChart";
@@ -12,8 +12,8 @@ import useDatasetStore from "../../utils/useDatasetStore";
 import variableProviders from "../../utils/variableProviders";
 import { Breakdowns } from "../../utils/Breakdowns";
 import CovidReport from "./CovidReport";
-import { STATE_FIPS_MAP } from "../../utils/Fips";
 import VariableProvider from "../../utils/variables/VariableProvider";
+import { USA_FIPS } from "../../utils/Fips";
 
 function ChartDumpReport() {
   const datasetStore = useDatasetStore();
@@ -75,19 +75,10 @@ function ChartDumpReport() {
             />
             <Divider />
             <div style={{ width: "500px", margin: "auto", textAlign: "left" }}>
-              <h1>Time Series</h1>
-              <b>Example</b>
-              <ul>
-                <li>Show [covid death rates] broken down by [race] in [USA]</li>
-              </ul>
+              <h1>Time Series & Two Variable Bar Chart</h1>
             </div>
-            <CovidReport
-              variable={"covid_deaths_per_100k"}
-              geography={STATE_FIPS_MAP[1]}
-            />
-
+            <CovidReport variable="covid_cases" stateFips={USA_FIPS} />
             <Divider />
-
             <div style={{ width: "500px", margin: "auto", textAlign: "left" }}>
               <h1>Choropleth</h1>
               <b>Examples</b>
@@ -117,9 +108,8 @@ function ChartDumpReport() {
             </div>
             <TellMeAboutReport variable={"diabetes_count"} />
             <Divider />
-
             <div style={{ width: "500px", margin: "auto", textAlign: "left" }}>
-              <h1>Vertical Grouped Bar Chart</h1>
+              <h1>Grouped Bar Charts (horizontal or vertical)</h1>
               <b>Examples</b>
               <ul>
                 <li>
@@ -127,7 +117,7 @@ function ChartDumpReport() {
                 </li>
               </ul>
             </div>
-            <VerticalGroupedBarChart
+            <GroupedBarChart
               data={variableProvider
                 .getData(datasetStore.datasets, Breakdowns.byState().andRace())
                 .concat(
@@ -138,9 +128,26 @@ function ChartDumpReport() {
                 )
                 .filter((r) => selectedStates.includes(r.state_name))}
               measure={variableProvider.variableId}
+              dimension1="state_name"
+              dimension2="race"
+              bars="vertical"
+            />
+            <GroupedBarChart
+              data={variableProvider
+                .getData(datasetStore.datasets, Breakdowns.byState().andRace())
+                .concat(
+                  variableProvider.getData(
+                    datasetStore.datasets,
+                    Breakdowns.national().andRace()
+                  )
+                )
+                .filter((r) => selectedStates.includes(r.state_name))}
+              measure={variableProvider.variableId}
+              bars="horizontal"
+              dimension1="state_name"
+              dimension2="race"
             />
             <Divider />
-
             <div style={{ width: "500px", margin: "auto", textAlign: "left" }}>
               <h1>Stacked Bar Chart</h1>
               <b>Examples</b>
