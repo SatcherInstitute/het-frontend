@@ -21,8 +21,8 @@ function UsaChloroplethMap(props: {
   varField: string;
   legendTitle: string;
   signalListeners: any;
-  stateFips?: number;
-  countyFips?: number;
+  stateFips?: string;
+  countyFips?: string;
   numberFormat?: NumberFormat;
   hideLegend?: boolean;
 }) {
@@ -31,6 +31,7 @@ function UsaChloroplethMap(props: {
   // Initial spec state is set in useEffect
   const [spec, setSpec] = useState({});
 
+  console.log(props.stateFips);
   useEffect(() => {
     /* SET UP GEO DATSET */
     // Transform geo dataset by adding varField from VAR_DATASET
@@ -47,7 +48,7 @@ function UsaChloroplethMap(props: {
     ];
     if (props.stateFips && !props.countyFips) {
       // The first two characters of a county FIPS are the state FIPS
-      let stateFipsVar = "slice(datum.id,0,2) == " + props.stateFips;
+      let stateFipsVar = `slice(datum.id,0,2) == '${props.stateFips}'`;
       geoTransformers.push({
         type: "filter",
         expr: stateFipsVar,

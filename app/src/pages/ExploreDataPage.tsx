@@ -43,7 +43,7 @@ function getPhraseValue(madLib: MadLib, segmentIndex: number): string {
 function ReportWrapper(props: { madLib: MadLib; setMadLib: Function }) {
   let variableId: VariableId;
 
-  function updateGeo(fips: number, geoIndex: number) {
+  function updateGeo(fips: string, geoIndex: number) {
     let updatedArray: PhraseSelections = {
       ...props.madLib.activeSelections,
     };
@@ -83,8 +83,8 @@ function ReportWrapper(props: { madLib: MadLib; setMadLib: Function }) {
         <CompareMapNavReport
           fipsGeo1={props.madLib.activeSelections[1]}
           fipsGeo2={props.madLib.activeSelections[3]}
-          updateGeo1Callback={(fips: number) => updateGeo(fips, 1)}
-          updateGeo2Callback={(fips: number) => updateGeo(fips, 3)}
+          updateGeo1Callback={(fips: string) => updateGeo(fips, 1)}
+          updateGeo2Callback={(fips: string) => updateGeo(fips, 3)}
         />
       );
     default:

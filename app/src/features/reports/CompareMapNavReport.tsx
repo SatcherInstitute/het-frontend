@@ -7,24 +7,24 @@ import useDatasetStore from "../../utils/useDatasetStore";
 import variableProviders from "../../utils/variableProviders";
 import { Breakdowns } from "../../utils/Breakdowns";
 import VariableProvider from "../../utils/variables/VariableProvider";
-import { STATE_FIPS_MAP } from "../../utils/Fips";
+import { USA_FIPS, STATE_FIPS_MAP } from "../../utils/Fips";
 import Alert from "@material-ui/lab/Alert";
 import Breadcrumbs from "@material-ui/core/Breadcrumbs";
 import Link from "@material-ui/core/Link";
 import Typography from "@material-ui/core/Typography";
 
 interface Geo {
-  fips: number;
+  fips: string;
   name: string;
 }
 
 function Map(props: {
-  fipsGeo: number;
+  fipsGeo: string;
   data: Record<string, any>[];
   updateGeoCallback: Function;
 }) {
   function getStateGeoFromPropFips() {
-    return props.fipsGeo === 0
+    return props.fipsGeo === USA_FIPS
       ? undefined
       : { fips: props.fipsGeo, name: STATE_FIPS_MAP[props.fipsGeo] };
   }
@@ -35,7 +35,7 @@ function Map(props: {
   const [county, setCounty] = useState<Geo | undefined>();
 
   useEffect(() => {
-    props.updateGeoCallback(state ? state.fips : 0);
+    props.updateGeoCallback(state ? state.fips : USA_FIPS);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state]);
 
@@ -114,8 +114,8 @@ function Map(props: {
 }
 
 function CompareMapNavReport(props: {
-  fipsGeo1: number;
-  fipsGeo2: number;
+  fipsGeo1: string;
+  fipsGeo2: string;
   updateGeo1Callback: Function;
   updateGeo2Callback: Function;
 }) {
