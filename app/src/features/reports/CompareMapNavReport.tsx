@@ -13,12 +13,29 @@ import Breadcrumbs from "@material-ui/core/Breadcrumbs";
 import Link from "@material-ui/core/Link";
 import Typography from "@material-ui/core/Typography";
 
-type UpdateGeoCallback = (message: string) => void;
+function GeographyBreadcrumb(props: {
+  text: string;
+  isClickable: boolean;
+  onClick?: () => void;
+}) {
+  return (
+    <>
+      {props.isClickable && (
+        <Link color="inherit" onClick={() => props.onClick!()}>
+          {props.text}
+        </Link>
+      )}
+      {!props.isClickable && (
+        <Typography color="textPrimary">{props.text}</Typography>
+      )}
+    </>
+  );
+}
 
 function Map(props: {
   fipsGeo: string;
   data: Record<string, any>[];
-  updateGeoCallback: UpdateGeoCallback;
+  updateGeoCallback: (message: string) => void;
 }) {
   const [stateFips, setStateFips] = useState<string>(props.fipsGeo);
   const [countyFips, setCountyFips] = useState<string>();
@@ -58,38 +75,26 @@ function Map(props: {
   return (
     <div>
       <Breadcrumbs aria-label="breadcrumb">
+        <GeographyBreadcrumb
+          text={USA_DISPLAY_NAME}
+          isClickable={stateFips !== USA_FIPS}
+          onClick={() => {
+            setStateFips(USA_FIPS);
+            setCountyFips(undefined);
+            setCountyName(undefined);
+          }}
+        />
         {stateFips !== USA_FIPS && (
-          <Link
-            color="inherit"
-            onClick={() => {
-              setStateFips(USA_FIPS);
-              setCountyFips(undefined);
-              setCountyName(undefined);
-            }}
-          >
-            {USA_DISPLAY_NAME}
-          </Link>
-        )}
-        {!stateFips && (
-          <Typography color="textPrimary">{USA_DISPLAY_NAME}</Typography>
-        )}
-        {stateFips && countyFips && (
-          <Link
-            color="inherit"
+          <GeographyBreadcrumb
+            text={STATE_FIPS_MAP[stateFips]}
+            isClickable={!(!stateFips || !countyFips)}
             onClick={() => {
               setCountyFips(undefined);
             }}
-          >
-            {STATE_FIPS_MAP[stateFips]}
-          </Link>
+          />
         )}
-        {stateFips && !countyFips && (
-          <Typography color="textPrimary">
-            {STATE_FIPS_MAP[stateFips]}
-          </Typography>
-        )}
-        {countyFips && (
-          <Typography color="textPrimary">{countyName}</Typography>
+        {countyName && (
+          <GeographyBreadcrumb text={countyName} isClickable={false} />
         )}
       </Breadcrumbs>
 
