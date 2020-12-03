@@ -37,17 +37,10 @@ function Map(props: {
   data: Record<string, any>[];
   updateGeoCallback: (message: string) => void;
 }) {
-  const [stateFips, setStateFips] = useState<string>(props.fipsGeo);
   const [countyFips, setCountyFips] = useState<string>();
   const [countyName, setCountyName] = useState<string>();
 
   useEffect(() => {
-    props.updateGeoCallback(stateFips);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [stateFips]);
-
-  useEffect(() => {
-    setStateFips(props.fipsGeo);
     setCountyFips(undefined);
     setCountyName(undefined);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -58,7 +51,7 @@ function Map(props: {
       // Is this a countyFips or a state??
       const clickedData = args[1];
       if (clickedData.id.length === 2) {
-        setStateFips(clickedData.id);
+        props.updateGeoCallback(clickedData.id);
       } else {
         setCountyFips(clickedData.id);
         setCountyName(clickedData.properties.name);
@@ -67,9 +60,9 @@ function Map(props: {
   };
 
   let dataset =
-    stateFips === USA_FIPS
+    props.fipsGeo === USA_FIPS
       ? props.data
-      : props.data.filter((r) => r.state_fips_code === stateFips);
+      : props.data.filter((r) => r.state_fips_code === props.fipsGeo);
 
   // TODO - make the mouse turn into a pointer when you hover over
   return (
@@ -77,17 +70,17 @@ function Map(props: {
       <Breadcrumbs aria-label="breadcrumb">
         <GeographyBreadcrumb
           text={USA_DISPLAY_NAME}
-          isClickable={stateFips !== USA_FIPS}
+          isClickable={props.fipsGeo !== USA_FIPS}
           onClick={() => {
-            setStateFips(USA_FIPS);
+            props.updateGeoCallback(USA_FIPS);
             setCountyFips(undefined);
             setCountyName(undefined);
           }}
         />
-        {stateFips !== USA_FIPS && (
+        {props.fipsGeo !== USA_FIPS && (
           <GeographyBreadcrumb
-            text={STATE_FIPS_MAP[stateFips]}
-            isClickable={!(!stateFips || !countyFips)}
+            text={STATE_FIPS_MAP[props.fipsGeo]}
+            isClickable={!(!props.fipsGeo || !countyFips)}
             onClick={() => {
               setCountyFips(undefined);
             }}
@@ -103,11 +96,11 @@ function Map(props: {
         varField={"diabetes_count"}
         legendTitle="Diabetes Count"
         data={dataset}
-        hideLegend={stateFips ? true : false}
-        stateFips={stateFips === USA_FIPS ? undefined : stateFips}
+        hideLegend={props.fipsGeo ? true : false}
+        stateFips={props.fipsGeo === USA_FIPS ? undefined : props.fipsGeo}
         countyFips={countyFips ? countyFips : undefined}
       />
-      {stateFips !== USA_FIPS && (
+      {props.fipsGeo !== USA_FIPS && (
         <Alert severity="error">
           This dataset does not provide county level data
         </Alert>
