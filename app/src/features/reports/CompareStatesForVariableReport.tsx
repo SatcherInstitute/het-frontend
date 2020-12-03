@@ -44,6 +44,8 @@ function CompareStatesForVariableReport(props: {
                   .filter((r) => selectedStates.includes(r.state_name))}
                 measure={variableProvider.variableId}
                 bars="vertical"
+                dimension1="state_name"
+                dimension2="race"
               />
             </Grid>
             <Grid item xs={12} sm={12} md={6}>

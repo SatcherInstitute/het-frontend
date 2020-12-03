@@ -134,6 +134,8 @@ function ChartDumpReport() {
                 )
                 .filter((r) => selectedStates.includes(r.state_name))}
               measure={variableProvider.variableId}
+              dimension1="state_name"
+              dimension2="race"
               bars="vertical"
             />
             <GroupedBarChart
@@ -148,6 +150,8 @@ function ChartDumpReport() {
                 .filter((r) => selectedStates.includes(r.state_name))}
               measure={variableProvider.variableId}
               bars="horizontal"
+              dimension1="state_name"
+              dimension2="race"
             />
             <Divider />
 

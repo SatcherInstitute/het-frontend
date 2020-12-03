@@ -52,14 +52,16 @@ function getSpec(
 function GroupedBarChart(props: {
   data: Row[];
   measure: string;
+  dimension1: string;
+  dimension2: string;
   bars: BarOrientation;
 }) {
   return (
     <Vega
       spec={getSpec(
         props.data,
-        "state_name",
-        "race",
+        props.dimension1,
+        props.dimension2,
         props.measure,
         props.bars
       )}
