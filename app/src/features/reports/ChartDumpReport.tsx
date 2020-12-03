@@ -115,7 +115,7 @@ function ChartDumpReport() {
             <Divider />
 
             <div style={{ width: "500px", margin: "auto", textAlign: "left" }}>
-              <h1>Vertical Grouped Bar Chart</h1>
+              <h1>Grouped Bar Charts (horizontal or vertical)</h1>
               <b>Examples</b>
               <ul>
                 <li>
