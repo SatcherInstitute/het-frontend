@@ -190,7 +190,7 @@ function CarouselMadLib(props: {
                   {Object.entries(phraseSegment)
                     .sort((a, b) => a[0].localeCompare(b[0]))
                     .map(([key, value]) => (
-                      // TODO - we may want to not have this alphabetized by default
+                      // TODO - we may want to not have this alphabetized by ID by default
                       <MenuItem key={value} value={key}>
                         {value}
                       </MenuItem>

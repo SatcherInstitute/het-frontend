@@ -1,6 +1,7 @@
 // TODO maybe rename this file since this string is out of place
 export const ALL_RACES_DISPLAY_NAME = "All races";
-export const USA_DISPLAY_NAME = "the USA";
+export const USA_DISPLAY_NAME = "United States";
+// Fake FIPS code used to represent totals in USA for convenience
 export const USA_FIPS = "00";
 
 export const STATE_FIPS_MAP: Record<string, string> = {

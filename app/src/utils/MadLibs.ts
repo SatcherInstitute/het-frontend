@@ -35,6 +35,7 @@ function getMadLibPhraseText(madLib: MadLib): string {
   return madLibText;
 }
 
+// TODO- investigate type check error to see if we can remove
 // @ts-ignore
 const COVID_VARIABLES: Record<VariableId, string> = {
   covid_cases: "COVID Cases",
@@ -48,6 +49,7 @@ const COVID_VARIABLES: Record<VariableId, string> = {
   covid_hosp_per_100k: "COVID Hospitalizations per 100k",
 };
 
+// TODO- investigate type check error to see if we can remove
 // @ts-ignore
 const DIABETES_VARIABLES: Record<VariableId, string> = {
   diabetes_count: "Diabetes Count",
