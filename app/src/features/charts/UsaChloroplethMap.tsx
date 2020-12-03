@@ -31,7 +31,6 @@ function UsaChloroplethMap(props: {
   // Initial spec state is set in useEffect
   const [spec, setSpec] = useState({});
 
-  console.log(props.stateFips);
   useEffect(() => {
     /* SET UP GEO DATSET */
     // Transform geo dataset by adding varField from VAR_DATASET

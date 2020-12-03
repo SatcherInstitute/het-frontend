@@ -48,11 +48,12 @@ function Map(props: {
 
   const signalListeners: any = {
     click: (...args: any) => {
-      // Is this a countyFips or a state??
       const clickedData = args[1];
       if (clickedData.id.length === 2) {
+        // Updating the state
         props.updateGeoCallback(clickedData.id);
       } else {
+        // Updating the county
         setCountyFips(clickedData.id);
         setCountyName(clickedData.properties.name);
       }
