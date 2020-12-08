@@ -2,16 +2,16 @@ import React from "react";
 import { Grid } from "@material-ui/core";
 import TableCard from "../cards/TableCard";
 import styles from "./Report.module.scss";
-import WithDatasets from "../data/WithDatasets";
+import { WithVariables } from "../data/WithLoadingOrErrorUI";
 import useDatasetStore from "../data/useDatasetStore";
 import { DropdownVarId } from "../utils/madlib/MadLibs";
 import { VARIABLE_DISPLAY_NAMES } from "../utils/madlib/DisplayNames";
-import variableProviders, { VariableId } from "../data/variableProviders";
+import { getDependentDatasets, VariableId } from "../data/variableProviders";
 import { Breakdowns } from "../data/Breakdowns";
-import VariableProvider from "../data/variables/VariableProvider";
-import { USA_FIPS, Fips } from "../utils/madlib/Fips";
+import { Fips } from "../utils/madlib/Fips";
 import MapCard from "../cards/MapCard";
 import Alert from "@material-ui/lab/Alert";
+import VariableQuery from "../data/VariableQuery";
 
 // TODO - remove hardcoded values when we have full support
 const SUPPORTED_MADLIB_VARIABLES: DropdownVarId[] = ["diabetes"];
@@ -33,24 +33,18 @@ function VarGeoReport(props: {
     : ("diabetes_per_100k" as VariableId);
 
   const datasetStore = useDatasetStore();
-  const variableProvider = variableProviders[variableId];
-  const datasetIds = VariableProvider.getUniqueDatasetIds([variableProvider]);
+
+  const geoFilteredBreakdowns = Breakdowns.forFips(props.fips).andRace();
+  const allGeosBreakdowns = Breakdowns.byState().andRace();
+  const geoFilteredQuery = new VariableQuery(variableId, geoFilteredBreakdowns);
+  const allGeosQuery = new VariableQuery(variableId, allGeosBreakdowns);
+  const datasetIds = getDependentDatasets([variableId]);
 
   return (
-    <WithDatasets datasetIds={datasetIds}>
+    <WithVariables queries={[geoFilteredQuery, allGeosQuery]}>
       {() => {
-        let dataset = variableProvider.getData(
-          datasetStore.datasets,
-          Breakdowns.byState().andRace()
-        );
-
-        let tableDataset =
-          props.fips.code === USA_FIPS
-            ? variableProvider.getData(
-                datasetStore.datasets,
-                Breakdowns.national().andRace()
-              )
-            : dataset.filter((r) => r.state_fips === props.fips.code);
+        const mapDataset = datasetStore.getVariables(allGeosQuery);
+        const tableDataset = datasetStore.getVariables(geoFilteredQuery);
 
         return (
           <>
@@ -71,7 +65,7 @@ function VarGeoReport(props: {
                   className={styles.PaddedGrid}
                 >
                   <MapCard
-                    data={dataset}
+                    data={mapDataset}
                     datasetIds={datasetIds}
                     varField={variableId}
                     varFieldDisplayName={VARIABLE_DISPLAY_NAMES[variableId]}
@@ -92,7 +86,7 @@ function VarGeoReport(props: {
                   <TableCard
                     data={tableDataset}
                     datasetIds={datasetIds}
-                    fields={["race", variableId]}
+                    fields={["race_and_ethnicity", variableId]}
                   />
                 </Grid>
               </Grid>
@@ -100,7 +94,7 @@ function VarGeoReport(props: {
           </>
         );
       }}
-    </WithDatasets>
+    </WithVariables>
   );
 }
 

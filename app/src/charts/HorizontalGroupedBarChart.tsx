@@ -137,7 +137,14 @@ function getSpec(
 
 function HorizontalGroupedBarChart(props: { data: Row[]; measure: string }) {
   return (
-    <Vega spec={getSpec(props.data, "state_name", "race", props.measure)} />
+    <Vega
+      spec={getSpec(
+        props.data,
+        "state_name",
+        "race_and_ethnicity",
+        props.measure
+      )}
+    />
   );
 }
 
