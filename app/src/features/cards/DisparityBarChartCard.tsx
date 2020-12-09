@@ -8,7 +8,11 @@ import ToggleButton from "@material-ui/lab/ToggleButton";
 import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
 import SimpleHorizontalBarChart from "../charts/SimpleHorizontalBarChart";
 import { Fips } from "../../utils/Fips";
-import { VariableId } from "../../utils/variableProviders";
+import {
+  VariableId,
+  BreakdownVar,
+  BREAKDOWN_VAR_DISPLAY_NAMES,
+} from "../../utils/variableProviders";
 import CardWrapper from "./CardWrapper";
 
 export type ChartToggle = "percents" | "ratio";
@@ -18,8 +22,7 @@ function DisparityBarChartCard(props: {
   datasetIds: string[];
   metricId: string;
   variableTitle: string;
-  breakdownVar: string;
-  breakdownVarDisplayName: string;
+  breakdownVar: BreakdownVar;
   fips: Fips;
 }) {
   const [chartToggle, setChartToggle] = useState<ChartToggle>("percents");
@@ -29,7 +32,7 @@ function DisparityBarChartCard(props: {
     <CardWrapper
       datasetIds={props.datasetIds}
       titleText={`Disparities in ${props.variableTitle} by ${
-        props.breakdownVarDisplayName
+        BREAKDOWN_VAR_DISPLAY_NAMES[props.breakdownVar]
       } in ${props.fips.getFullDisplayName()}`}
     >
       {() => (
@@ -60,17 +63,15 @@ function DisparityBarChartCard(props: {
                     data={props.dataset}
                     thickMeasure={"population_pct" as VariableId}
                     thinMeasure={(props.metricId + "_pct_of_geo") as VariableId}
-                    breakdownVar={props.breakdownVar}
-                    breakdownVarDisplayName={props.breakdownVarDisplayName}
+                    breakdownVar={props.breakdownVar as BreakdownVar}
                   />
                 )}
                 {chartToggle !== "percents" && (
                   // TODO- calculate actual ratio
                   <SimpleHorizontalBarChart
                     data={props.dataset}
-                    breakdownVar={props.breakdownVar}
+                    breakdownVar={props.breakdownVar as BreakdownVar}
                     measure={(props.metricId + "_per_100k") as VariableId}
-                    breakdownVarDisplayName={props.breakdownVarDisplayName}
                     showLegend={false}
                   />
                 )}

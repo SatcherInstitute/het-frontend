@@ -23,7 +23,7 @@ export type VariableId =
   | "covid_cases_per_100k"
   | "covid_hosp_per_100k";
 
-export const VARIABLE_DISPLAY_NAME_MAP: Record<VariableId, string> = {
+export const VARIABLE_DISPLAY_NAMES: Record<VariableId, string> = {
   diabetes_count: "Diabetes case count",
   diabetes_per_100k: "Diabetes cases per 100,000 people",
   copd_count: "COPD case count",
@@ -38,6 +38,14 @@ export const VARIABLE_DISPLAY_NAME_MAP: Record<VariableId, string> = {
   covid_deaths_per_100k: "COVID-19 deaths per 100,000 people",
   covid_cases_per_100k: "COVID-19 cases per 100,000 people",
   covid_hosp_per_100k: "COVID-19 hospitalizations per 100,000 people",
+};
+
+export type BreakdownVar = "race_and_ethnicity" | "age" | "gender";
+
+export const BREAKDOWN_VAR_DISPLAY_NAMES: Record<BreakdownVar, string> = {
+  race_and_ethnicity: "Race and Ethnicity",
+  age: "age",
+  gender: "gender",
 };
 
 const acsProvider = new AcsPopulationProvider(

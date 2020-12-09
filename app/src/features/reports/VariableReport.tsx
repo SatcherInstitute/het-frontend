@@ -6,7 +6,7 @@ import WithDatasets from "../../utils/WithDatasets";
 import useDatasetStore from "../../utils/useDatasetStore";
 import variableProviders, {
   VariableId,
-  VARIABLE_DISPLAY_NAME_MAP,
+  VARIABLE_DISPLAY_NAMES,
 } from "../../utils/variableProviders";
 import { DropdownVarId } from "../../utils/MadLibs";
 import { Breakdowns } from "../../utils/Breakdowns";
@@ -53,7 +53,7 @@ function VarGeoReport(props: {
                 datasetStore.datasets,
                 Breakdowns.national().andRace()
               )
-            : dataset.filter((r) => r.state_fips === props.fips.code);
+            : dataset.filter((r) => r.state_fips_code === props.fips.code);
 
         return (
           <>
@@ -77,7 +77,7 @@ function VarGeoReport(props: {
                     data={dataset}
                     datasetIds={datasetIds}
                     varField={variableId}
-                    varFieldDisplayName={VARIABLE_DISPLAY_NAME_MAP[variableId]}
+                    varFieldDisplayName={VARIABLE_DISPLAY_NAMES[variableId]}
                     fips={props.fips}
                     updateFipsCallback={(fips: Fips) => {
                       props.updateFipsCallback(fips);
@@ -100,7 +100,7 @@ function VarGeoReport(props: {
                           { name: "race", displayName: "Race and Ethnicity" },
                           {
                             name: variableId,
-                            displayName: VARIABLE_DISPLAY_NAME_MAP[variableId],
+                            displayName: VARIABLE_DISPLAY_NAMES[variableId],
                           },
                         ]}
                       />

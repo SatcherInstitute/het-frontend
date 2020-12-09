@@ -4,7 +4,9 @@ import { Row } from "../../utils/DatasetTypes";
 import { useResponsiveWidth } from "../../utils/useResponsiveWidth";
 import {
   VariableId,
-  VARIABLE_DISPLAY_NAME_MAP,
+  BreakdownVar,
+  VARIABLE_DISPLAY_NAMES,
+  BREAKDOWN_VAR_DISPLAY_NAMES,
 } from "../../utils/variableProviders";
 
 function getSpec(
@@ -26,7 +28,6 @@ function getSpec(
     ? [
         {
           stroke: "variables",
-          title: "Variables",
           orient: "top",
           padding: 4,
           encode: {
@@ -169,8 +170,7 @@ function getSpec(
 function SimpleHorizontalBarChart(props: {
   data: Row[];
   measure: VariableId;
-  breakdownVar: string;
-  breakdownVarDisplayName: string;
+  breakdownVar: BreakdownVar;
   showLegend: boolean;
 }) {
   const [ref, width] = useResponsiveWidth(
@@ -183,9 +183,9 @@ function SimpleHorizontalBarChart(props: {
           props.data,
           width,
           props.breakdownVar,
-          props.breakdownVarDisplayName,
+          BREAKDOWN_VAR_DISPLAY_NAMES[props.breakdownVar],
           props.measure,
-          VARIABLE_DISPLAY_NAME_MAP[props.measure],
+          VARIABLE_DISPLAY_NAMES[props.measure],
           props.showLegend
         )}
       />

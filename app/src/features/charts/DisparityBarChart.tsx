@@ -4,7 +4,9 @@ import { Row } from "../../utils/DatasetTypes";
 import { useResponsiveWidth } from "../../utils/useResponsiveWidth";
 import {
   VariableId,
-  VARIABLE_DISPLAY_NAME_MAP,
+  BreakdownVar,
+  VARIABLE_DISPLAY_NAMES,
+  BREAKDOWN_VAR_DISPLAY_NAMES,
 } from "../../utils/variableProviders";
 
 function getSpec(
@@ -213,8 +215,7 @@ function DisparityBarChart(props: {
   data: Row[];
   thickMeasure: VariableId;
   thinMeasure: VariableId;
-  breakdownVar: string;
-  breakdownVarDisplayName: string;
+  breakdownVar: BreakdownVar;
 }) {
   const [ref, width] = useResponsiveWidth(
     100 /* default width during intialization */
@@ -226,11 +227,11 @@ function DisparityBarChart(props: {
           props.data,
           width,
           props.breakdownVar,
-          props.breakdownVarDisplayName,
+          BREAKDOWN_VAR_DISPLAY_NAMES[props.breakdownVar],
           props.thickMeasure,
-          VARIABLE_DISPLAY_NAME_MAP[props.thickMeasure],
+          VARIABLE_DISPLAY_NAMES[props.thickMeasure],
           props.thinMeasure,
-          VARIABLE_DISPLAY_NAME_MAP[props.thinMeasure]
+          VARIABLE_DISPLAY_NAMES[props.thinMeasure]
         )}
       />
     </div>
