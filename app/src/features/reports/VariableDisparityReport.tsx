@@ -5,7 +5,6 @@ import useDatasetStore from "../../utils/useDatasetStore";
 import { Breakdowns } from "../../utils/Breakdowns";
 import variableProviders, {
   VariableId,
-  BreakdownVar,
   VARIABLE_DISPLAY_NAMES,
 } from "../../utils/variableProviders";
 import VariableProvider from "../../utils/variables/VariableProvider";
@@ -151,26 +150,11 @@ function DisVarGeo(props: {
                     <TableCard
                       data={geoFilteredDataset}
                       fields={[
-                        {
-                          name: "race_and_ethnicity" as BreakdownVar,
-                          displayName: "Race",
-                        },
-                        { name: "population", displayName: "Population" },
-                        {
-                          name: "population_pct",
-                          displayName:
-                            VARIABLE_DISPLAY_NAMES[
-                              "population_pct" as VariableId
-                            ],
-                        },
-                        {
-                          name: shareOf(metric),
-                          displayName: VARIABLE_DISPLAY_NAMES[shareOf(metric)],
-                        },
-                        {
-                          name: per100k(metric),
-                          displayName: VARIABLE_DISPLAY_NAMES[per100k(metric)],
-                        },
+                        "race_and_ethnicity",
+                        "population",
+                        "population_pct",
+                        shareOf(metric),
+                        per100k(metric),
                       ]}
                     />
                   </Grid>

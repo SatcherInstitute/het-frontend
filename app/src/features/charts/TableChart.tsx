@@ -8,11 +8,12 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import { Row } from "../../utils/DatasetTypes";
 import { withStyles, Theme, createStyles } from "@material-ui/core/styles";
-
-export interface Field {
-  readonly name: string;
-  readonly displayName: string;
-}
+import {
+  VariableId,
+  BreakdownVar,
+  VARIABLE_DISPLAY_NAMES,
+  BREAKDOWN_VAR_DISPLAY_NAMES,
+} from "../../utils/variableProviders";
 
 const StyledTableHeader = withStyles((theme: Theme) =>
   createStyles({
@@ -23,16 +24,21 @@ const StyledTableHeader = withStyles((theme: Theme) =>
   })
 )(TableCell);
 
-function TableChart(props: { data: Row[]; fields?: Field[] }) {
-  let tableColumns: Field[] | undefined = undefined;
-  if (props.data.length > 0) {
-    tableColumns =
-      props.fields === undefined
-        ? Object.keys(props.data[0]).map((name) => ({
-            name: name,
-            displayName: name,
-          }))
-        : props.fields;
+function TableChart(props: { data: Row[]; fields?: string[] }) {
+  const tableColumns: string[] | undefined =
+    !props.fields && props.data.length > 0
+      ? Object.keys(props.data[0])
+      : props.fields;
+
+  console.log(props);
+  //localhost:3000/exploredata?mlp=vargeo&mls=1:diabetes,3:04
+  function getDisplayName(field: string) {
+    if (Object.keys(BREAKDOWN_VAR_DISPLAY_NAMES).includes(field)) {
+      return BREAKDOWN_VAR_DISPLAY_NAMES[field as BreakdownVar];
+    } else if (Object.keys(VARIABLE_DISPLAY_NAMES).includes(field)) {
+      return VARIABLE_DISPLAY_NAMES[field as VariableId];
+    }
+    return field;
   }
 
   return (
@@ -46,7 +52,7 @@ function TableChart(props: { data: Row[]; fields?: Field[] }) {
               <TableRow>
                 {tableColumns.map((field, i) => (
                   <StyledTableHeader key={i}>
-                    {field.displayName}
+                    {getDisplayName(field)}
                   </StyledTableHeader>
                 ))}
               </TableRow>
@@ -54,18 +60,18 @@ function TableChart(props: { data: Row[]; fields?: Field[] }) {
             <TableBody>
               {props.data.map((row, i) => (
                 <TableRow key={i}>
-                  {tableColumns!.map((field, j) => (
+                  {tableColumns.map((field, j) => (
                     <TableCell key={j}>
-                      {Number.isInteger(row[field.name])
-                        ? row[field.name].toLocaleString("en")
-                        : row[field.name]}
+                      {Number.isInteger(row[field])
+                        ? row[field].toLocaleString("en")
+                        : row[field]}
                       {
-                        field.name.endsWith("_pct") && (
+                        field.endsWith("_pct") && (
                           <span>%</span>
                         ) /* TODO - don't hard code*/
                       }
                       {
-                        field.name.endsWith("_pct_of_geo") && (
+                        field.endsWith("_pct_of_geo") && (
                           <span>%</span>
                         ) /* TODO - don't hard code*/
                       }
