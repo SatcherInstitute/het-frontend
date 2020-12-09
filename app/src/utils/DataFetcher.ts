@@ -64,7 +64,6 @@ class DataFetcher {
         result = result.map((row: any) => {
           return { ...row, state_fips: fipsMap[row["state_name"]] };
         });
-        console.log(result);
         return result;
       default:
         throw new Error("Unknown dataset: " + datasetId);
