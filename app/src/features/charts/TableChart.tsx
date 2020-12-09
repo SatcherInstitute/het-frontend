@@ -46,7 +46,7 @@ function TableChart(props: { data: Row[]; fields?: string[] }) {
       {!tableColumns ? (
         <h1>No Data provided</h1>
       ) : (
-        <TableContainer component={Paper} style={{ height: "500px" }}>
+        <TableContainer component={Paper} style={{ maxHeight: "500px" }}>
           <Table stickyHeader>
             <TableHead>
               <TableRow>
