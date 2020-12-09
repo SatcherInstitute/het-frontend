@@ -1,4 +1,4 @@
-import React, { useState, useEffect, RefObject } from "react";
+import React, { useState, useEffect } from "react";
 import { Vega } from "react-vega";
 import { useResponsiveWidth } from "../../utils/useResponsiveWidth";
 import { Fips } from "../../utils/Fips";
@@ -184,7 +184,7 @@ function UsaChloroplethMap(props: {
 
   return (
     <div
-      ref={ref as RefObject<HTMLDivElement>}
+      ref={ref}
       style={{
         width: "80%",
         margin: "auto",
