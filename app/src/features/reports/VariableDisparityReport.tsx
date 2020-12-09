@@ -149,6 +149,7 @@ function DisVarGeo(props: {
                     />
                     <TableCard
                       data={geoFilteredDataset}
+                      datasetIds={datasetIds}
                       fields={[
                         "race_and_ethnicity",
                         "population",

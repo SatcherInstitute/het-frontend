@@ -93,6 +93,7 @@ function VarGeoReport(props: {
                 >
                   <TableCard
                     data={tableDataset}
+                    datasetIds={datasetIds}
                     fields={["race", variableId]}
                   />
                 </Grid>

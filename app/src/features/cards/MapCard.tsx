@@ -60,7 +60,7 @@ function MapCard(props: {
     >
       {() => (
         <>
-          <CardContent className={styles.Breadcrumbs}>
+          <CardContent className={styles.SmallMarginContent}>
             <MapBreadcrumbs
               fips={props.fips}
               updateFipsCallback={props.updateFipsCallback}
@@ -71,7 +71,7 @@ function MapCard(props: {
             <>
               <Divider />
               <CardContent
-                className={styles.Breadcrumbs}
+                className={styles.SmallMarginContent}
                 style={{ textAlign: "left" }}
               >
                 <span style={{ lineHeight: "33px", fontSize: "13pt" }}>
