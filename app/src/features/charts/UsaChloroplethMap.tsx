@@ -24,7 +24,9 @@ function UsaChloroplethMap(props: {
   numberFormat?: NumberFormat;
   hideLegend?: boolean;
 }) {
-  const [ref, width] = useResponsiveWidth();
+  const [ref, width] = useResponsiveWidth(
+    100 /* default width during intialization */
+  );
 
   // Initial spec state is set in useEffect
   const [spec, setSpec] = useState({});
@@ -188,11 +190,7 @@ function UsaChloroplethMap(props: {
         margin: "auto",
       }}
     >
-      <Vega
-        spec={spec}
-        width={width ? width : 100} // Set a default value until width is set
-        signalListeners={props.signalListeners}
-      />
+      <Vega spec={spec} width={width} signalListeners={props.signalListeners} />
     </div>
   );
 }
