@@ -1,6 +1,6 @@
 // TODO maybe rename this file since this string is out of place
 export const ALL_RACES_DISPLAY_NAME = "All races";
-export const USA_DISPLAY_NAME = "the United States";
+export const USA_DISPLAY_NAME = "The United States";
 // Fake FIPS code used to represent totals in USA for convenience
 export const USA_FIPS = "00";
 
@@ -9,7 +9,7 @@ class Fips {
 
   // TODO- revisit optional name, this is brittle
   constructor(code: string) {
-    if (!RegExp("^[0-9]{2}|[0-9]{5}").test(code)) {
+    if (!RegExp("^[0-9]{2}|[0-9]{5}$").test(code)) {
       throw new Error("Invalid FIPS code");
     }
     this.code = code;
@@ -66,6 +66,7 @@ export const STATE_FIPS_MAP: Record<string, string> = {
   "08": "Colorado",
   "09": "Connecticut",
   "10": "Delaware",
+  "11": "District of Columbia",
   "12": "Florida",
   "13": "Georgia",
   "15": "Hawaii",
@@ -108,14 +109,12 @@ export const STATE_FIPS_MAP: Record<string, string> = {
   "54": "West Virginia",
   "55": "Wisconsin",
   "56": "Wyoming",
+  "60": "American Samoa",
+  "66": "Guam",
+  "69": "Northern Mariana Islands",
+  "72": "Puerto Rico",
+  "78": "Virgin Islands",
 };
-/*
-      "60": "American Samoa",
-      "66": "Guam",
-      "69": "Northern Mariana Islands",
-      "72": "Puerto Rico",
-      "78": "Virgin Islands"
-  */
 
 // TODO- switch to this list: https://api.census.gov/data/2018/acs/acs5?get=NAME&for=county:*
 export const COUNTY_FIPS_MAP: Record<string, string> = {
@@ -438,7 +437,6 @@ export const COUNTY_FIPS_MAP: Record<string, string> = {
   "10001": "Kent",
   "10003": "New Castle",
   "10005": "Sussex",
-  "11001": "District of Columbia",
   "12001": "Alachua",
   "12003": "Baker",
   "12005": "Bay",
