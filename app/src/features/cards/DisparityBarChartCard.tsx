@@ -24,10 +24,8 @@ export type ChartToggle = "percents" | "ratio";
 function DisparityBarChartCard(props: {
   dataset?: Row[];
   datasetIds: string[];
-  variableTitle: string;
   breakdownVar: BreakdownVar;
   metricId: MetricToggle;
-  breakdownVarDisplayName: string;
   fips: Fips;
 }) {
   const [chartToggle, setChartToggle] = useState<ChartToggle>("percents");

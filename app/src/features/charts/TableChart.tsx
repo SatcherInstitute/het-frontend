@@ -8,12 +8,12 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import { Row } from "../../utils/DatasetTypes";
 import { withStyles, Theme, createStyles } from "@material-ui/core/styles";
+import { VariableId } from "../../utils/variableProviders";
 import {
-  VariableId,
   BreakdownVar,
   VARIABLE_DISPLAY_NAMES,
   BREAKDOWN_VAR_DISPLAY_NAMES,
-} from "../../utils/variableProviders";
+} from "../../utils/madlib/DisplayNames";
 
 const StyledTableHeader = withStyles((theme: Theme) =>
   createStyles({

@@ -3,9 +3,7 @@ import { Grid } from "@material-ui/core";
 import WithDatasets from "../../utils/WithDatasets";
 import useDatasetStore from "../../utils/useDatasetStore";
 import { Breakdowns } from "../../utils/Breakdowns";
-import variableProviders, {
-  VariableId,
-} from "../../utils/variableProviders";
+import variableProviders, { VariableId } from "../../utils/variableProviders";
 import {
   MetricToggle,
   VARIABLE_DISPLAY_NAMES,
