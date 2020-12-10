@@ -4,14 +4,13 @@ import TableCard from "../cards/TableCard";
 import styles from "./Report.module.scss";
 import WithDatasets from "../../utils/WithDatasets";
 import useDatasetStore from "../../utils/useDatasetStore";
-import variableProviders, {
-  VariableId,
-  VARIABLE_DISPLAY_NAMES,
-} from "../../utils/variableProviders";
 import { DropdownVarId } from "../../utils/MadLibs";
+import { VARIABLE_DISPLAY_NAMES } from "../../utils/madlib/DisplayNames";
+import variableProviders, { VariableId } from "../../utils/variableProviders";
+import { DropdownVarId } from "../../utils/madlib/MadLibs";
 import { Breakdowns } from "../../utils/Breakdowns";
 import VariableProvider from "../../utils/variables/VariableProvider";
-import { USA_FIPS, Fips } from "../../utils/Fips";
+import { USA_FIPS, Fips } from "../../utils/madlib/Fips";
 import MapCard from "../cards/MapCard";
 import Alert from "@material-ui/lab/Alert";
 

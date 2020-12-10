@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Vega } from "react-vega";
 import { useResponsiveWidth } from "../../utils/useResponsiveWidth";
-import { Fips } from "../../utils/Fips";
+import { Fips } from "../../utils/madlib/Fips";
 
 type NumberFormat = "raw" | "percentage";
 
@@ -98,8 +98,7 @@ function UsaChloroplethMap(props: {
         {
           name: GEO_DATASET,
           transform: geoTransformers,
-          url:
-            "https://raw.githubusercontent.com/kkatzen/het-frontend/designjam2/app/public/counties-10m.json",
+          url: "/counties-10m.json",
           format: {
             type: "topojson",
             feature: props.showCounties ? "counties" : "states",
