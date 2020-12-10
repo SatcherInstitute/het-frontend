@@ -89,8 +89,6 @@ function DisVarGeo(props: {
               const geoFilteredDataset = dataset
                 .filter((r) => r.race_and_ethnicity !== "Total")
                 .filter((row) => row.state_fips === props.fips.code);
-              console.log(dataset);
-              console.log(geoFilteredDataset);
 
               return (
                 <>
@@ -152,7 +150,21 @@ function DisVarGeo(props: {
                       breakdownVar="race_and_ethnicity"
                       fips={props.fips}
                     />
+                    <TableCard
+                      data={geoFilteredDataset}
+                      datasetIds={datasetIds}
+                      fields={[
+                        "race_and_ethnicity",
+                        "population",
+                        "population_pct",
+                        shareOf(metric),
+                        per100k(metric),
+                      ]}
+                    />
+                  </Grid>
+                  <Grid item xs={props.vertical ? 12 : 6}>
                     <DisparityBarChartCard
+                      dataset={geoFilteredDataset}
                       datasetIds={datasetIds}
                       metricId={metric}
                       breakdownVar="age"

@@ -58,71 +58,67 @@ function MapCard(props: {
         props.varFieldDisplayName
       } in ${props.fips.getFullDisplayName()}`}
     >
-      {() => (
+      <CardContent className={styles.SmallMarginContent}>
+        <MapBreadcrumbs
+          fips={props.fips}
+          updateFipsCallback={props.updateFipsCallback}
+        />
+      </CardContent>
+
+      {props.enableFilter && (
         <>
-          <CardContent className={styles.SmallMarginContent}>
-            <MapBreadcrumbs
-              fips={props.fips}
-              updateFipsCallback={props.updateFipsCallback}
-            />
-          </CardContent>
-
-          {props.enableFilter && (
-            <>
-              <Divider />
-              <CardContent
-                className={styles.SmallMarginContent}
-                style={{ textAlign: "left" }}
-              >
-                <span style={{ lineHeight: "33px", fontSize: "13pt" }}>
-                  Filter by race:
-                </span>
-
-                <FormControl>
-                  <Select
-                    name="raceSelect"
-                    value={race}
-                    onChange={(e) => {
-                      setRace(e.target.value as string);
-                    }}
-                    disabled={props.fips.isUsa() ? false : true}
-                  >
-                    {RACES.map((race) => (
-                      <MenuItem key={race} value={race}>
-                        {race}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </CardContent>
-            </>
-          )}
-
           <Divider />
-          <CardContent>
-            {!props.fips.isUsa() /* TODO - don't hardcode */ && (
-              <Alert severity="warning">
-                This dataset does not provide county level data
-              </Alert>
-            )}
-          </CardContent>
-          <CardContent>
-            <UsaChloroplethMap
-              signalListeners={signalListeners}
-              varField={props.varField}
-              legendTitle={props.varFieldDisplayName}
-              data={
-                props.enableFilter
-                  ? props.data.filter((r) => r.race_and_ethnicity === race)
-                  : props.data
-              }
-              hideLegend={!props.fips.isUsa()} // TODO - update logic here when we have county level data
-              showCounties={props.showCounties}
-              fips={props.fips}
-            />
+          <CardContent
+            className={styles.SmallMarginContent}
+            style={{ textAlign: "left" }}
+          >
+            <span style={{ lineHeight: "33px", fontSize: "13pt" }}>
+              Filter by race:
+            </span>
+
+            <FormControl>
+              <Select
+                name="raceSelect"
+                value={race}
+                onChange={(e) => {
+                  setRace(e.target.value as string);
+                }}
+                disabled={props.fips.isUsa() ? false : true}
+              >
+                {RACES.map((race) => (
+                  <MenuItem key={race} value={race}>
+                    {race}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
           </CardContent>
         </>
       )}
+
+      <Divider />
+      <CardContent>
+        {!props.fips.isUsa() /* TODO - don't hardcode */ && (
+          <Alert severity="warning">
+            This dataset does not provide county level data
+          </Alert>
+        )}
+      </CardContent>
+      <CardContent>
+        <UsaChloroplethMap
+          signalListeners={signalListeners}
+          varField={props.varField}
+          legendTitle={props.varFieldDisplayName}
+          data={
+            props.enableFilter
+              ? props.data.filter((r) => r.race_and_ethnicity === race)
+              : props.data
+          }
+          hideLegend={!props.fips.isUsa()} // TODO - update logic here when we have county level data
+          showCounties={props.showCounties}
+          fips={props.fips}
+        />
+      </CardContent>
     </CardWrapper>
   );
 }
