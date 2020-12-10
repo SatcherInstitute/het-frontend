@@ -105,8 +105,6 @@ function DisVarGeo(props: {
               const geoFilteredDataset = dataset
                 .filter((r) => r.race_and_ethnicity !== "Total")
                 .filter((row) => row.state_fips === props.fips.code);
-              console.log(dataset);
-              console.log(geoFilteredDataset);
 
               return (
                 <>

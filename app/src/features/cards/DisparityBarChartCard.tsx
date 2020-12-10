@@ -35,51 +35,47 @@ function DisparityBarChartCard(props: {
         BREAKDOWN_VAR_DISPLAY_NAMES[props.breakdownVar]
       } in ${props.fips.getFullDisplayName()}`}
     >
-      {() => (
-        <>
-          <CardContent className={styles.Breadcrumbs}>
-            {!props.dataset && (
-              <Alert severity="warning">
-                Missing data means that we don't know the full story.
-              </Alert>
+      <CardContent className={styles.Breadcrumbs}>
+        {!props.dataset && (
+          <Alert severity="warning">
+            Missing data means that we don't know the full story.
+          </Alert>
+        )}
+        {props.dataset && (
+          <ToggleButtonGroup
+            value={chartToggle}
+            exclusive
+            onChange={(e, v) => setChartToggle(v)}
+            aria-label="text alignment"
+          >
+            <ToggleButton value="percents">Percent Share</ToggleButton>
+            <ToggleButton value="ratio">Per 100,000 People</ToggleButton>
+          </ToggleButtonGroup>
+        )}
+      </CardContent>
+      <CardContent className={styles.Breadcrumbs}>
+        {props.dataset && (
+          <>
+            {chartToggle === "percents" && (
+              <DisparityBarChart
+                data={props.dataset}
+                thickMeasure={"population_pct" as VariableId}
+                thinMeasure={(props.metricId + "_pct_of_geo") as VariableId}
+                breakdownVar={props.breakdownVar as BreakdownVar}
+              />
             )}
-            {props.dataset && (
-              <ToggleButtonGroup
-                value={chartToggle}
-                exclusive
-                onChange={(e, v) => setChartToggle(v)}
-                aria-label="text alignment"
-              >
-                <ToggleButton value="percents">Percent Share</ToggleButton>
-                <ToggleButton value="ratio">Per 100,000 People</ToggleButton>
-              </ToggleButtonGroup>
+            {chartToggle !== "percents" && (
+              // TODO- calculate actual ratio
+              <SimpleHorizontalBarChart
+                data={props.dataset}
+                breakdownVar={props.breakdownVar as BreakdownVar}
+                measure={(props.metricId + "_per_100k") as VariableId}
+                showLegend={false}
+              />
             )}
-          </CardContent>
-          <CardContent className={styles.Breadcrumbs}>
-            {props.dataset && (
-              <>
-                {chartToggle === "percents" && (
-                  <DisparityBarChart
-                    data={props.dataset}
-                    thickMeasure={"population_pct" as VariableId}
-                    thinMeasure={(props.metricId + "_pct_of_geo") as VariableId}
-                    breakdownVar={props.breakdownVar as BreakdownVar}
-                  />
-                )}
-                {chartToggle !== "percents" && (
-                  // TODO- calculate actual ratio
-                  <SimpleHorizontalBarChart
-                    data={props.dataset}
-                    breakdownVar={props.breakdownVar as BreakdownVar}
-                    measure={(props.metricId + "_per_100k") as VariableId}
-                    showLegend={false}
-                  />
-                )}
-              </>
-            )}
-          </CardContent>
-        </>
-      )}
+          </>
+        )}
+      </CardContent>
     </CardWrapper>
   );
 }

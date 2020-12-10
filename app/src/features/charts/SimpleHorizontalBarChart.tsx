@@ -97,7 +97,7 @@ function getSpec(
             x: { scale: "x", field: measure },
             y: { scale: "y", field: breakdownVar, band: 0.8 },
             text: {
-              signal: `format(datum["${measure}"], ",")`,
+              signal: `isValid(datum["${measure}"]) ? format(datum["${measure}"], ",") : "" `,
             },
           },
         },

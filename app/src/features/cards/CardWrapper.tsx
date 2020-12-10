@@ -13,7 +13,7 @@ import Divider from "@material-ui/core/Divider";
 function CardWrapper(props: {
   datasetIds: string[];
   titleText: string;
-  children: () => JSX.Element;
+  children: React.ReactNode;
 }) {
   return (
     <Card raised={true} className={styles.ChartCard}>
@@ -21,7 +21,7 @@ function CardWrapper(props: {
         <Typography className={styles.CardHeader}>{props.titleText}</Typography>
       </CardContent>
       <Divider />
-      {props.children()}
+      {props.children}
       <CardContent>
         <LinkWithStickyParams
           target="_blank"
