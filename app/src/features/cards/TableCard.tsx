@@ -9,7 +9,6 @@ function TableCard(props: {
   data: Row[];
   fields?: string[];
 }) {
-  // TODO- would be nice if the header row didn't scroll with content
   return (
     <>
       {props.data.length === 0 && (

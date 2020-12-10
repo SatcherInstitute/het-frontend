@@ -13,6 +13,7 @@ import {
   BreakdownVar,
   VARIABLE_DISPLAY_NAMES,
   BREAKDOWN_VAR_DISPLAY_NAMES,
+  formatFieldValue,
 } from "../../utils/madlib/DisplayNames";
 
 const StyledTableHeader = withStyles((theme: Theme) =>
@@ -30,8 +31,6 @@ function TableChart(props: { data: Row[]; fields?: string[] }) {
       ? Object.keys(props.data[0])
       : props.fields;
 
-  console.log(props);
-  //localhost:3000/exploredata?mlp=vargeo&mls=1:diabetes,3:04
   function getDisplayName(field: string) {
     if (Object.keys(BREAKDOWN_VAR_DISPLAY_NAMES).includes(field)) {
       return BREAKDOWN_VAR_DISPLAY_NAMES[field as BreakdownVar];
@@ -62,19 +61,7 @@ function TableChart(props: { data: Row[]; fields?: string[] }) {
                 <TableRow key={i}>
                   {tableColumns.map((field, j) => (
                     <TableCell key={j}>
-                      {Number.isInteger(row[field])
-                        ? row[field].toLocaleString("en")
-                        : row[field]}
-                      {
-                        field.endsWith("_pct") && (
-                          <span>%</span>
-                        ) /* TODO - don't hard code*/
-                      }
-                      {
-                        field.endsWith("_pct_of_geo") && (
-                          <span>%</span>
-                        ) /* TODO - don't hard code*/
-                      }
+                      {formatFieldValue(field, row[field])}
                     </TableCell>
                   ))}
                 </TableRow>

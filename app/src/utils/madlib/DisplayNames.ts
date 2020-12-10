@@ -50,3 +50,14 @@ export function per100k(metric: string): VariableId {
 export const METRICS_FOR_VARIABLE: Record<string, MetricToggle[]> = {
   covid: ["covid_cases", "covid_deaths", "covid_hosp"],
 };
+
+export function formatFieldValue(nameOfField: string, value: any): string {
+  const formattedValue = Number.isInteger(value)
+    ? value.toLocaleString("en")
+    : value;
+  const suffix =
+    nameOfField.endsWith("_pct") || nameOfField.endsWith("_pct_of_geo")
+      ? "%"
+      : "";
+  return `${formattedValue}${suffix}`;
+}
