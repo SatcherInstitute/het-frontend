@@ -150,21 +150,7 @@ function DisVarGeo(props: {
                       breakdownVar="race_and_ethnicity"
                       fips={props.fips}
                     />
-                    <TableCard
-                      data={geoFilteredDataset}
-                      datasetIds={datasetIds}
-                      fields={[
-                        "race_and_ethnicity",
-                        "population",
-                        "population_pct",
-                        shareOf(metric),
-                        per100k(metric),
-                      ]}
-                    />
-                  </Grid>
-                  <Grid item xs={props.vertical ? 12 : 6}>
                     <DisparityBarChartCard
-                      dataset={geoFilteredDataset}
                       datasetIds={datasetIds}
                       metricId={metric}
                       breakdownVar="age"
