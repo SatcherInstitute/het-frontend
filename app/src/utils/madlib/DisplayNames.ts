@@ -39,6 +39,7 @@ export const METRIC_SHORT_NAMES: Record<MetricToggle, string> = {
   covid_hosp: "hospitalizations",
 };
 
+// TODO - should these be incorporated into how the dataset fields are calculated?
 export function shareOf(metric: string): VariableId {
   return (metric + "_pct_of_geo") as VariableId;
 }
