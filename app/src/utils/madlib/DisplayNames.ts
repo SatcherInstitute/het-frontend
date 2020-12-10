@@ -47,10 +47,12 @@ export function per100k(metric: string): VariableId {
   return (metric + "_per_100k") as VariableId;
 }
 
+// Key should be of type DropdownVarId
 export const METRICS_FOR_VARIABLE: Record<string, MetricToggle[]> = {
   covid: ["covid_cases", "covid_deaths", "covid_hosp"],
 };
 
+// Prints a formatted version of a field value based on the type specified by the field name
 export function formatFieldValue(nameOfField: string, value: any): string {
   const formattedValue = Number.isInteger(value)
     ? value.toLocaleString("en")
