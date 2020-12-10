@@ -64,3 +64,12 @@ export function formatFieldValue(nameOfField: string, value: any): string {
       : "";
   return `${formattedValue}${suffix}`;
 }
+
+export function getFieldDisplayName(field: string) {
+  if (Object.keys(BREAKDOWN_VAR_DISPLAY_NAMES).includes(field)) {
+    return BREAKDOWN_VAR_DISPLAY_NAMES[field as BreakdownVar];
+  } else if (Object.keys(VARIABLE_DISPLAY_NAMES).includes(field)) {
+    return VARIABLE_DISPLAY_NAMES[field as VariableId];
+  }
+  return field;
+}

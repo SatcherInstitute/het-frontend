@@ -8,11 +8,8 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import { Row } from "../../utils/DatasetTypes";
 import { withStyles, Theme, createStyles } from "@material-ui/core/styles";
-import { VariableId } from "../../utils/variableProviders";
 import {
-  BreakdownVar,
-  VARIABLE_DISPLAY_NAMES,
-  BREAKDOWN_VAR_DISPLAY_NAMES,
+  getFieldDisplayName,
   formatFieldValue,
 } from "../../utils/madlib/DisplayNames";
 
@@ -31,15 +28,6 @@ function TableChart(props: { data: Row[]; fields?: string[] }) {
       ? Object.keys(props.data[0])
       : props.fields;
 
-  function getDisplayName(field: string) {
-    if (Object.keys(BREAKDOWN_VAR_DISPLAY_NAMES).includes(field)) {
-      return BREAKDOWN_VAR_DISPLAY_NAMES[field as BreakdownVar];
-    } else if (Object.keys(VARIABLE_DISPLAY_NAMES).includes(field)) {
-      return VARIABLE_DISPLAY_NAMES[field as VariableId];
-    }
-    return field;
-  }
-
   return (
     <>
       {!tableColumns ? (
@@ -51,7 +39,7 @@ function TableChart(props: { data: Row[]; fields?: string[] }) {
               <TableRow>
                 {tableColumns.map((field, i) => (
                   <StyledTableHeader key={i}>
-                    {getDisplayName(field)}
+                    {getFieldDisplayName(field)}
                   </StyledTableHeader>
                 ))}
               </TableRow>
