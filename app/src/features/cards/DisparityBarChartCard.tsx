@@ -8,7 +8,12 @@ import ToggleButton from "@material-ui/lab/ToggleButton";
 import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
 import SimpleHorizontalBarChart from "../charts/SimpleHorizontalBarChart";
 import { Fips } from "../../utils/Fips";
-import { VariableId } from "../../utils/variableProviders";
+import {
+  VariableId,
+  MetricToggle,
+  METRIC_FULL_NAMES,
+  METRIC_SHORT_NAMES,
+} from "../../utils/variableProviders";
 import CardWrapper from "./CardWrapper";
 
 export type ChartToggle = "percents" | "ratio";
@@ -16,8 +21,7 @@ export type ChartToggle = "percents" | "ratio";
 function DisparityBarChartCard(props: {
   dataset?: Row[];
   datasetIds: string[];
-  metricId: string;
-  variableTitle: string;
+  metricId: MetricToggle;
   breakdownVar: string;
   breakdownVarDisplayName: string;
   fips: Fips;
@@ -28,7 +32,7 @@ function DisparityBarChartCard(props: {
   return (
     <CardWrapper
       datasetIds={props.datasetIds}
-      titleText={`Disparities in ${props.variableTitle} by ${
+      titleText={`Disparities in ${METRIC_FULL_NAMES[props.metricId]} by ${
         props.breakdownVarDisplayName
       } in ${props.fips.getFullDisplayName()}`}
     >
@@ -62,6 +66,7 @@ function DisparityBarChartCard(props: {
                     thinMeasure={(props.metricId + "_pct_of_geo") as VariableId}
                     breakdownVar={props.breakdownVar}
                     breakdownVarDisplayName={props.breakdownVarDisplayName}
+                    metricDisplayName={METRIC_SHORT_NAMES[props.metricId]}
                   />
                 )}
                 {chartToggle !== "percents" && (

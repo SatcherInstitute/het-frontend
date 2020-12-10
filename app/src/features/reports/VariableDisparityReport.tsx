@@ -6,6 +6,7 @@ import { Breakdowns } from "../../utils/Breakdowns";
 import variableProviders, {
   VariableId,
   VARIABLE_DISPLAY_NAME_MAP,
+  MetricToggle,
 } from "../../utils/variableProviders";
 import VariableProvider from "../../utils/variables/VariableProvider";
 import DisparityBarChartCard from "../cards/DisparityBarChartCard";
@@ -17,18 +18,10 @@ import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
 import Alert from "@material-ui/lab/Alert";
 import { Fips } from "../../utils/Fips";
 
-export type MetricToggle = "covid_cases" | "covid_deaths" | "covid_hosp";
-
 // TODO - remove hardcoded values when we have full support
 const SUPPORTED_MADLIB_VARIABLES: DropdownVarId[] = ["covid"];
 const METRIC_VARIABLES: Record<string, MetricToggle[]> = {
   covid: ["covid_cases", "covid_deaths", "covid_hosp"],
-};
-
-const METRIC_NAMES: Record<MetricToggle, string> = {
-  covid_cases: "COVID-19 Cases",
-  covid_deaths: "COVID-19 Deaths",
-  covid_hosp: "COVID-19 Hospitalizations",
 };
 
 function shareOf(metric: string): VariableId {
@@ -184,7 +177,6 @@ function DisVarGeo(props: {
                       dataset={geoFilteredDataset}
                       datasetIds={datasetIds}
                       metricId={metric}
-                      variableTitle={METRIC_NAMES[metric]}
                       breakdownVar="race_and_ethnicity"
                       breakdownVarDisplayName="Race/Ethnicity"
                       fips={props.fips}
@@ -192,7 +184,6 @@ function DisVarGeo(props: {
                     <DisparityBarChartCard
                       datasetIds={datasetIds}
                       metricId={metric}
-                      variableTitle={METRIC_NAMES[metric]}
                       breakdownVar="age"
                       breakdownVarDisplayName="Age"
                       fips={props.fips}
@@ -200,7 +191,6 @@ function DisVarGeo(props: {
                     <DisparityBarChartCard
                       datasetIds={datasetIds}
                       metricId={metric}
-                      variableTitle={METRIC_NAMES[metric]}
                       breakdownVar="gender"
                       breakdownVarDisplayName="Gender"
                       fips={props.fips}

@@ -40,6 +40,20 @@ export const VARIABLE_DISPLAY_NAME_MAP: Record<VariableId, string> = {
   covid_hosp_per_100k: "COVID-19 hospitalizations per 100,000 people",
 };
 
+export type MetricToggle = "covid_cases" | "covid_deaths" | "covid_hosp";
+
+export const METRIC_FULL_NAMES: Record<MetricToggle, string> = {
+  covid_cases: "COVID-19 Cases",
+  covid_deaths: "COVID-19 Deaths",
+  covid_hosp: "COVID-19 Hospitalizations",
+};
+
+export const METRIC_SHORT_NAMES: Record<MetricToggle, string> = {
+  covid_cases: "cases",
+  covid_deaths: "deaths",
+  covid_hosp: "hospitalizations",
+};
+
 const acsProvider = new AcsPopulationProvider(
   "population",
   "Population",
