@@ -7,13 +7,14 @@ import { CardContent } from "@material-ui/core";
 import ToggleButton from "@material-ui/lab/ToggleButton";
 import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
 import SimpleHorizontalBarChart from "../charts/SimpleHorizontalBarChart";
-import { Fips } from "../../utils/Fips";
+import { Fips } from "../../utils/madlib/Fips";
+import { VariableId } from "../../utils/variableProviders";
 import {
-  VariableId,
   MetricToggle,
   METRIC_FULL_NAMES,
   METRIC_SHORT_NAMES,
-} from "../../utils/variableProviders";
+} from "../../utils/madlib/DisplayNames";
+
 import CardWrapper from "./CardWrapper";
 
 export type ChartToggle = "percents" | "ratio";

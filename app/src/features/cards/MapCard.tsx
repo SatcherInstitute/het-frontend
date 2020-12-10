@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import UsaChloroplethMap from "../charts/UsaChloroplethMap";
-import { Fips } from "../../utils/Fips";
+import { Fips } from "../../utils/madlib/Fips";
 import Alert from "@material-ui/lab/Alert";
 import { VariableId } from "../../utils/variableProviders";
 import Divider from "@material-ui/core/Divider";
