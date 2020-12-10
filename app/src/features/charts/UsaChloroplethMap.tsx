@@ -98,8 +98,7 @@ function UsaChloroplethMap(props: {
         {
           name: GEO_DATASET,
           transform: geoTransformers,
-          url:
-            "https://raw.githubusercontent.com/kkatzen/het-frontend/designjam2/app/public/counties-10m.json",
+          url: "/counties-10m.json",
           format: {
             type: "topojson",
             feature: props.showCounties ? "counties" : "states",
