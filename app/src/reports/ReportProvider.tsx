@@ -18,7 +18,7 @@ function getPhraseValue(madLib: MadLib, segmentIndex: number): string {
     : madLib.activeSelections[segmentIndex];
 }
 
-function ReportWrapper(props: { madLib: MadLib; setMadLib: Function }) {
+function ReportProvider(props: { madLib: MadLib; setMadLib: Function }) {
   function updateFipsCallback(fips: Fips, geoIndex: number) {
     let updatedArray: PhraseSelections = {
       ...props.madLib.activeSelections,
@@ -102,4 +102,4 @@ function ReportWrapper(props: { madLib: MadLib; setMadLib: Function }) {
   }
 }
 
-export default ReportWrapper;
+export default ReportProvider;
