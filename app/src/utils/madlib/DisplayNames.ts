@@ -1,5 +1,4 @@
 import { VariableId } from "../../data/variableProviders";
-import React from "react";
 
 export const VARIABLE_DISPLAY_NAMES: Record<VariableId, string> = {
   diabetes_count: "Diabetes case count",
@@ -55,10 +54,7 @@ export const METRICS_FOR_VARIABLE: Record<string, MetricToggle[]> = {
 };
 
 // Prints a formatted version of a field value based on the type specified by the field name
-export function formatFieldValue(
-  nameOfField: string,
-  value: any
-): React.ReactNode {
+export function formatFieldValue(nameOfField: string, value: any): string {
   if (value === null || value === undefined) {
     return "";
   }
