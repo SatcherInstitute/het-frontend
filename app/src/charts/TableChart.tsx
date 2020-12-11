@@ -51,7 +51,7 @@ function TableChart(props: { data: Row[]; fields?: string[] }) {
                   {tableColumns.map((field, j) => (
                     <TableCell key={j}>
                       {formatFieldValue(field, row[field])}
-                      {!row[field] && row[field] !== 0 && (
+                      {(row[field] === null || row[field] === undefined) && (
                         <WarningRoundedIcon />
                       )}
                     </TableCell>
