@@ -30,7 +30,7 @@ import {
   linkToMadLib,
 } from "../utils/urlutils";
 import ReactTooltip from "react-tooltip";
-import ReportWrapper from "../features/reports/ReportWrapper";
+import ReportWrapper from "../reports/ReportWrapper";
 
 function FipsSelector(props: {
   value: string;
