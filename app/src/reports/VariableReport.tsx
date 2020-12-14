@@ -42,58 +42,53 @@ function VarGeoReport(props: {
 
   return (
     <WithVariables queries={[geoFilteredQuery, allGeosQuery]}>
-      {() => {
-        const mapDataset = datasetStore.getVariables(allGeosQuery);
-        const tableDataset = datasetStore.getVariables(geoFilteredQuery);
-
-        return (
-          <>
-            {!SUPPORTED_MADLIB_VARIABLES.includes(props.variable) && (
-              <Grid container xs={12} spacing={1} justify="center">
-                <Grid item xs={5}>
-                  <Alert severity="error">Data not currently available</Alert>
-                </Grid>
+      {() => (
+        <>
+          {!SUPPORTED_MADLIB_VARIABLES.includes(props.variable) && (
+            <Grid container xs={12} spacing={1} justify="center">
+              <Grid item xs={5}>
+                <Alert severity="error">Data not currently available</Alert>
               </Grid>
-            )}
-            {SUPPORTED_MADLIB_VARIABLES.includes(props.variable) && (
-              <Grid container spacing={1} alignItems="flex-start">
-                <Grid
-                  item
-                  xs={12}
-                  sm={12}
-                  md={props.vertical ? 12 : 6}
-                  className={styles.PaddedGrid}
-                >
-                  <MapCard
-                    data={mapDataset}
-                    datasetIds={datasetIds}
-                    varField={variableId}
-                    varFieldDisplayName={VARIABLE_DISPLAY_NAMES[variableId]}
-                    fips={props.fips}
-                    updateFipsCallback={(fips: Fips) => {
-                      props.updateFipsCallback(fips);
-                    }}
-                    showCounties={props.fips.isUsa() ? false : true}
-                  />
-                </Grid>
-                <Grid
-                  item
-                  xs={12}
-                  sm={12}
-                  md={props.vertical ? 12 : 6}
-                  className={styles.PaddedGrid}
-                >
-                  <TableCard
-                    data={tableDataset}
-                    datasetIds={datasetIds}
-                    fields={["race_and_ethnicity", variableId]}
-                  />
-                </Grid>
+            </Grid>
+          )}
+          {SUPPORTED_MADLIB_VARIABLES.includes(props.variable) && (
+            <Grid container spacing={1} alignItems="flex-start">
+              <Grid
+                item
+                xs={12}
+                sm={12}
+                md={props.vertical ? 12 : 6}
+                className={styles.PaddedGrid}
+              >
+                <MapCard
+                  data={datasetStore.getVariables(allGeosQuery)}
+                  datasetIds={datasetIds}
+                  varField={variableId}
+                  varFieldDisplayName={VARIABLE_DISPLAY_NAMES[variableId]}
+                  fips={props.fips}
+                  updateFipsCallback={(fips: Fips) => {
+                    props.updateFipsCallback(fips);
+                  }}
+                  showCounties={props.fips.isUsa() ? false : true}
+                />
               </Grid>
-            )}
-          </>
-        );
-      }}
+              <Grid
+                item
+                xs={12}
+                sm={12}
+                md={props.vertical ? 12 : 6}
+                className={styles.PaddedGrid}
+              >
+                <TableCard
+                  data={datasetStore.getVariables(geoFilteredQuery)}
+                  datasetIds={datasetIds}
+                  fields={["race_and_ethnicity", variableId]}
+                />
+              </Grid>
+            </Grid>
+          )}
+        </>
+      )}
     </WithVariables>
   );
 }
