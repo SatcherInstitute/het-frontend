@@ -1,7 +1,7 @@
 import DataFetcher from "../data/DataFetcher";
 import Logger from "./Logger";
 
-export interface Globals {
+interface Globals {
   initialized: boolean;
   logger: Logger;
   dataFetcher: DataFetcher;
