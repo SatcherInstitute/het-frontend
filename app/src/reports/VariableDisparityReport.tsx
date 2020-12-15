@@ -1,7 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { Grid } from "@material-ui/core";
 import { VariableId } from "../data/variableProviders";
-import { BreakdownVar } from "../utils/madlib/DisplayNames";
+import {
+  MetricToggle,
+  VARIABLE_DISPLAY_NAMES,
+  BREAKDOWN_VAR_DISPLAY_NAMES,
+  BreakdownVar,
+  shareOf,
+  per100k,
+  METRICS_FOR_VARIABLE,
+} from "../utils/madlib/DisplayNames";
 import DisparityBarChartCard from "../cards/DisparityBarChartCard";
 import MapCard from "../cards/MapCard";
 import TableCard from "../cards/TableCard";
@@ -15,6 +23,12 @@ import {
   VariableConfig,
   MetricConfig,
 } from "../data/MetricConfig";
+
+const SUPPORTED_BREAKDOWNS: BreakdownVar[] = [
+  "race_and_ethnicity",
+  "age",
+  "sex",
+];
 
 function VariableDisparityReport(props: {
   dropdownVarId: DropdownVarId;
@@ -48,6 +62,7 @@ function VariableDisparityReport(props: {
   const tableFields = variableConfig
     ? [...fields, "population" as VariableId, "population_pct" as VariableId]
     : [];
+  const [breakdown, setBreakdown] = useState<BreakdownVar | "all">("all");
 
   return (
     <>
@@ -61,6 +76,27 @@ function VariableDisparityReport(props: {
 
       {variableConfig && (
         <Grid container spacing={1} justify="center">
+          <Grid item xs={12}>
+            <ToggleButtonGroup
+              exclusive
+              value={breakdown}
+              onChange={(e, v) => {
+                if (v !== null) {
+                  setBreakdown(v);
+                }
+              }}
+              aria-label="text formatting"
+            >
+              <ToggleButton value="all" key="all">
+                All
+              </ToggleButton>
+              {SUPPORTED_BREAKDOWNS.map((breakdownVar) => (
+                <ToggleButton value={breakdownVar} key={breakdownVar}>
+                  {BREAKDOWN_VAR_DISPLAY_NAMES[breakdownVar]}
+                </ToggleButton>
+              ))}
+            </ToggleButtonGroup>
+          </Grid>
           <Grid item xs={12}>
             {!!METRIC_CONFIG[props.dropdownVarId as string] &&
               METRIC_CONFIG[props.dropdownVarId as string].length > 1 && (
@@ -114,30 +150,21 @@ function VariableDisparityReport(props: {
             />
           </Grid>
           <Grid item xs={props.vertical ? 12 : 6}>
-            <DisparityBarChartCard
-              variableConfig={variableConfig}
-              breakdownVar="race_and_ethnicity"
-              nonstandardizedRace={
-                props.dropdownVarId === "covid" ? true : false
-              }
-              fips={props.fips}
-            />
-            <DisparityBarChartCard
-              variableConfig={variableConfig}
-              breakdownVar="age"
-              nonstandardizedRace={
-                props.dropdownVarId === "covid" ? true : false
-              }
-              fips={props.fips}
-            />
-            <DisparityBarChartCard
-              variableConfig={variableConfig}
-              breakdownVar="sex"
-              nonstandardizedRace={
-                props.dropdownVarId === "covid" ? true : false
-              }
-              fips={props.fips}
-            />
+            {SUPPORTED_BREAKDOWNS.map((breakdownVar) => (
+              <>
+                {" "}
+                {(breakdown === "all" || breakdown === breakdownVar) && (
+                  <DisparityBarChartCard
+                    metricId={metric}
+                    breakdownVar={breakdownVar as BreakdownVar}
+                    nonstandardizedRace={
+                      props.dropdownVarId === "covid" ? true : false
+                    }
+                    fips={props.fips}
+                  />
+                )}
+              </>
+            ))}
           </Grid>
         </Grid>
       )}
