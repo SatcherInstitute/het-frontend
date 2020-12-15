@@ -11,8 +11,6 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import IconButton from "@material-ui/core/IconButton";
 import ShareIcon from "@material-ui/icons/Share";
-import TextField from "@material-ui/core/TextField";
-import Autocomplete from "@material-ui/lab/Autocomplete";
 import {
   MADLIB_LIST,
   getMadLibPhraseText,
@@ -31,29 +29,7 @@ import {
 } from "../utils/urlutils";
 import ReactTooltip from "react-tooltip";
 import ReportProvider from "../reports/ReportProvider";
-
-function FipsSelector(props: {
-  value: string;
-  options: Fips[];
-  onGeoUpdate: Function;
-}) {
-  return (
-    <Autocomplete
-      disableClearable={true}
-      value={new Fips(props.value)}
-      defaultValue={props.options[0]}
-      options={props.options}
-      clearOnEscape={true}
-      getOptionLabel={(fips) => fips.getFullDisplayName()}
-      getOptionSelected={(fips) => fips.code === props.value}
-      renderOption={(fips) => <>{fips.getFullDisplayName()}</>}
-      renderInput={(params) => (
-        <TextField margin="dense" {...params} variant="outlined" />
-      )}
-      onChange={(e, fips) => props.onGeoUpdate(fips.code)}
-    />
-  );
-}
+import FipsSelector from "./FipsSelector";
 
 function ExploreDataPage() {
   const [shareModalOpen, setShareModalOpen] = useState(false);
@@ -170,7 +146,7 @@ function CarouselMadLib(props: {
               <>
                 {/* TODO - don't use this hack to figure out if its a FIPS or not*/}
                 {Object.keys(phraseSegment).length > 20 ? (
-                  <Grid item style={{ width: "250px" }}>
+                  <Grid item>
                     <FipsSelector
                       key={index}
                       value={props.madLib.activeSelections[index]}

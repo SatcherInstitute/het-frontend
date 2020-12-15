@@ -13,6 +13,17 @@ const MaterialTheme = createMuiTheme({
       dark: "#167B6F",
     },
   },
+  overrides: {
+    MuiPaper: {
+      root: {
+        "&.MuiPopover-paper": {
+          padding: "20px",
+          maxWidth: "unset",
+          minWidth: "unset",
+        },
+      },
+    },
+  },
 });
 
 export default MaterialTheme;
