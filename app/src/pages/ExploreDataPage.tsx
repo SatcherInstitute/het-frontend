@@ -29,7 +29,7 @@ import {
 } from "../utils/urlutils";
 import ReactTooltip from "react-tooltip";
 import ReportProvider from "../reports/ReportProvider";
-import FipsSelector from "./FipsSelector";
+import FipsSelector from "./ui/FipsSelector";
 
 function ExploreDataPage() {
   const [shareModalOpen, setShareModalOpen] = useState(false);

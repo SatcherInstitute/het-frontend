@@ -3,9 +3,10 @@ import ArrowDropUp from "@material-ui/icons/ArrowDropUp";
 import ArrowDropDown from "@material-ui/icons/ArrowDropDown";
 import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
-import { Fips } from "../utils/madlib/Fips";
+import { Fips } from "../../utils/madlib/Fips";
 import Popover from "@material-ui/core/Popover";
 import Button from "@material-ui/core/Button";
+import styles from "./FipsSelector.module.scss";
 
 function FipsSelector(props: {
   value: string;
@@ -25,22 +26,15 @@ function FipsSelector(props: {
   };
 
   const open = Boolean(anchorEl);
-  const id = open ? "simple-popover" : undefined;
 
   return (
     <>
-      <Button
-        aria-describedby={id}
-        variant="outlined"
-        color="primary"
-        onClick={handleClick}
-      >
+      <Button variant="text" color="primary" onClick={handleClick}>
         {new Fips(props.value).getFullDisplayName()}
         {!open && <ArrowDropDown />}
         {open && <ArrowDropUp />}
       </Button>
       <Popover
-        id={id}
         open={open}
         anchorEl={anchorEl}
         onClose={handleClose}
@@ -53,7 +47,7 @@ function FipsSelector(props: {
           horizontal: "center",
         }}
       >
-        <span>Search for location</span>
+        <span className={styles.SearchForText}>Search for location</span>
         <Autocomplete
           disableClearable={true}
           options={props.options}
@@ -65,6 +59,7 @@ function FipsSelector(props: {
             <TextField
               placeholder="County, State, Territory or United States"
               margin="dense"
+              variant="outlined"
               {...params}
             />
           )}
@@ -73,7 +68,7 @@ function FipsSelector(props: {
             handleClose();
           }}
         />
-        <span>
+        <span className={styles.NoteText}>
           Note: City and census tract location is currently unavailable
         </span>
       </Popover>
