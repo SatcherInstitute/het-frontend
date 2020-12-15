@@ -19,6 +19,7 @@ const MaterialTheme = createMuiTheme({
         "&.MuiPopover-paper": {
           maxWidth: "unset",
           minWidth: "unset",
+          zIndex: "99999",
         },
       },
     },
