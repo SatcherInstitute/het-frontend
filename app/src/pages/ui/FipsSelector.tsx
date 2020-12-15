@@ -62,7 +62,7 @@ function FipsSelector(props: {
             renderOption={(fips) => <>{fips.getFullDisplayName()}</>}
             renderInput={(params) => (
               <TextField
-                placeholder="County, State, Territory or United States"
+                placeholder="County, State, Territory or United States" // TODO- update depending on what options are
                 margin="dense"
                 variant="outlined"
                 {...params}
