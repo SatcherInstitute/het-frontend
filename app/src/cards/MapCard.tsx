@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import UsaChloroplethMap from "../charts/UsaChloroplethMap";
-import { Fips, USA_FIPS } from "../utils/madlib/Fips";
+import { Fips } from "../utils/madlib/Fips";
 import Alert from "@material-ui/lab/Alert";
 import Divider from "@material-ui/core/Divider";
 import { CardContent } from "@material-ui/core";
@@ -58,24 +58,24 @@ function MapCard(props: {
 
   const per100kVariable = per100k(props.variable) as VariableId;
   const variableDisplayName = VARIABLE_DISPLAY_NAMES[per100kVariable];
-  const allGeosBreakdowns = Breakdowns.byState().andRace(
-    props.nonstandardizedRace
-  );
-  const allGeosQuery = new VariableQuery(per100kVariable, allGeosBreakdowns);
+  const breakdowns = Breakdowns.byState().andRace(props.nonstandardizedRace);
+  const query = new VariableQuery(per100kVariable, breakdowns);
 
   return (
     <CardWrapper
-      queries={[allGeosQuery]}
+      queries={[query]}
       datasetIds={getDependentDatasets([per100kVariable])}
       titleText={`${variableDisplayName} in ${props.fips.getFullDisplayName()}`}
     >
       {() => {
         const dataset = datasetStore
-          .getVariables(allGeosQuery)
+          .getVariables(query)
           .filter((row) => row.race_and_ethnicity !== "Not Hispanic or Latino");
 
-        let mapData = dataset.filter((r) => r[per100kVariable] !== undefined);
-        if (props.fips.code !== USA_FIPS) {
+        let mapData = dataset.filter(
+          (r) => r[per100kVariable] !== undefined && r[per100kVariable] !== null
+        );
+        if (!props.fips.isUsa()) {
           // TODO - this doesn't consider county level data
           mapData = mapData.filter((r) => r.state_fips === props.fips.code);
         }

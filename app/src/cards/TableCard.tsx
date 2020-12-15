@@ -18,19 +18,16 @@ function TableCard(props: {
 
   // TODO need to handle race categories standard vs non-standard for covid vs
   // other demographic.
-  const geoFilteredBreakdowns = Breakdowns.forFips(props.fips).andRace(true);
-  const geoFilteredQuery = new VariableQuery(
-    props.variableIds,
-    geoFilteredBreakdowns
-  );
+  const breakdowns = Breakdowns.forFips(props.fips).andRace(true);
+  const query = new VariableQuery(props.variableIds, breakdowns);
 
   const datasetIds = getDependentDatasets(props.variableIds);
 
   return (
-    <CardWrapper queries={[geoFilteredQuery]} datasetIds={datasetIds}>
+    <CardWrapper queries={[query]} datasetIds={datasetIds}>
       {() => {
         const dataset = datasetStore
-          .getVariables(geoFilteredQuery)
+          .getVariables(query)
           .filter(
             (row) =>
               !["Not Hispanic or Latino", "Total"].includes(
