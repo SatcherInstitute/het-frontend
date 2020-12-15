@@ -29,7 +29,11 @@ function FipsSelector(props: {
 
   return (
     <>
-      <Button variant="text" color="primary" onClick={handleClick}>
+      <Button
+        variant="text"
+        className={styles.MadLibButton}
+        onClick={handleClick}
+      >
         {new Fips(props.value).getFullDisplayName()}
         {!open && <ArrowDropDown />}
         {open && <ArrowDropUp />}
