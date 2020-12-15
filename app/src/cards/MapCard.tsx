@@ -22,7 +22,6 @@ function MapCard(props: {
   nonstandardizedRace: boolean /* TODO- ideally wouldn't go here, could be calculated based on dataset */;
   updateFipsCallback: (fips: Fips) => void;
   enableFilter?: boolean;
-  showCounties: boolean;
 }) {
   const signalListeners: any = {
     click: (...args: any) => {
@@ -161,7 +160,6 @@ function MapCard(props: {
                   legendTitle={props.metricConfig.fullCardTitleName}
                   data={mapData}
                   hideLegend={!props.fips.isUsa()} // TODO - update logic here when we have county level data
-                  showCounties={props.showCounties}
                   fips={props.fips}
                 />
               )}

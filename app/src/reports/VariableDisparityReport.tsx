@@ -100,7 +100,6 @@ function VariableDisparityReport(props: {
                 props.updateFipsCallback(fips);
               }}
               enableFilter={props.fips.isUsa()}
-              showCounties={false}
               nonstandardizedRace={
                 props.dropdownVarId === "covid" ? true : false
               }
