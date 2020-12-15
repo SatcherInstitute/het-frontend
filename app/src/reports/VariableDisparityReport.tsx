@@ -4,6 +4,7 @@ import { VariableId } from "../data/variableProviders";
 import {
   MetricToggle,
   VARIABLE_DISPLAY_NAMES,
+  BREAKDOWN_VAR_DISPLAY_NAMES,
   BreakdownVar,
   shareOf,
   per100k,
@@ -21,6 +22,12 @@ import { Fips } from "../utils/madlib/Fips";
 // TODO - remove hardcoded values when we have full support
 const SUPPORTED_MADLIB_VARIABLES: DropdownVarId[] = ["covid"];
 
+const SUPPORTED_BREAKDOWNS: BreakdownVar[] = [
+  "race_and_ethnicity",
+  "age",
+  "sex",
+];
+
 function DisVarGeo(props: {
   dropdownVarId: DropdownVarId;
   fips: Fips;
@@ -34,6 +41,8 @@ function DisVarGeo(props: {
       : ("covid_cases" as MetricToggle)
   );
 
+  const [breakdown, setBreakdown] = useState<BreakdownVar | "all">("all");
+
   return (
     <>
       {!SUPPORTED_MADLIB_VARIABLES.includes(props.dropdownVarId) && (
@@ -46,6 +55,28 @@ function DisVarGeo(props: {
 
       {SUPPORTED_MADLIB_VARIABLES.includes(props.dropdownVarId) && (
         <Grid container spacing={1} justify="center">
+          <Grid item xs={12}>
+            <ToggleButtonGroup
+              exclusive
+              value={breakdown}
+              onChange={(e, v) => {
+                if (v !== null) {
+                  setBreakdown(v);
+                }
+              }}
+              aria-label="text formatting"
+            >
+              <ToggleButton value="all" key="all">
+                All
+              </ToggleButton>
+              {SUPPORTED_BREAKDOWNS.map((breakdownVar) => (
+                <ToggleButton value={breakdownVar} key={breakdownVar}>
+                  {BREAKDOWN_VAR_DISPLAY_NAMES[breakdownVar]}
+                </ToggleButton>
+              ))}
+            </ToggleButtonGroup>
+          </Grid>
+
           <Grid item xs={12}>
             <ToggleButtonGroup
               exclusive
@@ -89,21 +120,18 @@ function DisVarGeo(props: {
             />
           </Grid>
           <Grid item xs={props.vertical ? 12 : 6}>
-            <DisparityBarChartCard
-              metricId={metric}
-              breakdownVar="race_and_ethnicity"
-              fips={props.fips}
-            />
-            <DisparityBarChartCard
-              metricId={metric}
-              breakdownVar="age"
-              fips={props.fips}
-            />
-            <DisparityBarChartCard
-              metricId={metric}
-              breakdownVar="sex"
-              fips={props.fips}
-            />
+            {SUPPORTED_BREAKDOWNS.map((breakdownVar) => (
+              <>
+                {" "}
+                {(breakdown === "all" || breakdown === breakdownVar) && (
+                  <DisparityBarChartCard
+                    metricId={metric}
+                    breakdownVar={breakdownVar as BreakdownVar}
+                    fips={props.fips}
+                  />
+                )}
+              </>
+            ))}
           </Grid>
         </Grid>
       )}
