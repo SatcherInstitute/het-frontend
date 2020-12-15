@@ -160,6 +160,7 @@ function MapCard(props: {
                   legendTitle={props.metricConfig.fullCardTitleName}
                   data={mapData}
                   hideLegend={!props.fips.isUsa()} // TODO - update logic here when we have county level data
+                  showCounties={props.fips.isUsa() ? false : true}
                   fips={props.fips}
                 />
               )}

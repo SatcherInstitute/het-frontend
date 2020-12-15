@@ -2,13 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Grid } from "@material-ui/core";
 import { VariableId } from "../data/variableProviders";
 import {
-  MetricToggle,
-  VARIABLE_DISPLAY_NAMES,
   BREAKDOWN_VAR_DISPLAY_NAMES,
   BreakdownVar,
-  shareOf,
-  per100k,
-  METRICS_FOR_VARIABLE,
 } from "../utils/madlib/DisplayNames";
 import DisparityBarChartCard from "../cards/DisparityBarChartCard";
 import MapCard from "../cards/MapCard";
@@ -152,10 +147,9 @@ function VariableDisparityReport(props: {
           <Grid item xs={props.vertical ? 12 : 6}>
             {SUPPORTED_BREAKDOWNS.map((breakdownVar) => (
               <>
-                {" "}
                 {(breakdown === "all" || breakdown === breakdownVar) && (
                   <DisparityBarChartCard
-                    metricId={metric}
+                    variableConfig={variableConfig}
                     breakdownVar={breakdownVar as BreakdownVar}
                     nonstandardizedRace={
                       props.dropdownVarId === "covid" ? true : false
