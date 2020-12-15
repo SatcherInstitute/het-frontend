@@ -47,30 +47,32 @@ function FipsSelector(props: {
           horizontal: "center",
         }}
       >
-        <span className={styles.SearchForText}>Search for location</span>
-        <Autocomplete
-          disableClearable={true}
-          options={props.options}
-          clearOnEscape={true}
-          getOptionLabel={(fips) => fips.getFullDisplayName()}
-          getOptionSelected={(fips) => fips.code === props.value}
-          renderOption={(fips) => <>{fips.getFullDisplayName()}</>}
-          renderInput={(params) => (
-            <TextField
-              placeholder="County, State, Territory or United States"
-              margin="dense"
-              variant="outlined"
-              {...params}
-            />
-          )}
-          onChange={(e, fips) => {
-            props.onGeoUpdate(fips.code);
-            handleClose();
-          }}
-        />
-        <span className={styles.NoteText}>
-          Note: City and census tract location is currently unavailable
-        </span>
+        <div className={styles.FipsSelectorPopover}>
+          <span className={styles.SearchForText}>Search for location</span>
+          <Autocomplete
+            disableClearable={true}
+            options={props.options}
+            clearOnEscape={true}
+            getOptionLabel={(fips) => fips.getFullDisplayName()}
+            getOptionSelected={(fips) => fips.code === props.value}
+            renderOption={(fips) => <>{fips.getFullDisplayName()}</>}
+            renderInput={(params) => (
+              <TextField
+                placeholder="County, State, Territory or United States"
+                margin="dense"
+                variant="outlined"
+                {...params}
+              />
+            )}
+            onChange={(e, fips) => {
+              props.onGeoUpdate(fips.code);
+              handleClose();
+            }}
+          />
+          <span className={styles.NoteText}>
+            Note: City and census tract location is currently unavailable
+          </span>
+        </div>
       </Popover>
     </>
   );

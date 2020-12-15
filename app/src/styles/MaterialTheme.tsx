@@ -17,7 +17,6 @@ const MaterialTheme = createMuiTheme({
     MuiPaper: {
       root: {
         "&.MuiPopover-paper": {
-          padding: "20px",
           maxWidth: "unset",
           minWidth: "unset",
         },
