@@ -18,6 +18,8 @@ import {
   VariableConfig,
   MetricConfig,
 } from "../data/MetricConfig";
+import Typography from "@material-ui/core/Typography";
+import styles from "./Report.module.scss";
 
 const SUPPORTED_BREAKDOWNS: BreakdownVar[] = [
   "race_and_ethnicity",
@@ -71,57 +73,79 @@ function VariableDisparityReport(props: {
 
       {variableConfig && (
         <Grid container spacing={1} justify="center">
-          <Grid item xs={12}>
-            <ToggleButtonGroup
-              exclusive
-              value={breakdown}
-              onChange={(e, v) => {
-                if (v !== null) {
-                  setBreakdown(v);
-                }
-              }}
-              aria-label="text formatting"
-            >
-              <ToggleButton value="all" key="all">
-                All
-              </ToggleButton>
-              {SUPPORTED_BREAKDOWNS.map((breakdownVar) => (
-                <ToggleButton value={breakdownVar} key={breakdownVar}>
-                  {BREAKDOWN_VAR_DISPLAY_NAMES[breakdownVar]}
+          <Grid container xs={12}>
+            <Grid item>
+              {!!METRIC_CONFIG[props.dropdownVarId as string] &&
+                METRIC_CONFIG[props.dropdownVarId as string].length > 1 && (
+                  <>
+                    <Typography
+                      variant="button"
+                      align="left"
+                      color="primary"
+                      display="block"
+                    >
+                      Filter Data
+                    </Typography>
+                    <ToggleButtonGroup
+                      className={styles.ToggleBlock}
+                      exclusive
+                      value={variableConfig.variableId}
+                      onChange={(e, variableId) => {
+                        if (
+                          variableId !== null &&
+                          METRIC_CONFIG[props.dropdownVarId]
+                        ) {
+                          setVariableConfig(
+                            METRIC_CONFIG[props.dropdownVarId].find(
+                              (variableConfig) =>
+                                variableConfig.variableId === variableId
+                            ) as VariableConfig
+                          );
+                        }
+                      }}
+                      aria-label="text formatting"
+                    >
+                      {METRIC_CONFIG[props.dropdownVarId as string].map(
+                        (variable: VariableConfig, key: number) => (
+                          <ToggleButton value={variable.variableId} key={key}>
+                            {variable.variableId}
+                          </ToggleButton>
+                        )
+                      )}
+                    </ToggleButtonGroup>
+                  </>
+                )}
+            </Grid>
+            <Grid item>
+              <Typography
+                variant="button"
+                align="left"
+                color="primary"
+                display="block"
+              >
+                Filter Demographic
+              </Typography>
+              <ToggleButtonGroup
+                className={styles.ToggleBlock}
+                exclusive
+                value={breakdown}
+                onChange={(e, v) => {
+                  if (v !== null) {
+                    setBreakdown(v);
+                  }
+                }}
+                aria-label="text formatting"
+              >
+                <ToggleButton value="all" key="all">
+                  All
                 </ToggleButton>
-              ))}
-            </ToggleButtonGroup>
-          </Grid>
-          <Grid item xs={12}>
-            {!!METRIC_CONFIG[props.dropdownVarId as string] &&
-              METRIC_CONFIG[props.dropdownVarId as string].length > 1 && (
-                <ToggleButtonGroup
-                  exclusive
-                  value={variableConfig.variableId}
-                  onChange={(e, variableId) => {
-                    if (
-                      variableId !== null &&
-                      METRIC_CONFIG[props.dropdownVarId]
-                    ) {
-                      setVariableConfig(
-                        METRIC_CONFIG[props.dropdownVarId].find(
-                          (variableConfig) =>
-                            variableConfig.variableId === variableId
-                        ) as VariableConfig
-                      );
-                    }
-                  }}
-                  aria-label="text formatting"
-                >
-                  {METRIC_CONFIG[props.dropdownVarId as string].map(
-                    (variable: VariableConfig, key: number) => (
-                      <ToggleButton value={variable.variableId} key={key}>
-                        {variable.variableId}
-                      </ToggleButton>
-                    )
-                  )}
-                </ToggleButtonGroup>
-              )}
+                {SUPPORTED_BREAKDOWNS.map((breakdownVar) => (
+                  <ToggleButton value={breakdownVar} key={breakdownVar}>
+                    {BREAKDOWN_VAR_DISPLAY_NAMES[breakdownVar]}
+                  </ToggleButton>
+                ))}
+              </ToggleButtonGroup>
+            </Grid>
           </Grid>
           <Grid item xs={props.vertical ? 12 : 6}>
             <MapCard
