@@ -170,6 +170,7 @@ function getSpec(
 function SimpleHorizontalBarChart(props: {
   data: Row[];
   measure: MetricId;
+  measureDisplayName: string;
   breakdownVar: BreakdownVar;
   showLegend: boolean;
 }) {
@@ -185,7 +186,7 @@ function SimpleHorizontalBarChart(props: {
           props.breakdownVar,
           BREAKDOWN_VAR_DISPLAY_NAMES[props.breakdownVar],
           props.measure,
-          METRIC_DISPLAY_NAMES[props.measure],
+          props.measureDisplayName,
           props.showLegend
         )}
       />
