@@ -4,7 +4,6 @@ import { Row } from "../data/DatasetTypes";
 import { useResponsiveWidth } from "../utils/useResponsiveWidth";
 import { MetricId } from "../data/variableProviders";
 import {
-  METRIC_DISPLAY_NAMES,
   BreakdownVar,
   BREAKDOWN_VAR_DISPLAY_NAMES,
 } from "../utils/madlib/DisplayNames";
