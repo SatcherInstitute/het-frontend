@@ -12,7 +12,7 @@ import { BreakdownVar } from "../utils/madlib/DisplayNames";
 function TableCard(props: {
   fips: Fips;
   breakdownVar: BreakdownVar;
-  variableIds: MetricId[];
+  metricIds: MetricId[];
   nonstandardizedRace: boolean /* TODO- ideally wouldn't go here, could be calculated based on dataset */;
 }) {
   const datasetStore = useDatasetStore();
@@ -22,15 +22,15 @@ function TableCard(props: {
   const breakdowns = Breakdowns.forFips(props.fips).andRace(
     props.nonstandardizedRace
   );
-  const query = new MetricQuery(props.variableIds, breakdowns);
+  const query = new MetricQuery(props.metricIds, breakdowns);
 
-  const datasetIds = getDependentDatasets(props.variableIds);
+  const datasetIds = getDependentDatasets(props.metricIds);
 
   return (
     <CardWrapper queries={[query]} datasetIds={datasetIds}>
       {() => {
         const dataset = datasetStore
-          .getVariables(query)
+          .getMetrics(query)
           .filter(
             (row) =>
               !["Not Hispanic or Latino", "Total"].includes(
@@ -48,9 +48,7 @@ function TableCard(props: {
             {dataset.length > 0 && (
               <TableChart
                 data={dataset}
-                fields={[props.breakdownVar as string].concat(
-                  props.variableIds
-                )}
+                fields={[props.breakdownVar as string].concat(props.metricIds)}
               />
             )}
           </>

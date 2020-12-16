@@ -82,7 +82,7 @@ function MapCard(props: {
     >
       {() => {
         const dataset = datasetStore
-          .getVariables(query)
+          .getMetrics(query)
           .filter((row) => row.race_and_ethnicity !== "Not Hispanic or Latino");
 
         let mapData = dataset.filter(

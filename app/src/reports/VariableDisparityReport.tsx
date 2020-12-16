@@ -108,7 +108,7 @@ function VariableDisparityReport(props: {
             />
             <TableCard
               fips={props.fips}
-              variableIds={tableFields}
+              metricIds={tableFields}
               breakdownVar={"race_and_ethnicity" as BreakdownVar}
               nonstandardizedRace={
                 props.dropdownVarId === "covid" ? true : false

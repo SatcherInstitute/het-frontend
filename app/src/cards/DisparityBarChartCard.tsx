@@ -52,9 +52,9 @@ function DisparityBarChartCard(props: {
   const metricIds = Object.values(props.variableConfig.metrics).map(
     (metricConfig: MetricConfig) => metricConfig.metricId
   );
-  const variables: MetricId[] = [...metricIds, "population", "population_pct"];
+  const metrics: MetricId[] = [...metricIds, "population", "population_pct"];
 
-  const query = new MetricQuery(variables, breakdowns);
+  const query = new MetricQuery(metrics, breakdowns);
 
   // TODO - what if there are no valid types at all? What do we show?
   const validDisplayMetricConfigs: MetricConfig[] = Object.values(
@@ -64,7 +64,7 @@ function DisparityBarChartCard(props: {
   // TODO - we want to bold the breakdown name in the card title
   return (
     <CardWrapper
-      datasetIds={getDependentDatasets(variables)}
+      datasetIds={getDependentDatasets(metrics)}
       queries={[query]}
       titleText={`${metricConfig.fullCardTitleName} by ${
         BREAKDOWN_VAR_DISPLAY_NAMES[props.breakdownVar]
@@ -72,7 +72,7 @@ function DisparityBarChartCard(props: {
     >
       {() => {
         const dataset = datasetStore
-          .getVariables(query)
+          .getMetrics(query)
           .filter(
             (row) =>
               !["Not Hispanic or Latino", "Total"].includes(

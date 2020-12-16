@@ -58,11 +58,11 @@ export function WithVariables(props: {
   // making sure it's not loaded too many times.
   useEffect(() => {
     props.queries.forEach((query) => {
-      datasetStore.loadVariables(query);
+      datasetStore.loadMetrics(query);
     });
   });
   const statuses = props.queries.map((query) =>
-    datasetStore.getVariablesLoadStatus(query)
+    datasetStore.getMetricsLoadStatus(query)
   );
 
   return (

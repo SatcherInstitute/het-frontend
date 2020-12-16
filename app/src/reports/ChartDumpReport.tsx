@@ -46,14 +46,14 @@ function ChartDumpReport() {
     <WithVariables queries={queries}>
       {() => {
         const pieChartData = datasetStore
-          .getVariables(state1PopulationQuery)
+          .getMetrics(state1PopulationQuery)
           .filter((r) => r.race_and_ethnicity !== "Total");
-        const timeSeriesData = datasetStore.getVariables(state1CovidQuery);
-        const geo1 = datasetStore.getVariables(state1DiabetesQuery);
-        const geo2 = datasetStore.getVariables(state2DiabetesQuery);
+        const timeSeriesData = datasetStore.getMetrics(state1CovidQuery);
+        const geo1 = datasetStore.getMetrics(state1DiabetesQuery);
+        const geo2 = datasetStore.getMetrics(state2DiabetesQuery);
         const groupedChartData = geo1.concat(geo2);
-        const population1 = datasetStore.getVariables(state1PopulationQuery);
-        const population2 = datasetStore.getVariables(state2PopulationQuery);
+        const population1 = datasetStore.getMetrics(state1PopulationQuery);
+        const population2 = datasetStore.getMetrics(state2PopulationQuery);
         const popChartData = population1
           .concat(population2)
           .filter((r) => r.race_and_ethnicity !== "Total");
