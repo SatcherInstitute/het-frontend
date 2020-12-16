@@ -11,7 +11,7 @@ import styles from "./FipsSelector.module.scss";
 function FipsSelector(props: {
   value: string;
   options: Fips[];
-  onGeoUpdate: Function;
+  onGeoUpdate: (fipsCode: string) => void;
 }) {
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null
@@ -35,8 +35,7 @@ function FipsSelector(props: {
         onClick={handleClick}
       >
         {new Fips(props.value).getFullDisplayName()}
-        {!open && <ArrowDropDown />}
-        {open && <ArrowDropUp />}
+        {open ? <ArrowDropUp /> : <ArrowDropDown />}
       </Button>
       <Popover
         open={open}
@@ -62,7 +61,7 @@ function FipsSelector(props: {
             renderOption={(fips) => <>{fips.getFullDisplayName()}</>}
             renderInput={(params) => (
               <TextField
-                placeholder="County, State, Territory or United States" // TODO- update depending on what options are
+                placeholder="County, State, Territory, or United States" // TODO- update depending on what options are
                 margin="dense"
                 variant="outlined"
                 {...params}

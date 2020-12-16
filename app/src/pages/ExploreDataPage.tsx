@@ -170,6 +170,7 @@ function CarouselMadLib(props: {
                 {/* TODO - don't use this hack to figure out if its a FIPS or not*/}
                 {Object.keys(phraseSegment).length > 20 ? (
                   <Grid item>
+                    {/* TODO - this is inefficient*/}
                     <FipsSelector
                       key={index}
                       value={props.madLib.activeSelections[index]}
