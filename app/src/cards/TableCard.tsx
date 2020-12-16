@@ -4,15 +4,15 @@ import { Alert } from "@material-ui/lab";
 import CardWrapper from "./CardWrapper";
 import useDatasetStore from "../data/useDatasetStore";
 import { Breakdowns } from "../data/Breakdowns";
-import { getDependentDatasets, VariableId } from "../data/variableProviders";
-import VariableQuery from "../data/VariableQuery";
+import { getDependentDatasets, MetricId } from "../data/variableProviders";
+import MetricQuery from "../data/MetricQuery";
 import { Fips } from "../utils/madlib/Fips";
 import { BreakdownVar } from "../utils/madlib/DisplayNames";
 
 function TableCard(props: {
   fips: Fips;
   breakdownVar: BreakdownVar;
-  variableIds: VariableId[];
+  variableIds: MetricId[];
   nonstandardizedRace: boolean /* TODO- ideally wouldn't go here, could be calculated based on dataset */;
 }) {
   const datasetStore = useDatasetStore();
@@ -22,7 +22,7 @@ function TableCard(props: {
   const breakdowns = Breakdowns.forFips(props.fips).andRace(
     props.nonstandardizedRace
   );
-  const query = new VariableQuery(props.variableIds, breakdowns);
+  const query = new MetricQuery(props.variableIds, breakdowns);
 
   const datasetIds = getDependentDatasets(props.variableIds);
 

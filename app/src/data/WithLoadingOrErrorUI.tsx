@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { LoadStatus } from "./DatasetTypes";
 import useDatasetStore from "./useDatasetStore";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import VariableQuery from "./VariableQuery";
+import MetricQuery from "./MetricQuery";
 
 function getJointLoadStatus(statuses: LoadStatus[]) {
   if (statuses.includes("error")) {
@@ -49,7 +49,7 @@ export function WithLoadingOrErrorUI(props: {
  * displays loading and error indicators.
  */
 export function WithVariables(props: {
-  queries: VariableQuery[];
+  queries: MetricQuery[];
   loadingComponent?: JSX.Element;
   children: () => JSX.Element;
 }) {

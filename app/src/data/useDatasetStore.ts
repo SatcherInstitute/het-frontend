@@ -10,7 +10,7 @@ import { getUniqueProviders } from "./variableProviders";
 import VariableProvider from "./variables/VariableProvider";
 import { joinOnCols } from "./datasetutils";
 import { DataFrame, IDataFrame } from "data-forge";
-import VariableQuery from "./VariableQuery";
+import MetricQuery from "./MetricQuery";
 import { getDataFetcher, getLogger } from "../utils/globals";
 
 const METADATA_KEY = "all_metadata";
@@ -165,7 +165,7 @@ export function useDatasetStoreProvider(): DatasetStore {
    * Loads the requested variables into a single dataset and caches them so they
    * can be accessed via `getVariables()`
    */
-  async function loadVariables(query: VariableQuery): Promise<void> {
+  async function loadVariables(query: MetricQuery): Promise<void> {
     const providers = getUniqueProviders(query.varIds);
 
     await loadResource<Row[]>(
@@ -217,12 +217,12 @@ export function useDatasetStoreProvider(): DatasetStore {
     return datasetCacheManager.cache.statuses[id] || "unloaded";
   }
 
-  function getVariablesLoadStatus(query: VariableQuery): LoadStatus {
+  function getVariablesLoadStatus(query: MetricQuery): LoadStatus {
     const key = query.getUniqueKey();
     return variableCacheManager.cache.statuses[key] || "unloaded";
   }
 
-  function getVariables(query: VariableQuery): Row[] {
+  function getVariables(query: MetricQuery): Row[] {
     const data = variableCacheManager.cache.resources[query.getUniqueKey()];
     // TODO try to find a good way to use static type checking to make sure
     // this is present rather than throwing an error.

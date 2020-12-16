@@ -10,13 +10,13 @@ import { CardContent } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 import { WithVariables } from "../data/WithLoadingOrErrorUI";
-import VariableQuery from "../data/VariableQuery";
+import MetricQuery from "../data/MetricQuery";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
 function CardWrapper(props: {
   datasetIds: string[];
   titleText?: string;
-  queries?: VariableQuery[];
+  queries?: MetricQuery[];
   children: () => JSX.Element;
 }) {
   const optionalTitle = props.titleText ? (
