@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import UsaChloroplethMap from "../charts/UsaChloroplethMap";
-import { Fips, USA_FIPS } from "../utils/madlib/Fips";
+import { Fips } from "../utils/madlib/Fips";
 import Alert from "@material-ui/lab/Alert";
 import Divider from "@material-ui/core/Divider";
 import { CardContent } from "@material-ui/core";
@@ -18,7 +18,7 @@ import { MetricConfig } from "../data/MetricConfig";
 
 function MapCard(props: {
   fips: Fips;
-  metricConfig: MetricConfig | undefined;
+  metricConfig: MetricConfig;
   nonstandardizedRace: boolean /* TODO- ideally wouldn't go here, could be calculated based on dataset */;
   updateFipsCallback: (fips: Fips) => void;
   enableFilter?: boolean;
@@ -62,50 +62,41 @@ function MapCard(props: {
       ];
 
   const [race, setRace] = useState<string>(RACES[0]);
+  // TODO - remove this useEffect once races are standarized, should be unecessary
   useEffect(() => {
     setRace(RACES[0]);
   }, [RACES, props.metricConfig]);
 
   const datasetStore = useDatasetStore();
 
-  const allGeosBreakdowns = Breakdowns.byState().andRace(
-    props.nonstandardizedRace
-  );
-  const allGeosQuery = new VariableQuery(
-    props.metricConfig!.metricId,
-    allGeosBreakdowns
-  );
-
-  const datasets = props.metricConfig
-    ? getDependentDatasets([props.metricConfig.metricId])
-    : [];
+  const breakdowns = Breakdowns.byState().andRace(props.nonstandardizedRace);
+  const query = new VariableQuery(props.metricConfig.metricId, breakdowns);
 
   return (
     <CardWrapper
-      queries={[allGeosQuery]}
-      datasetIds={datasets}
+      queries={[query]}
+      datasetIds={getDependentDatasets([props.metricConfig.metricId])}
       titleText={`${
-        props.metricConfig!.fullCardTitleName
+        props.metricConfig.fullCardTitleName
       } in ${props.fips.getFullDisplayName()}`}
     >
       {() => {
         const dataset = datasetStore
-          .getVariables(allGeosQuery)
+          .getVariables(query)
           .filter((row) => row.race_and_ethnicity !== "Not Hispanic or Latino");
 
         let mapData = dataset.filter(
-          (r) => r[props.metricConfig!.metricId] !== undefined
+          (r) =>
+            r[props.metricConfig.metricId] !== undefined &&
+            r[props.metricConfig.metricId] !== null
         );
-        console.log("mapData", mapData);
-        if (props.fips.code !== USA_FIPS) {
+        if (!props.fips.isUsa()) {
           // TODO - this doesn't consider county level data
           mapData = mapData.filter((r) => r.state_fips === props.fips.code);
         }
-        console.log("mapData", mapData);
         if (props.enableFilter) {
           mapData = mapData.filter((r) => r.race_and_ethnicity === race);
         }
-        console.log("mapData", mapData);
 
         return (
           <>
@@ -163,8 +154,8 @@ function MapCard(props: {
               {props.metricConfig && (
                 <UsaChloroplethMap
                   signalListeners={signalListeners}
-                  varField={props.metricConfig!.metricId}
-                  legendTitle={props.metricConfig!.fullCardTitleName}
+                  varField={props.metricConfig.metricId}
+                  legendTitle={props.metricConfig.fullCardTitleName}
                   data={mapData}
                   hideLegend={!props.fips.isUsa()} // TODO - update logic here when we have county level data
                   showCounties={props.showCounties}

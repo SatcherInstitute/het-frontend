@@ -21,22 +21,22 @@ import CardWrapper from "./CardWrapper";
 
 const VALID_METRIC_TYPES = ["pct_share", "per100k"];
 
+function getInitalMetricConfig(variableConfig: VariableConfig) {
+  return variableConfig.metrics["pct_share"]
+    ? variableConfig.metrics["pct_share"]
+    : variableConfig.metrics["per100k"];
+}
+
 function DisparityBarChartCard(props: {
   breakdownVar: BreakdownVar;
   variableConfig: VariableConfig;
   nonstandardizedRace: boolean /* TODO- ideally wouldn't go here, could be calculated based on dataset */;
   fips: Fips;
 }) {
-  function getInitalMetricConfig(variableConfig: VariableConfig) {
-    return variableConfig.metrics["pct_share"]
-      ? variableConfig.metrics["pct_share"]
-      : variableConfig.metrics["per100k"];
-  }
-
-  // Initalized state
   const [metricConfig, setMetricConfig] = useState<MetricConfig>(
     getInitalMetricConfig(props.variableConfig)
   );
+  // TODO - Fix antipattern per comments in PR 150
   useEffect(() => {
     setMetricConfig(getInitalMetricConfig(props.variableConfig));
   }, [props.variableConfig]);
@@ -45,7 +45,7 @@ function DisparityBarChartCard(props: {
 
   // TODO need to handle race categories standard vs non-standard for covid vs
   // other demographic.
-  const geoFilteredBreakdowns = Breakdowns.forFips(props.fips).andRace(
+  const breakdowns = Breakdowns.forFips(props.fips).andRace(
     props.nonstandardizedRace
   );
 
@@ -57,20 +57,26 @@ function DisparityBarChartCard(props: {
     "population",
     "population_pct",
   ];
-  const geoFilteredQuery = new VariableQuery(variables, geoFilteredBreakdowns);
+
+  const query = new VariableQuery(variables, breakdowns);
+
+  // TODO - what if there are no valid types at all? What do we show?
+  const validDisplayMetricConfigs: MetricConfig[] = Object.values(
+    props.variableConfig.metrics
+  ).filter((metricConfig) => VALID_METRIC_TYPES.includes(metricConfig.type));
 
   // TODO - we want to bold the breakdown name in the card title
   return (
     <CardWrapper
       datasetIds={getDependentDatasets(variables)}
-      queries={[geoFilteredQuery]}
+      queries={[query]}
       titleText={`${metricConfig.fullCardTitleName} by ${
         BREAKDOWN_VAR_DISPLAY_NAMES[props.breakdownVar]
       } in ${props.fips.getFullDisplayName()}`}
     >
       {() => {
         const dataset = datasetStore
-          .getVariables(geoFilteredQuery)
+          .getVariables(query)
           .filter(
             (row) =>
               !["Not Hispanic or Latino", "Total"].includes(
@@ -87,11 +93,7 @@ function DisparityBarChartCard(props: {
                 </Alert>
               )}
               {props.breakdownVar === ("race_and_ethnicity" as BreakdownVar) &&
-                Object.values(
-                  props.variableConfig.metrics
-                ).filter((metricConfig) =>
-                  VALID_METRIC_TYPES.includes(metricConfig.type)
-                ).length > 1 && (
+                validDisplayMetricConfigs.length > 1 && (
                   <ToggleButtonGroup
                     value={metricConfig.type}
                     exclusive
@@ -104,17 +106,15 @@ function DisparityBarChartCard(props: {
                         );
                       }
                     }}
-                    aria-label="text alignment"
                   >
-                    {Object.values(props.variableConfig.metrics)
-                      .filter((metricConfig) =>
-                        VALID_METRIC_TYPES.includes(metricConfig.type)
-                      )
-                      .map((metricConfig) => (
-                        <ToggleButton value={metricConfig.type}>
-                          {metricConfig.type}
-                        </ToggleButton>
-                      ))}
+                    {validDisplayMetricConfigs.map((metricConfig) => (
+                      <ToggleButton value={metricConfig.type}>
+                        {metricConfig.type === "pct_share" &&
+                          props.variableConfig.variableId + " and Population"}
+                        {metricConfig.type === "per100k" &&
+                          "per 100,000 people"}
+                      </ToggleButton>
+                    ))}
                   </ToggleButtonGroup>
                 )}
             </CardContent>

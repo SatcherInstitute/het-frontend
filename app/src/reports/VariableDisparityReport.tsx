@@ -29,6 +29,7 @@ function VariableDisparityReport(props: {
       : null
   );
 
+  // TODO - Fix antipattern per comments in PR 150
   useEffect(() => {
     setVariableConfig(
       Object.keys(METRIC_CONFIG).includes(props.dropdownVarId)
@@ -45,8 +46,8 @@ function VariableDisparityReport(props: {
     fields.push(variableConfig.metrics["pct_share"].metricId as VariableId);
   }
 
-  const tableFields = variableConfig
-    ? [...fields, "population" as VariableId, "population_pct" as VariableId]
+  const tableFields: VariableId[] = variableConfig
+    ? [...fields, "population", "population_pct"]
     : [];
 
   return (
