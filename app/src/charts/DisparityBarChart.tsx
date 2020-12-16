@@ -109,7 +109,7 @@ function getSpec(
             x: { scale: "x", field: thinMeasure },
             y: { scale: "y", field: breakdownVar, band: 0.5 },
             text: {
-              signal: `isValid(datum["${thinMeasure}"]) ? datum["${thinMeasure}"] + "% of ${metricDisplayName}" : "" `,
+              signal: `isValid(datum["${thinMeasure}"]) ? datum["${thinMeasure}"] + "${metricDisplayName}" : "" `,
             },
           },
         },
