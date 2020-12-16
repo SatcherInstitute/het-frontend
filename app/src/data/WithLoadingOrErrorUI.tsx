@@ -45,10 +45,10 @@ export function WithLoadingOrErrorUI(props: {
 }
 
 /**
- * Provides a wrapper around a UI component that requires some variables, and
+ * Provides a wrapper around a UI component that requires some metrics, and
  * displays loading and error indicators.
  */
-export function WithVariables(props: {
+export function WithMetrics(props: {
   queries: MetricQuery[];
   loadingComponent?: JSX.Element;
   children: () => JSX.Element;

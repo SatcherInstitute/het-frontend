@@ -9,7 +9,7 @@ import {
 import { CardContent } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
-import { WithVariables } from "../data/WithLoadingOrErrorUI";
+import { WithMetrics } from "../data/WithLoadingOrErrorUI";
 import MetricQuery from "../data/MetricQuery";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
@@ -29,7 +29,7 @@ function CardWrapper(props: {
   ) : null;
 
   return (
-    <WithVariables
+    <WithMetrics
       queries={props.queries ? props.queries : []}
       loadingComponent={
         <Card raised={true} className={styles.ChartCard}>
@@ -58,7 +58,7 @@ function CardWrapper(props: {
           </Card>
         );
       }}
-    </WithVariables>
+    </WithMetrics>
   );
 }
 

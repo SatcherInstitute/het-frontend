@@ -1,7 +1,7 @@
 import React from "react";
 import { Grid } from "@material-ui/core";
 import Divider from "@material-ui/core/Divider";
-import { WithVariables } from "../data/WithLoadingOrErrorUI";
+import { WithMetrics } from "../data/WithLoadingOrErrorUI";
 import GroupedBarChart from "../charts/GroupedBarChart";
 import StackedBarChart from "../charts/StackedBarChart";
 import PieChart from "../charts/PieChart";
@@ -43,7 +43,7 @@ function ChartDumpReport() {
     state2PopulationQuery,
   ];
   return (
-    <WithVariables queries={queries}>
+    <WithMetrics queries={queries}>
       {() => {
         const pieChartData = datasetStore
           .getMetrics(state1PopulationQuery)
@@ -132,7 +132,7 @@ function ChartDumpReport() {
           </Grid>
         );
       }}
-    </WithVariables>
+    </WithMetrics>
   );
 }
 
