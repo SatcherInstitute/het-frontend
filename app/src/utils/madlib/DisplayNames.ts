@@ -1,5 +1,6 @@
 import { MetricId } from "../../data/variableProviders";
 
+// TODO - migrate into the MetricConfig
 export const METRIC_DISPLAY_NAMES: Record<MetricId, string> = {
   diabetes_count: "Diabetes case count",
   diabetes_per_100k: "Diabetes cases per 100,000 people",
