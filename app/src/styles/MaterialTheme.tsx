@@ -1,5 +1,3 @@
-//@ts-nocheck
-// Overriding ts check because it complains about MuiToggleButton
 import { createMuiTheme } from "@material-ui/core/styles";
 
 const MaterialTheme = createMuiTheme({
@@ -16,7 +14,6 @@ const MaterialTheme = createMuiTheme({
     },
   },
   overrides: {
-    // TODO - Figure out how best to add ToggleButtonGroup style overrides
     MuiPaper: {
       root: {
         "&.MuiPopover-paper": {
@@ -25,6 +22,7 @@ const MaterialTheme = createMuiTheme({
         },
       },
     },
+    //@ts-ignore - ts doesn't like MuiToggleButton type even though it works
     MuiToggleButton: {
       root: {
         fontWeight: "normal",
