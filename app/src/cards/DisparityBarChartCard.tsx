@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import DisparityBarChart from "../charts/DisparityBarChart";
 import styles from "./Card.module.scss";
 import { Alert } from "@material-ui/lab";
@@ -29,6 +29,7 @@ function getInitalMetricConfig(variableConfig: VariableConfig) {
 }
 
 function DisparityBarChartCard(props: {
+  key: string;
   breakdownVar: BreakdownVar;
   variableConfig: VariableConfig;
   nonstandardizedRace: boolean /* TODO- ideally wouldn't go here, could be calculated based on dataset */;
@@ -37,10 +38,6 @@ function DisparityBarChartCard(props: {
   const [metricConfig, setMetricConfig] = useState<MetricConfig>(
     getInitalMetricConfig(props.variableConfig)
   );
-  // TODO - Fix antipattern per comments in PR 150
-  useEffect(() => {
-    setMetricConfig(getInitalMetricConfig(props.variableConfig));
-  }, [props.variableConfig]);
 
   const datasetStore = useDatasetStore();
 
