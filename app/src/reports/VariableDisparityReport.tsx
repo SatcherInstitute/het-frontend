@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Grid } from "@material-ui/core";
 import { MetricId } from "../data/variableProviders";
 import { BreakdownVar } from "../utils/madlib/DisplayNames";
@@ -18,6 +18,7 @@ import {
 import PopulationCard from "../cards/PopulationCard";
 
 function VariableDisparityReport(props: {
+  key: string;
   dropdownVarId: DropdownVarId;
   fips: Fips;
   updateFipsCallback: Function;
@@ -30,16 +31,8 @@ function VariableDisparityReport(props: {
       : null
   );
 
-  // TODO - Fix antipattern per comments in PR 150
-  useEffect(() => {
-    setVariableConfig(
-      Object.keys(METRIC_CONFIG).includes(props.dropdownVarId)
-        ? METRIC_CONFIG[props.dropdownVarId as string][0]
-        : null
-    );
-  }, [props.dropdownVarId]);
-
   const fields: MetricId[] = [];
+
   if (variableConfig && variableConfig.metrics["per100k"]) {
     fields.push(variableConfig.metrics["per100k"].metricId as MetricId);
   }
@@ -120,6 +113,7 @@ function VariableDisparityReport(props: {
           </Grid>
           <Grid item xs={props.vertical ? 12 : 6}>
             <DisparityBarChartCard
+              key={variableConfig.variableId + "race_and_ethnicity"}
               variableConfig={variableConfig}
               breakdownVar="race_and_ethnicity"
               nonstandardizedRace={
@@ -128,6 +122,7 @@ function VariableDisparityReport(props: {
               fips={props.fips}
             />
             <DisparityBarChartCard
+              key={variableConfig.variableId + "age"}
               variableConfig={variableConfig}
               breakdownVar="age"
               nonstandardizedRace={
@@ -136,6 +131,7 @@ function VariableDisparityReport(props: {
               fips={props.fips}
             />
             <DisparityBarChartCard
+              key={variableConfig.variableId + "sex"}
               variableConfig={variableConfig}
               breakdownVar="sex"
               nonstandardizedRace={
