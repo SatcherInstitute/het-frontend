@@ -43,15 +43,17 @@ function PopulationCard(props: { fips: Fips }) {
 
         return (
           <CardContent>
-            <Button
-              aria-label="expand description"
-              onClick={() => setExpanded(!expanded)}
-              color="primary"
-              className={styles.ExpandPopulationCardButton}
-            >
-              {expanded ? "Collapse full profile" : "See full profile"}
-              {expanded ? <ArrowDropUp /> : <ArrowDropDown />}
-            </Button>
+            {dataset.length > 0 && (
+              <Button
+                aria-label="expand description"
+                onClick={() => setExpanded(!expanded)}
+                color="primary"
+                className={styles.ExpandPopulationCardButton}
+              >
+                {expanded ? "Collapse full profile" : "See full profile"}
+                {expanded ? <ArrowDropUp /> : <ArrowDropDown />}
+              </Button>
+            )}
             <span className={styles.PopulationCardTitle}>
               {props.fips.getFullDisplayName()}
             </span>
