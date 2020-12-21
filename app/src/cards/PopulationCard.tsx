@@ -60,8 +60,16 @@ function PopulationCard(props: { fips: Fips }) {
                 Missing data means that we don't know the full story.
               </Alert>
             )}
+            {/* Because the Vega charts are using responsive width based on the window resizing,
+                we manually trigger a resize when the div size changes so vega chart will 
+                render with the right size. This means the vega chart won't appear until the 
+                AnimateHeight is finished expanding */}
             {dataset.length > 0 && (
-              <>
+              <AnimateHeight
+                duration={500}
+                height={expanded ? "auto" : 70}
+                onAnimationEnd={() => window.dispatchEvent(new Event("resize"))}
+              >
                 <Grid
                   container
                   className={styles.PopulationCard}
@@ -89,43 +97,31 @@ function PopulationCard(props: { fips: Fips }) {
                       </Grid>
                     ))}
                 </Grid>
-                {/* Because the Vega charts are using responsive width based on the window resizing,
-                    we manually trigger a resize when the div size changes so vega chart will 
-                    render with the right size. This means the vega chart won't appear until the 
-                    AnimateHeight is finished expanding */}
-                <AnimateHeight
-                  duration={500}
-                  height={expanded ? "auto" : 0}
-                  onAnimationEnd={() =>
-                    window.dispatchEvent(new Event("resize"))
-                  }
-                >
-                  <Grid container>
-                    <Grid item xs={6}>
-                      <span className={styles.PopulationChartTitle}>
-                        Population by race
-                      </span>
-                      <SimpleHorizontalBarChart
-                        data={dataset.filter(
-                          (r) => r.race_and_ethnicity !== "Total"
-                        )}
-                        measure="population_pct"
-                        measureDisplayName={
-                          METRIC_DISPLAY_NAMES["population_pct"]
-                        }
-                        breakdownVar="race_and_ethnicity"
-                        showLegend={false}
-                        hideActions={true}
-                      />
-                    </Grid>
-                    <Grid item xs={6}>
-                      <span className={styles.PopulationChartTitle}>
-                        Population by age [coming soon]
-                      </span>
-                    </Grid>
+                <Grid container>
+                  <Grid item xs={6}>
+                    <span className={styles.PopulationChartTitle}>
+                      Population by race
+                    </span>
+                    <SimpleHorizontalBarChart
+                      data={dataset.filter(
+                        (r) => r.race_and_ethnicity !== "Total"
+                      )}
+                      measure="population_pct"
+                      measureDisplayName={
+                        METRIC_DISPLAY_NAMES["population_pct"]
+                      }
+                      breakdownVar="race_and_ethnicity"
+                      showLegend={false}
+                      hideActions={true}
+                    />
                   </Grid>
-                </AnimateHeight>
-              </>
+                  <Grid item xs={6}>
+                    <span className={styles.PopulationChartTitle}>
+                      Population by age [coming soon]
+                    </span>
+                  </Grid>
+                </Grid>
+              </AnimateHeight>
             )}
           </CardContent>
         );
