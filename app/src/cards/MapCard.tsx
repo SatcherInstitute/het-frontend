@@ -150,6 +150,7 @@ function MapCard(props: {
                 <UsaChloroplethMap
                   signalListeners={signalListeners}
                   varField={props.metricConfig.metricId}
+                  varFieldDisplayName={props.metricConfig.shortVegaLabel}
                   legendTitle={props.metricConfig.fullCardTitleName}
                   data={mapData}
                   hideLegend={!props.fips.isUsa()} // TODO - update logic here when we have county level data

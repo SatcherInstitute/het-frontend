@@ -21,6 +21,7 @@ const VAR_COUNTY_FIPS = "COUNTY_FIPS";
 function UsaChloroplethMap(props: {
   data: Record<string, any>[];
   varField: string;
+  varFieldDisplayName: string;
   legendTitle: string;
   signalListeners: any;
   fips: Fips;
@@ -68,7 +69,7 @@ function UsaChloroplethMap(props: {
       props.numberFormat === "percentage"
         ? `format(datum.${props.varField}, '0.1%')`
         : `format(datum.${props.varField}, ',')`;
-    let tooltipValue = 'datum.properties.name + ": " + ' + tooltipDatum;
+    const tooltipValue = `{"State": datum.properties.name, "${props.varFieldDisplayName}": ${tooltipDatum} }`;
 
     /* SET UP LEGEND */
     // TODO - Legends should be scaled exactly the same the across compared charts. Looks misleading otherwise.
@@ -204,6 +205,7 @@ function UsaChloroplethMap(props: {
   }, [
     width,
     props.varField,
+    props.varFieldDisplayName,
     props.legendTitle,
     props.numberFormat,
     props.data,

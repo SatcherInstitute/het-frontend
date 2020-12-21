@@ -19,7 +19,7 @@ function getSpec(
 ): any {
   const BAR_HEIGHT = 40;
   const BAR_PADDING = 0.1;
-  const MEASURE_COLOR = "#89B7D5";
+  const MEASURE_COLOR = "#BDC1C6";
   const DATASET = "DATASET";
   const WIDTH_PADDING_FOR_SNOWMAN_MENU = 50;
 

@@ -43,7 +43,7 @@ export const METRIC_CONFIG: Record<string, VariableConfig[]> = {
         per100k: {
           metricId: "covid_cases_per_100k",
           fullCardTitleName: "COVID-19 cases per 100,000 people",
-          shortVegaLabel: "COVID-19 cases per 100k",
+          shortVegaLabel: "Cases per 100k",
           type: "per100k",
         },
       },
