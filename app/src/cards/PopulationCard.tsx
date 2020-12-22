@@ -43,7 +43,7 @@ function PopulationCard(props: { fips: Fips }) {
 
         return (
           <CardContent>
-            {dataset.length > 0 && (
+            {!queryResponse.isError() && (
               <Button
                 aria-label="expand description"
                 onClick={() => setExpanded(!expanded)}
@@ -89,8 +89,9 @@ function PopulationCard(props: { fips: Fips }) {
                     <span className={styles.PopulationMetricValue}>??</span>
                   </Grid>
                   {/* TODO- properly align these */}
-                  {dataset
-                    .filter((r) => r.race_and_ethnicity !== "Total")
+                  {datasetStore
+                    .getMetrics(query)
+                    .data.filter((r) => r.race_and_ethnicity !== "Total")
                     .map((row) => (
                       <Grid item className={styles.PopulationMetric}>
                         <span>{row.race_and_ethnicity}</span>
@@ -106,9 +107,9 @@ function PopulationCard(props: { fips: Fips }) {
                       Population by race
                     </span>
                     <SimpleHorizontalBarChart
-                      data={dataset.filter(
-                        (r) => r.race_and_ethnicity !== "Total"
-                      )}
+                      data={datasetStore
+                        .getMetrics(query)
+                        .data.filter((r) => r.race_and_ethnicity !== "Total")}
                       measure="population_pct"
                       measureDisplayName={
                         METRIC_DISPLAY_NAMES["population_pct"]
