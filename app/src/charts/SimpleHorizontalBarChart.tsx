@@ -169,6 +169,7 @@ function SimpleHorizontalBarChart(props: {
   measureDisplayName: string;
   breakdownVar: BreakdownVar;
   showLegend: boolean;
+  hideActions?: boolean;
 }) {
   const [ref, width] = useResponsiveWidth(
     100 /* default width during intialization */
@@ -185,6 +186,7 @@ function SimpleHorizontalBarChart(props: {
           props.measureDisplayName,
           props.showLegend
         )}
+        actions={props.hideActions ? false : true}
       />
     </div>
   );
