@@ -1,4 +1,8 @@
 import { MetricId } from "../../data/variableProviders";
+import {
+  BreakdownVar,
+  BREAKDOWN_VAR_DISPLAY_NAMES,
+} from "../../data/Breakdowns";
 
 // TODO - migrate into the MetricConfig
 export const METRIC_DISPLAY_NAMES: Record<MetricId, string> = {
@@ -17,14 +21,6 @@ export const METRIC_DISPLAY_NAMES: Record<MetricId, string> = {
   covid_deaths_per_100k: "COVID-19 deaths per 100,000 people",
   covid_cases_per_100k: "COVID-19 cases per 100,000 people",
   covid_hosp_per_100k: "COVID-19 hospitalizations per 100,000 people",
-};
-
-export type BreakdownVar = "race_and_ethnicity" | "age" | "sex";
-
-export const BREAKDOWN_VAR_DISPLAY_NAMES: Record<BreakdownVar, string> = {
-  race_and_ethnicity: "Race and Ethnicity",
-  age: "Age",
-  sex: "Sex",
 };
 
 // Prints a formatted version of a field value based on the type specified by the field name

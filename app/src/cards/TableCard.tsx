@@ -3,11 +3,10 @@ import TableChart from "../charts/TableChart";
 import { Alert } from "@material-ui/lab";
 import CardWrapper from "./CardWrapper";
 import useDatasetStore from "../data/useDatasetStore";
-import { Breakdowns } from "../data/Breakdowns";
 import { getDependentDatasets, MetricId } from "../data/variableProviders";
-import MetricQuery from "../data/MetricQuery";
+import { MetricQuery } from "../data/MetricQuery";
 import { Fips } from "../utils/madlib/Fips";
-import { BreakdownVar } from "../utils/madlib/DisplayNames";
+import { Breakdowns, BreakdownVar } from "../data/Breakdowns";
 
 function TableCard(props: {
   fips: Fips;
@@ -19,9 +18,11 @@ function TableCard(props: {
 
   // TODO need to handle race categories standard vs non-standard for covid vs
   // other demographic.
-  const breakdowns = Breakdowns.forFips(props.fips).andRace(
+  const breakdowns = Breakdowns.forFips(props.fips).addBreakdown(
+    props.breakdownVar,
     props.nonstandardizedRace
   );
+
   const query = new MetricQuery(props.metricIds, breakdowns);
 
   const datasetIds = getDependentDatasets(props.metricIds);
@@ -29,23 +30,22 @@ function TableCard(props: {
   return (
     <CardWrapper queries={[query]} datasetIds={datasetIds}>
       {() => {
-        const dataset = datasetStore
-          .getMetrics(query)
-          .filter(
-            (row) =>
-              !["Not Hispanic or Latino", "Total"].includes(
-                row.race_and_ethnicity
-              )
-          );
+        const queryResponse = datasetStore.getMetrics(query);
+        const dataset = queryResponse.data.filter(
+          (row) =>
+            !["Not Hispanic or Latino", "Total"].includes(
+              row.race_and_ethnicity
+            )
+        );
 
         return (
           <>
-            {dataset.length < 1 && (
+            {queryResponse.isError() && (
               <Alert severity="warning">
                 Missing data means that we don't know the full story.
               </Alert>
             )}
-            {dataset.length > 0 && (
+            {!queryResponse.isError() && (
               <TableChart
                 data={dataset}
                 fields={[props.breakdownVar as string].concat(props.metricIds)}

@@ -1,6 +1,7 @@
 import { Breakdowns } from "../Breakdowns";
 import { Dataset, Row } from "../DatasetTypes";
 import { ProviderId, MetricId } from "../variableProviders";
+import { UnsupportedBreakdownError } from "../MetricQuery";
 
 abstract class VariableProvider {
   readonly providerId: ProviderId;
@@ -19,7 +20,7 @@ abstract class VariableProvider {
 
   getData(datasets: Record<string, Dataset>, breakdowns: Breakdowns): Row[] {
     if (!this.allowsBreakdowns(breakdowns)) {
-      throw new Error(
+      throw new UnsupportedBreakdownError(
         "Breakdowns not supported for provider " +
           this.providerId +
           ": " +
@@ -29,7 +30,7 @@ abstract class VariableProvider {
 
     const missingDatasetIds = this.datasetIds.filter((id) => !datasets[id]);
     if (missingDatasetIds.length > 0) {
-      throw new Error(
+      throw new UnsupportedBreakdownError(
         "Datasets not loaded properly: " + missingDatasetIds.join(",")
       );
     }

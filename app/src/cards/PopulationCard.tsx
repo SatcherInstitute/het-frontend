@@ -4,7 +4,7 @@ import CardWrapper from "./CardWrapper";
 import useDatasetStore from "../data/useDatasetStore";
 import { Breakdowns } from "../data/Breakdowns";
 import { getDependentDatasets, MetricId } from "../data/variableProviders";
-import MetricQuery from "../data/MetricQuery";
+import { MetricQuery } from "../data/MetricQuery";
 import { Fips } from "../utils/madlib/Fips";
 import { CardContent } from "@material-ui/core";
 import { Grid } from "@material-ui/core";
@@ -26,8 +26,8 @@ function PopulationCard(props: { fips: Fips }) {
       hideFooter={true}
     >
       {() => {
-        const dataset = datasetStore.getMetrics(query);
-        const totalPopulation = dataset.find(
+        const queryResponse = datasetStore.getMetrics(query);
+        const totalPopulation = queryResponse.data.find(
           (r) => r.race_and_ethnicity === "Total"
         );
         const totalPopulationSize = totalPopulation
@@ -39,12 +39,12 @@ function PopulationCard(props: { fips: Fips }) {
             <span className={styles.PopulationCardTitle}>
               {props.fips.getFullDisplayName()}
             </span>
-            {dataset.length < 1 && (
+            {queryResponse.isError() && (
               <Alert severity="warning">
                 Missing data means that we don't know the full story.
               </Alert>
             )}
-            {dataset.length > 0 && (
+            {!queryResponse.isError() && (
               <Grid
                 container
                 className={styles.PopulationCard}
@@ -61,7 +61,7 @@ function PopulationCard(props: { fips: Fips }) {
                   <span>Median Age</span>
                   <span className={styles.PopulationMetricValue}>??</span>
                 </Grid>
-                {dataset
+                {queryResponse.data
                   .filter((r) => r.race_and_ethnicity !== "Total")
                   .map((row) => (
                     <Grid item className={styles.PopulationMetric}>

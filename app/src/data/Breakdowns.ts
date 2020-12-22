@@ -6,6 +6,14 @@ export type GeographicBreakdown = "national" | "state" | "county";
 // expect each provider to know what type it uses?
 export type DemographicBreakdown = "race" | "race_nonstandard" | "age" | "sex";
 
+export type BreakdownVar = "race_and_ethnicity" | "age" | "sex";
+
+export const BREAKDOWN_VAR_DISPLAY_NAMES: Record<BreakdownVar, string> = {
+  race_and_ethnicity: "Race and Ethnicity",
+  age: "Age",
+  sex: "Sex",
+};
+
 // TODO flesh this out - would be nice to enforce more type-checking of these
 // column names throughout the codebase, for example with a StandardizedRow type
 // or an enum/constants that can be referenced.
@@ -119,6 +127,22 @@ export class Breakdowns {
 
   andTime(): Breakdowns {
     this.time = true;
+    return this;
+  }
+
+  addBreakdown(
+    breakdownVar: BreakdownVar,
+    nonstandardizedRace = false
+  ): Breakdowns {
+    if (breakdownVar === "race_and_ethnicity") {
+      return this.andRace(nonstandardizedRace);
+    }
+    if (breakdownVar === "age") {
+      return this.andAge();
+    }
+    if (breakdownVar === "sex") {
+      return this.andGender();
+    }
     return this;
   }
 

@@ -1,10 +1,7 @@
 import React, { useState } from "react";
 import { Grid } from "@material-ui/core";
 import { MetricId } from "../data/variableProviders";
-import {
-  BreakdownVar,
-  BREAKDOWN_VAR_DISPLAY_NAMES,
-} from "../utils/madlib/DisplayNames";
+import { BreakdownVar, BREAKDOWN_VAR_DISPLAY_NAMES } from "../data/Breakdowns";
 import DisparityBarChartCard from "../cards/DisparityBarChartCard";
 import MapCard from "../cards/MapCard";
 import TableCard from "../cards/TableCard";
@@ -131,6 +128,7 @@ function VariableDisparityReport(props: {
           </Grid>
           <Grid item xs={props.vertical ? 12 : 6}>
             <MapCard
+              key={currentBreakdown}
               metricConfig={variableConfig.metrics["per100k"] as MetricConfig}
               fips={props.fips}
               updateFipsCallback={(fips: Fips) => {
@@ -140,6 +138,7 @@ function VariableDisparityReport(props: {
               nonstandardizedRace={
                 props.dropdownVarId === "covid" ? true : false
               }
+              currentBreakdown={currentBreakdown}
             />
             <TableCard
               fips={props.fips}

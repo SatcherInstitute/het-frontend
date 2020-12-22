@@ -7,15 +7,15 @@ import ToggleButton from "@material-ui/lab/ToggleButton";
 import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
 import SimpleHorizontalBarChart from "../charts/SimpleHorizontalBarChart";
 import { Fips } from "../utils/madlib/Fips";
+import { METRIC_DISPLAY_NAMES } from "../utils/madlib/DisplayNames";
+import useDatasetStore from "../data/useDatasetStore";
 import {
+  Breakdowns,
   BreakdownVar,
   BREAKDOWN_VAR_DISPLAY_NAMES,
-  METRIC_DISPLAY_NAMES,
-} from "../utils/madlib/DisplayNames";
-import useDatasetStore from "../data/useDatasetStore";
-import { Breakdowns } from "../data/Breakdowns";
+} from "../data/Breakdowns";
 import { getDependentDatasets, MetricId } from "../data/variableProviders";
-import MetricQuery from "../data/MetricQuery";
+import { MetricQuery } from "../data/MetricQuery";
 import { MetricConfig, VariableConfig } from "../data/MetricConfig";
 
 import CardWrapper from "./CardWrapper";
@@ -43,7 +43,8 @@ function DisparityBarChartCard(props: {
 
   // TODO need to handle race categories standard vs non-standard for covid vs
   // other demographic.
-  const breakdowns = Breakdowns.forFips(props.fips).andRace(
+  const breakdown = Breakdowns.forFips(props.fips).addBreakdown(
+    props.breakdownVar,
     props.nonstandardizedRace
   );
 
@@ -52,7 +53,7 @@ function DisparityBarChartCard(props: {
   );
   const metrics: MetricId[] = [...metricIds, "population", "population_pct"];
 
-  const query = new MetricQuery(metrics, breakdowns);
+  const query = new MetricQuery(metrics, breakdown);
 
   // TODO - what if there are no valid types at all? What do we show?
   const validDisplayMetricConfigs: MetricConfig[] = Object.values(
@@ -69,52 +70,51 @@ function DisparityBarChartCard(props: {
       } in ${props.fips.getFullDisplayName()}`}
     >
       {() => {
-        const dataset = datasetStore
-          .getMetrics(query)
-          .filter(
-            (row) =>
-              !["Not Hispanic or Latino", "Total"].includes(
-                row.race_and_ethnicity
-              )
-          );
+        const queryResponse = datasetStore.getMetrics(query);
+        console.log(queryResponse);
+        const dataset = queryResponse.data
+          ? queryResponse.data.filter(
+              (row) =>
+                !["Not Hispanic or Latino", "Total"].includes(
+                  row.race_and_ethnicity
+                )
+            )
+          : [];
         return (
           <>
-            <CardContent className={styles.Breadcrumbs}>
-              {props.breakdownVar !==
-                ("race_and_ethnicity" as BreakdownVar) && (
+            {queryResponse.isError() && (
+              <CardContent className={styles.Breadcrumbs}>
                 <Alert severity="warning">
                   Missing data means that we don't know the full story.
                 </Alert>
-              )}
-              {props.breakdownVar === ("race_and_ethnicity" as BreakdownVar) &&
-                validDisplayMetricConfigs.length > 1 && (
-                  <ToggleButtonGroup
-                    value={metricConfig.type}
-                    exclusive
-                    onChange={(e, metricType) => {
-                      if (metricType !== null) {
-                        setMetricConfig(
-                          props.variableConfig.metrics[
-                            metricType
-                          ] as MetricConfig
-                        );
-                      }
-                    }}
-                  >
-                    {validDisplayMetricConfigs.map((metricConfig) => (
-                      <ToggleButton value={metricConfig.type}>
-                        {metricConfig.type === "pct_share" &&
-                          props.variableConfig.variableId + " and Population"}
-                        {metricConfig.type === "per100k" &&
-                          "per 100,000 people"}
-                      </ToggleButton>
-                    ))}
-                  </ToggleButtonGroup>
-                )}
-            </CardContent>
+              </CardContent>
+            )}
+            {!queryResponse.isError() && validDisplayMetricConfigs.length > 1 && (
+              <CardContent className={styles.Breadcrumbs}>
+                <ToggleButtonGroup
+                  value={metricConfig.type}
+                  exclusive
+                  onChange={(e, metricType) => {
+                    if (metricType !== null) {
+                      setMetricConfig(
+                        props.variableConfig.metrics[metricType] as MetricConfig
+                      );
+                    }
+                  }}
+                >
+                  {validDisplayMetricConfigs.map((metricConfig) => (
+                    <ToggleButton value={metricConfig.type}>
+                      {metricConfig.type === "pct_share" &&
+                        props.variableConfig.variableId + " and Population"}
+                      {metricConfig.type === "per100k" && "per 100,000 people"}
+                    </ToggleButton>
+                  ))}
+                </ToggleButtonGroup>
+              </CardContent>
+            )}
+
             <CardContent className={styles.Breadcrumbs}>
-              {props.breakdownVar ===
-                ("race_and_ethnicity" as BreakdownVar) && (
+              {!queryResponse.isError() && (
                 <>
                   {metricConfig.type === "pct_share" && (
                     <DisparityBarChart

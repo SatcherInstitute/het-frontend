@@ -1,16 +1,14 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import {
-  MetadataMap,
-  Dataset,
-  DatasetStore,
-  LoadStatus,
-  Row,
-} from "./DatasetTypes";
+import { MetadataMap, Dataset, DatasetStore, LoadStatus } from "./DatasetTypes";
 import { getUniqueProviders } from "./variableProviders";
 import VariableProvider from "./variables/VariableProvider";
 import { joinOnCols } from "./datasetutils";
 import { DataFrame, IDataFrame } from "data-forge";
-import MetricQuery from "./MetricQuery";
+import {
+  MetricQuery,
+  MetricQueryResponse,
+  UnsupportedBreakdownError,
+} from "./MetricQuery";
 import { getDataFetcher, getLogger } from "../utils/globals";
 
 const METADATA_KEY = "all_metadata";
@@ -126,7 +124,7 @@ function useResourceCache<R>(): ResourceCacheManager<R> {
 export function useDatasetStoreProvider(): DatasetStore {
   const metadataCacheManager = useResourceCache<MetadataMap>();
   const datasetCacheManager = useResourceCache<Dataset>();
-  const metricCacheManager = useResourceCache<Row[]>();
+  const metricCacheManager = useResourceCache<MetricQueryResponse>();
 
   function trackMetadataLoad() {
     loadResource<MetadataMap>(
@@ -168,7 +166,7 @@ export function useDatasetStoreProvider(): DatasetStore {
   async function loadMetrics(query: MetricQuery): Promise<void> {
     const providers = getUniqueProviders(query.varIds);
 
-    await loadResource<Row[]>(
+    await loadResource<MetricQueryResponse>(
       query.getUniqueKey(),
       metricCacheManager,
       async () => {
@@ -194,21 +192,32 @@ export function useDatasetStoreProvider(): DatasetStore {
         // you request covid cases we could also cache it under covid deaths
         // since they're provided together. Also, it would be nice to cache ACS
         // when it's used from within another provider.
-        const variables = providers.map((provider) =>
-          provider.getData(datasetMap, query.breakdowns)
-        );
-        const dataframes: IDataFrame[] = variables.map(
-          (data) => new DataFrame(data)
-        );
-        const joined = dataframes.reduce((prev, next) => {
-          return joinOnCols(
-            prev,
-            next,
-            query.breakdowns.getJoinColumns(),
-            query.joinType
+        try {
+          const variables = providers.map((provider) =>
+            provider.getData(datasetMap, query.breakdowns)
           );
-        });
-        return joined.toArray();
+
+          const dataframes: IDataFrame[] = variables.map(
+            (data) => new DataFrame(data)
+          );
+
+          const joined = dataframes.reduce((prev, next) => {
+            return joinOnCols(
+              prev,
+              next,
+              query.breakdowns.getJoinColumns(),
+              query.joinType
+            );
+          });
+          return new MetricQueryResponse(joined.toArray());
+        } catch (err) {
+          console.log("kkz", err);
+          if (err instanceof UnsupportedBreakdownError) {
+            return new MetricQueryResponse(err);
+          } else {
+            throw err; // re-throw the error unchanged
+          }
+        }
       }
     );
   }
@@ -222,14 +231,14 @@ export function useDatasetStoreProvider(): DatasetStore {
     return metricCacheManager.cache.statuses[key] || "unloaded";
   }
 
-  function getMetrics(query: MetricQuery): Row[] {
-    const data = metricCacheManager.cache.resources[query.getUniqueKey()];
+  function getMetrics(query: MetricQuery): MetricQueryResponse {
+    const metric = metricCacheManager.cache.resources[query.getUniqueKey()];
     // TODO try to find a good way to use static type checking to make sure
     // this is present rather than throwing an error.
-    if (!data) {
-      throw new Error("Cannot get a variable that has not been loaded");
+    if (!metric) {
+      throw new Error("Cannot get a metric that has not been loaded");
     }
-    return data;
+    return metric;
   }
 
   return {

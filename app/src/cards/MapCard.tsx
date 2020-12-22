@@ -5,16 +5,19 @@ import Alert from "@material-ui/lab/Alert";
 import Divider from "@material-ui/core/Divider";
 import { CardContent } from "@material-ui/core";
 import styles from "./Card.module.scss";
-import Select from "@material-ui/core/Select";
-import FormControl from "@material-ui/core/FormControl";
 import MenuItem from "@material-ui/core/MenuItem";
 import MapBreadcrumbs from "./MapBreadcrumbs";
 import CardWrapper from "./CardWrapper";
 import useDatasetStore from "../data/useDatasetStore";
-import { Breakdowns } from "../data/Breakdowns";
 import { getDependentDatasets } from "../data/variableProviders";
-import MetricQuery from "../data/MetricQuery";
+import { MetricQuery } from "../data/MetricQuery";
 import { MetricConfig } from "../data/MetricConfig";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
+import Menu from "@material-ui/core/Menu";
+import { Grid } from "@material-ui/core";
+import { Breakdowns, BreakdownVar } from "../data/Breakdowns";
 
 function MapCard(props: {
   fips: Fips;
@@ -22,6 +25,7 @@ function MapCard(props: {
   nonstandardizedRace: boolean /* TODO- ideally wouldn't go here, could be calculated based on dataset */;
   updateFipsCallback: (fips: Fips) => void;
   enableFilter?: boolean;
+  currentBreakdown: BreakdownVar | "all";
 }) {
   const signalListeners: any = {
     click: (...args: any) => {
@@ -60,25 +64,48 @@ function MapCard(props: {
         "White, Non-Hispanic",
       ];
 
-  const [race, setRace] = useState<string>(RACES[0]);
+  const [breakdownFilter, setBreakdownFilter] = useState<string>(RACES[0]);
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
   const datasetStore = useDatasetStore();
 
-  const breakdowns = Breakdowns.byState().andRace(props.nonstandardizedRace);
-  const query = new MetricQuery(props.metricConfig.metricId, breakdowns);
+  const raceBreakdown = Breakdowns.byState().andRace(props.nonstandardizedRace);
+  const ageBreakdown = Breakdowns.byState().andAge();
+  const sexBreakdown = Breakdowns.byState().andGender();
+
+  const raceQuery = new MetricQuery(props.metricConfig.metricId, raceBreakdown);
+  const ageQuery = new MetricQuery(props.metricConfig.metricId, ageBreakdown);
+  const sexQuery = new MetricQuery(props.metricConfig.metricId, sexBreakdown);
+
+  let queries = [];
+  if (
+    props.currentBreakdown === "all" ||
+    props.currentBreakdown === "race_and_ethnicity"
+  ) {
+    queries.push(raceQuery);
+  }
+  if (props.currentBreakdown === "all" || props.currentBreakdown === "age") {
+    queries.push(ageQuery);
+  }
+  if (props.currentBreakdown === "all" || props.currentBreakdown === "sex") {
+    queries.push(sexQuery);
+  }
+
+  let query = raceQuery;
 
   return (
     <CardWrapper
-      queries={[query]}
+      queries={queries}
       datasetIds={getDependentDatasets([props.metricConfig.metricId])}
       titleText={`${
         props.metricConfig.fullCardTitleName
       } in ${props.fips.getFullDisplayName()}`}
     >
       {() => {
-        const dataset = datasetStore
-          .getMetrics(query)
-          .filter((row) => row.race_and_ethnicity !== "Not Hispanic or Latino");
+        const queryResponse = datasetStore.getMetrics(query);
+        const dataset = queryResponse.data.filter(
+          (row) => row.race_and_ethnicity !== "Not Hispanic or Latino"
+        );
 
         let mapData = dataset.filter(
           (r) =>
@@ -90,7 +117,9 @@ function MapCard(props: {
           mapData = mapData.filter((r) => r.state_fips === props.fips.code);
         }
         if (props.enableFilter) {
-          mapData = mapData.filter((r) => r.race_and_ethnicity === race);
+          mapData = mapData.filter(
+            (r) => r.race_and_ethnicity === breakdownFilter
+          );
         }
 
         return (
@@ -109,26 +138,61 @@ function MapCard(props: {
                   className={styles.SmallMarginContent}
                   style={{ textAlign: "left" }}
                 >
-                  <span style={{ lineHeight: "33px", fontSize: "13pt" }}>
-                    Filter by race:
-                  </span>
-
-                  <FormControl>
-                    <Select
-                      name="raceSelect"
-                      value={race}
-                      onChange={(e) => {
-                        setRace(e.target.value as string);
-                      }}
-                      disabled={props.fips.isUsa() ? false : true}
-                    >
-                      {RACES.map((race) => (
-                        <MenuItem key={race} value={race}>
-                          {race}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
+                  <Grid container>
+                    <Grid item style={{ lineHeight: "64px", fontSize: "20px" }}>
+                      Filtered by:
+                    </Grid>
+                    <Grid item>
+                      <List component="nav" aria-label="Device settings">
+                        <ListItem
+                          button
+                          aria-haspopup="true"
+                          aria-controls="lock-menu"
+                          aria-label="when device is locked"
+                          onClick={(event: React.MouseEvent<HTMLElement>) =>
+                            setAnchorEl(event.currentTarget)
+                          }
+                        >
+                          <ListItemText primary={breakdownFilter} />
+                        </ListItem>
+                      </List>
+                      <Menu
+                        id="lock-menu"
+                        anchorEl={anchorEl}
+                        keepMounted
+                        open={Boolean(anchorEl)}
+                        onClose={() => {
+                          setAnchorEl(null);
+                        }}
+                      >
+                        {(props.currentBreakdown === "age" ||
+                          props.currentBreakdown === "all") && (
+                          <MenuItem disabled={true}>Age [unavailable]</MenuItem>
+                        )}
+                        {(props.currentBreakdown === "sex" ||
+                          props.currentBreakdown === "all") && (
+                          <MenuItem disabled={true}>Sex [unavailable]</MenuItem>
+                        )}
+                        {(props.currentBreakdown === "race_and_ethnicity" ||
+                          props.currentBreakdown === "all") && (
+                          <>
+                            <MenuItem disabled={true}>Races</MenuItem>
+                            {RACES.map((option, index) => (
+                              <MenuItem
+                                key={option}
+                                onClick={(e) => {
+                                  setAnchorEl(null);
+                                  setBreakdownFilter(option);
+                                }}
+                              >
+                                {option}
+                              </MenuItem>
+                            ))}
+                          </>
+                        )}
+                      </Menu>
+                    </Grid>
+                  </Grid>
                 </CardContent>
               </>
             )}
@@ -141,7 +205,7 @@ function MapCard(props: {
                     This dataset does not provide county level data
                   </Alert>
                 )}
-              {mapData.length === 0 && (
+              {queryResponse.isError() && (
                 <Alert severity="error">No data available</Alert>
               )}
             </CardContent>

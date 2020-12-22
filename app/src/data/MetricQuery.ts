@@ -1,8 +1,9 @@
 import { Breakdowns } from "./Breakdowns";
 import { JoinType } from "./datasetutils";
 import { MetricId } from "./variableProviders";
+import { Row } from "./DatasetTypes";
 
-class MetricQuery {
+export class MetricQuery {
   readonly varIds: MetricId[];
   readonly breakdowns: Breakdowns;
   readonly joinType: JoinType;
@@ -22,4 +23,30 @@ class MetricQuery {
   }
 }
 
-export default MetricQuery;
+export class UnsupportedBreakdownError extends Error {
+  constructor(m: string) {
+    super(m);
+
+    // Set the prototype explicitly.
+    Object.setPrototypeOf(this, UnsupportedBreakdownError.prototype);
+  }
+}
+
+export class MetricQueryResponse {
+  readonly data: Row[];
+  readonly error?: UnsupportedBreakdownError;
+
+  constructor(input: Row[] | UnsupportedBreakdownError) {
+    if (input instanceof Error) {
+      this.error = input as Error;
+      this.data = [];
+    } else {
+      this.data = input as Row[];
+    }
+    console.log("kkz this.data", this.data);
+  }
+
+  isError() {
+    return !!this.error;
+  }
+}

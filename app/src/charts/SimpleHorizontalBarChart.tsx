@@ -3,10 +3,7 @@ import { Vega } from "react-vega";
 import { Row } from "../data/DatasetTypes";
 import { useResponsiveWidth } from "../utils/useResponsiveWidth";
 import { MetricId } from "../data/variableProviders";
-import {
-  BreakdownVar,
-  BREAKDOWN_VAR_DISPLAY_NAMES,
-} from "../utils/madlib/DisplayNames";
+import { BreakdownVar, BREAKDOWN_VAR_DISPLAY_NAMES } from "../data/Breakdowns";
 
 function getSpec(
   data: Record<string, any>[],
