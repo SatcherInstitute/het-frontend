@@ -5,7 +5,7 @@ import {
   MADLIB_LIST,
   MadLib,
   PhraseSegment,
-  PhraseSelections,
+  getMadLibWithUpdatedValue,
 } from "../utils/madlib/MadLibs";
 import { Fips } from "../utils/madlib/Fips";
 import styles from "./ExploreDataPage.module.scss";
@@ -105,17 +105,6 @@ function CarouselMadLib(props: {
   madLib: MadLib;
   setMadLib: (updatedMadLib: MadLib) => void;
 }) {
-  function updateMadLib(phraseSegementIndex: number, newValue: string) {
-    let updatePhraseSelections: PhraseSelections = {
-      ...props.madLib.activeSelections,
-    };
-    updatePhraseSelections[phraseSegementIndex] = newValue;
-    props.setMadLib({
-      ...props.madLib,
-      activeSelections: updatePhraseSelections,
-    });
-  }
-
   // TODO - this isn't efficient, these should be stored in an ordered way
   function getOptionsFromPhraseSegement(
     phraseSegment: PhraseSegment
@@ -151,7 +140,9 @@ function CarouselMadLib(props: {
                   key={index}
                   value={props.madLib.activeSelections[index]}
                   onOptionUpdate={(fipsCode: string) =>
-                    updateMadLib(index, fipsCode)
+                    props.setMadLib(
+                      getMadLibWithUpdatedValue(props.madLib, index, fipsCode)
+                    )
                   }
                   options={getOptionsFromPhraseSegement(phraseSegment)}
                 />
