@@ -88,6 +88,7 @@ function PopulationCard(props: { fips: Fips }) {
                     <span>Median Age</span>
                     <span className={styles.PopulationMetricValue}>??</span>
                   </Grid>
+                  {/* TODO- properly align these */}
                   {dataset
                     .filter((r) => r.race_and_ethnicity !== "Total")
                     .map((row) => (
