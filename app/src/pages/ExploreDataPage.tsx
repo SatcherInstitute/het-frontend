@@ -154,6 +154,7 @@ function CarouselMadLib(props: {
   function getOptionsFromPhraseSegement(
     phraseSegment: PhraseSegment
   ): Fips[] | string[][] {
+    // TODO -don't use this hack to figure out if its a FIPS or not
     return Object.keys(phraseSegment).length > 20
       ? Object.keys(phraseSegment)
           .sort((a: string, b: string) => {
