@@ -14,6 +14,11 @@ const MaterialTheme = createMuiTheme({
     },
   },
   overrides: {
+    MuiButton: {
+      root: {
+        textTransform: "unset",
+      },
+    },
     MuiPaper: {
       root: {
         "&.MuiPopover-paper": {
