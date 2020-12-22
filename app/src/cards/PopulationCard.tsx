@@ -89,9 +89,8 @@ function PopulationCard(props: { fips: Fips }) {
                     <span className={styles.PopulationMetricValue}>??</span>
                   </Grid>
                   {/* TODO- properly align these */}
-                  {datasetStore
-                    .getMetrics(query)
-                    .data.filter((r) => r.race_and_ethnicity !== "Total")
+                  {queryResponse.data
+                    .filter((r) => r.race_and_ethnicity !== "Total")
                     .map((row) => (
                       <Grid item className={styles.PopulationMetric}>
                         <span>{row.race_and_ethnicity}</span>

@@ -103,15 +103,13 @@ function MapCard(props: {
     >
       {() => {
         const queryResponse = datasetStore.getMetrics(query);
-        const dataset = queryResponse.data.filter(
-          (row) => row.race_and_ethnicity !== "Not Hispanic or Latino"
-        );
-
-        let mapData = dataset.filter(
-          (r) =>
-            r[props.metricConfig.metricId] !== undefined &&
-            r[props.metricConfig.metricId] !== null
-        );
+        let mapData = queryResponse.data
+          .filter((row) => row.race_and_ethnicity !== "Not Hispanic or Latino")
+          .filter(
+            (r) =>
+              r[props.metricConfig.metricId] !== undefined &&
+              r[props.metricConfig.metricId] !== null
+          );
         if (!props.fips.isUsa()) {
           // TODO - this doesn't consider county level data
           mapData = mapData.filter((r) => r.state_fips === props.fips.code);
@@ -198,31 +196,34 @@ function MapCard(props: {
             )}
 
             <Divider />
-            <CardContent>
-              {mapData.length !== 0 &&
-                !props.fips.isUsa() /* TODO - don't hardcode */ && (
-                  <Alert severity="warning">
-                    This dataset does not provide county level data
-                  </Alert>
-                )}
-              {queryResponse.isError() && (
+            {!props.fips.isUsa() /* TODO - don't hardcode */ && (
+              <CardContent>
+                <Alert severity="warning">
+                  This dataset does not provide county level data
+                </Alert>
+              </CardContent>
+            )}
+            {queryResponse.isError() && (
+              <CardContent>
                 <Alert severity="error">No data available</Alert>
-              )}
-            </CardContent>
-            <CardContent>
-              {props.metricConfig && (
-                <UsaChloroplethMap
-                  signalListeners={signalListeners}
-                  varField={props.metricConfig.metricId}
-                  varFieldDisplayName={props.metricConfig.shortVegaLabel}
-                  legendTitle={props.metricConfig.fullCardTitleName}
-                  data={mapData}
-                  hideLegend={!props.fips.isUsa()} // TODO - update logic here when we have county level data
-                  showCounties={props.fips.isUsa() ? false : true}
-                  fips={props.fips}
-                />
-              )}
-            </CardContent>
+              </CardContent>
+            )}
+            {!queryResponse.isError() && (
+              <CardContent>
+                {props.metricConfig && (
+                  <UsaChloroplethMap
+                    signalListeners={signalListeners}
+                    varField={props.metricConfig.metricId}
+                    varFieldDisplayName={props.metricConfig.shortVegaLabel}
+                    legendTitle={props.metricConfig.fullCardTitleName}
+                    data={mapData}
+                    hideLegend={!props.fips.isUsa()} // TODO - update logic here when we have county level data
+                    showCounties={props.fips.isUsa() ? false : true}
+                    fips={props.fips}
+                  />
+                )}
+              </CardContent>
+            )}
           </>
         );
       }}

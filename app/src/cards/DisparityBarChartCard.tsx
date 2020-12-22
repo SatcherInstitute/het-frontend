@@ -43,7 +43,7 @@ function DisparityBarChartCard(props: {
 
   // TODO need to handle race categories standard vs non-standard for covid vs
   // other demographic.
-  const breakdown = Breakdowns.forFips(props.fips).addBreakdown(
+  const breakdowns = Breakdowns.forFips(props.fips).addBreakdown(
     props.breakdownVar,
     props.nonstandardizedRace
   );
@@ -52,8 +52,7 @@ function DisparityBarChartCard(props: {
     (metricConfig: MetricConfig) => metricConfig.metricId
   );
   const metrics: MetricId[] = [...metricIds, "population", "population_pct"];
-
-  const query = new MetricQuery(metrics, breakdown);
+  const query = new MetricQuery(metrics, breakdowns);
 
   // TODO - what if there are no valid types at all? What do we show?
   const validDisplayMetricConfigs: MetricConfig[] = Object.values(
@@ -71,15 +70,12 @@ function DisparityBarChartCard(props: {
     >
       {() => {
         const queryResponse = datasetStore.getMetrics(query);
-        console.log(queryResponse);
-        const dataset = queryResponse.data
-          ? queryResponse.data.filter(
-              (row) =>
-                !["Not Hispanic or Latino", "Total"].includes(
-                  row.race_and_ethnicity
-                )
+        const dataset = queryResponse.data.filter(
+          (row) =>
+            !["Not Hispanic or Latino", "Total"].includes(
+              row.race_and_ethnicity
             )
-          : [];
+        );
         return (
           <>
             {queryResponse.isError() && (
@@ -113,35 +109,32 @@ function DisparityBarChartCard(props: {
                 </ToggleButtonGroup>
               </CardContent>
             )}
-
-            <CardContent className={styles.Breadcrumbs}>
-              {!queryResponse.isError() && (
-                <>
-                  {metricConfig.type === "pct_share" && (
-                    <DisparityBarChart
-                      data={dataset}
-                      thickMeasure={"population_pct" as MetricId}
-                      thickMeasureDisplayName={
-                        METRIC_DISPLAY_NAMES["population_pct" as MetricId]
-                      }
-                      thinMeasure={metricConfig.metricId}
-                      thinMeasureDisplayName={metricConfig.shortVegaLabel}
-                      breakdownVar={props.breakdownVar as BreakdownVar}
-                      metricDisplayName={metricConfig.shortVegaLabel}
-                    />
-                  )}
-                  {metricConfig.type === "per100k" && (
-                    <SimpleHorizontalBarChart
-                      data={dataset}
-                      breakdownVar={props.breakdownVar as BreakdownVar}
-                      measure={metricConfig.metricId}
-                      measureDisplayName={metricConfig.shortVegaLabel}
-                      showLegend={false}
-                    />
-                  )}
-                </>
-              )}
-            </CardContent>
+            {!queryResponse.isError() && (
+              <CardContent className={styles.Breadcrumbs}>
+                {metricConfig.type === "pct_share" && (
+                  <DisparityBarChart
+                    data={dataset}
+                    thickMeasure={"population_pct" as MetricId}
+                    thickMeasureDisplayName={
+                      METRIC_DISPLAY_NAMES["population_pct" as MetricId]
+                    }
+                    thinMeasure={metricConfig.metricId}
+                    thinMeasureDisplayName={metricConfig.shortVegaLabel}
+                    breakdownVar={props.breakdownVar}
+                    metricDisplayName={metricConfig.shortVegaLabel}
+                  />
+                )}
+                {metricConfig.type === "per100k" && (
+                  <SimpleHorizontalBarChart
+                    data={dataset}
+                    breakdownVar={props.breakdownVar}
+                    measure={metricConfig.metricId}
+                    measureDisplayName={metricConfig.shortVegaLabel}
+                    showLegend={false}
+                  />
+                )}
+              </CardContent>
+            )}
           </>
         );
       }}
