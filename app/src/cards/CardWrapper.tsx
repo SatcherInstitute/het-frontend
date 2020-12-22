@@ -67,7 +67,7 @@ function CardWrapper(props: {
                   </>
                 ))}
                 <span className={styles.UpdateTime}>
-                  Data last updated:
+                  Data last updated:{" "}
                   {props.datasetIds.map((datasetId) => (
                     <>
                       {datasetStore.metadata[datasetId].data_source_name} (
