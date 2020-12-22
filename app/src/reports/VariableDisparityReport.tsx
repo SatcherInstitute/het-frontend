@@ -99,7 +99,7 @@ function VariableDisparityReport(props: {
                     {METRIC_CONFIG[props.dropdownVarId as string].map(
                       (variable: VariableConfig, key: number) => (
                         <ToggleButton value={variable.variableId} key={key}>
-                          {variable.variableId}
+                          {variable.variableDisplayName}
                         </ToggleButton>
                       )
                     )}
