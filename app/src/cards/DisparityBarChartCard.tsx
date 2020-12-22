@@ -70,6 +70,7 @@ function DisparityBarChartCard(props: {
     >
       {() => {
         const queryResponse = datasetStore.getMetrics(query);
+        console.log("kkz queryResponse", queryResponse);
         const dataset = queryResponse.data.filter(
           (row) =>
             !["Not Hispanic or Latino", "Total"].includes(
@@ -78,38 +79,42 @@ function DisparityBarChartCard(props: {
         );
         return (
           <>
-            {queryResponse.isError() && (
+            {queryResponse.showErrorMessage([metricConfig.metricId]) && (
               <CardContent className={styles.Breadcrumbs}>
                 <Alert severity="warning">
                   Missing data means that we don't know the full story.
                 </Alert>
               </CardContent>
             )}
-            {!queryResponse.isError() && validDisplayMetricConfigs.length > 1 && (
-              <CardContent className={styles.Breadcrumbs}>
-                <ToggleButtonGroup
-                  value={metricConfig.type}
-                  exclusive
-                  onChange={(e, metricType) => {
-                    if (metricType !== null) {
-                      setMetricConfig(
-                        props.variableConfig.metrics[metricType] as MetricConfig
-                      );
-                    }
-                  }}
-                >
-                  {validDisplayMetricConfigs.map((metricConfig) => (
-                    <ToggleButton value={metricConfig.type}>
-                      {metricConfig.type === "pct_share" &&
-                        props.variableConfig.variableDisplayName +
-                          " and Population"}
-                      {metricConfig.type === "per100k" && "per 100,000 people"}
-                    </ToggleButton>
-                  ))}
-                </ToggleButtonGroup>
-              </CardContent>
-            )}
-            {!queryResponse.isError() && (
+            {!queryResponse.showErrorMessage([metricConfig.metricId]) &&
+              validDisplayMetricConfigs.length > 1 && (
+                <CardContent className={styles.Breadcrumbs}>
+                  <ToggleButtonGroup
+                    value={metricConfig.type}
+                    exclusive
+                    onChange={(e, metricType) => {
+                      if (metricType !== null) {
+                        setMetricConfig(
+                          props.variableConfig.metrics[
+                            metricType
+                          ] as MetricConfig
+                        );
+                      }
+                    }}
+                  >
+                    {validDisplayMetricConfigs.map((metricConfig) => (
+                      <ToggleButton value={metricConfig.type}>
+                        {metricConfig.type === "pct_share" &&
+                          props.variableConfig.variableDisplayName +
+                            " and Population"}
+                        {metricConfig.type === "per100k" &&
+                          "per 100,000 people"}
+                      </ToggleButton>
+                    ))}
+                  </ToggleButtonGroup>
+                </CardContent>
+              )}
+            {!queryResponse.showErrorMessage([metricConfig.metricId]) && (
               <CardContent className={styles.Breadcrumbs}>
                 {metricConfig.type === "pct_share" && (
                   <DisparityBarChart
