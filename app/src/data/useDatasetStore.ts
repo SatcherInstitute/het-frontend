@@ -8,6 +8,7 @@ import {
   MetricQuery,
   MetricQueryResponse,
   UnsupportedBreakdownError,
+  NoDataError,
 } from "./MetricQuery";
 import { getDataFetcher, getLogger } from "../utils/globals";
 
@@ -211,8 +212,10 @@ export function useDatasetStoreProvider(): DatasetStore {
           });
           return new MetricQueryResponse(joined.toArray());
         } catch (err) {
-          console.log("kkz", err);
-          if (err instanceof UnsupportedBreakdownError) {
+          if (
+            err instanceof UnsupportedBreakdownError ||
+            err instanceof NoDataError
+          ) {
             return new MetricQueryResponse(err);
           } else {
             throw err; // re-throw the error unchanged

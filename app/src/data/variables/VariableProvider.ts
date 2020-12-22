@@ -1,7 +1,11 @@
 import { Breakdowns } from "../Breakdowns";
 import { Dataset, Row } from "../DatasetTypes";
 import { ProviderId, MetricId } from "../variableProviders";
-import { UnsupportedBreakdownError } from "../MetricQuery";
+import {
+  UnsupportedBreakdownError,
+  MissingDatasetError,
+  NoDataError,
+} from "../MetricQuery";
 
 abstract class VariableProvider {
   readonly providerId: ProviderId;
@@ -30,12 +34,18 @@ abstract class VariableProvider {
 
     const missingDatasetIds = this.datasetIds.filter((id) => !datasets[id]);
     if (missingDatasetIds.length > 0) {
-      throw new UnsupportedBreakdownError(
+      throw new MissingDatasetError(
         "Datasets not loaded properly: " + missingDatasetIds.join(",")
       );
     }
 
-    return this.getDataInternal(datasets, breakdowns);
+    const data = this.getDataInternal(datasets, breakdowns);
+
+    if (data.length > 0) {
+      return data;
+    } else {
+      throw new NoDataError("Dataset returned empty.");
+    }
   }
 
   abstract getDataInternal(

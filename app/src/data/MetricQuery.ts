@@ -23,27 +23,26 @@ export class MetricQuery {
   }
 }
 
-export class UnsupportedBreakdownError extends Error {
-  constructor(m: string) {
-    super(m);
-
-    // Set the prototype explicitly.
-    Object.setPrototypeOf(this, UnsupportedBreakdownError.prototype);
-  }
-}
+export class UnsupportedBreakdownError extends Error {}
+export class MissingDatasetError extends Error {}
+export class NoDataError extends Error {}
 
 export class MetricQueryResponse {
   readonly data: Row[];
-  readonly error?: UnsupportedBreakdownError;
+  readonly error?:
+    | NoDataError
+    | MissingDatasetError
+    | UnsupportedBreakdownError;
 
-  constructor(input: Row[] | UnsupportedBreakdownError) {
+  constructor(
+    input: Row[] | NoDataError | MissingDatasetError | UnsupportedBreakdownError
+  ) {
     if (input instanceof Error) {
       this.error = input as Error;
       this.data = [];
     } else {
       this.data = input as Row[];
     }
-    console.log("kkz this.data", this.data);
   }
 
   isError() {
