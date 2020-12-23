@@ -33,6 +33,7 @@ function VariableDisparityReport(props: {
   fips: Fips;
   updateFipsCallback: Function;
   vertical?: boolean;
+  hidePopulationCard?: boolean;
 }) {
   const [currentBreakdown, setCurrentBreakdown] = useState<
     BreakdownVar | "all"
@@ -70,6 +71,11 @@ function VariableDisparityReport(props: {
 
       {variableConfig && (
         <Grid container spacing={1} justify="center">
+          {!props.hidePopulationCard && (
+            <Grid item xs={12}>
+              <PopulationCard fips={props.fips} />
+            </Grid>
+          )}
           <Grid container xs={12}>
             {!!METRIC_CONFIG[props.dropdownVarId as string] &&
               METRIC_CONFIG[props.dropdownVarId as string].length > 1 && (
@@ -96,7 +102,7 @@ function VariableDisparityReport(props: {
                     {METRIC_CONFIG[props.dropdownVarId as string].map(
                       (variable: VariableConfig, key: number) => (
                         <ToggleButton value={variable.variableId} key={key}>
-                          {variable.variableId}
+                          {variable.variableDisplayName}
                         </ToggleButton>
                       )
                     )}
@@ -125,9 +131,6 @@ function VariableDisparityReport(props: {
                 ))}
               </ToggleButtonGroup>
             </Grid>
-          </Grid>
-          <Grid item xs={12}>
-            <PopulationCard fips={props.fips} />
           </Grid>
           <Grid item xs={props.vertical ? 12 : 6}>
             <MapCard

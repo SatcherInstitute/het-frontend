@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Alert } from "@material-ui/lab";
 import CardWrapper from "./CardWrapper";
 import useDatasetStore from "../data/useDatasetStore";
@@ -9,9 +9,16 @@ import { Fips } from "../utils/madlib/Fips";
 import { CardContent } from "@material-ui/core";
 import { Grid } from "@material-ui/core";
 import styles from "./Card.module.scss";
+import AnimateHeight from "react-animate-height";
+import Button from "@material-ui/core/Button";
+import SimpleHorizontalBarChart from "../charts/SimpleHorizontalBarChart";
+import ArrowDropUp from "@material-ui/icons/ArrowDropUp";
+import ArrowDropDown from "@material-ui/icons/ArrowDropDown";
+import { METRIC_DISPLAY_NAMES } from "../utils/madlib/DisplayNames";
 
 function PopulationCard(props: { fips: Fips }) {
   const datasetStore = useDatasetStore();
+  const [expanded, setExpanded] = useState(false);
 
   const variableIds: MetricId[] = ["population", "population_pct"];
   const query = new MetricQuery(
@@ -36,6 +43,17 @@ function PopulationCard(props: { fips: Fips }) {
 
         return (
           <CardContent>
+            {dataset.length > 0 && (
+              <Button
+                aria-label="expand description"
+                onClick={() => setExpanded(!expanded)}
+                color="primary"
+                className={styles.ExpandPopulationCardButton}
+              >
+                {expanded ? "Collapse full profile" : "See full profile"}
+                {expanded ? <ArrowDropUp /> : <ArrowDropDown />}
+              </Button>
+            )}
             <span className={styles.PopulationCardTitle}>
               {props.fips.getFullDisplayName()}
             </span>
@@ -44,34 +62,69 @@ function PopulationCard(props: { fips: Fips }) {
                 Missing data means that we don't know the full story.
               </Alert>
             )}
+            {/* Because the Vega charts are using responsive width based on the window resizing,
+                we manually trigger a resize when the div size changes so vega chart will 
+                render with the right size. This means the vega chart won't appear until the 
+                AnimateHeight is finished expanding */}
             {dataset.length > 0 && (
-              <Grid
-                container
-                className={styles.PopulationCard}
-                justify="space-around"
+              <AnimateHeight
+                duration={500}
+                height={expanded ? "auto" : 70}
+                onAnimationEnd={() => window.dispatchEvent(new Event("resize"))}
               >
-                <Grid item>
-                  <span>Total Population</span>
-                  <span className={styles.TotalPopulationValue}>
-                    {totalPopulationSize}
-                  </span>
+                <Grid
+                  container
+                  className={styles.PopulationCard}
+                  justify="space-around"
+                >
+                  <Grid item>
+                    <span>Total Population</span>
+                    <span className={styles.TotalPopulationValue}>
+                      {totalPopulationSize}
+                    </span>
+                  </Grid>
+                  {/* TODO- calculate median age */}
+                  <Grid item className={styles.PopulationMetric}>
+                    <span>Median Age</span>
+                    <span className={styles.PopulationMetricValue}>??</span>
+                  </Grid>
+                  {/* TODO- properly align these */}
+                  {dataset
+                    .filter((r) => r.race_and_ethnicity !== "Total")
+                    .map((row) => (
+                      <Grid item className={styles.PopulationMetric}>
+                        <span>{row.race_and_ethnicity}</span>
+                        <span className={styles.PopulationMetricValue}>
+                          {row.population_pct}%
+                        </span>
+                      </Grid>
+                    ))}
                 </Grid>
-                {/* TODO- calculate median age */}
-                <Grid item className={styles.PopulationMetric}>
-                  <span>Median Age</span>
-                  <span className={styles.PopulationMetricValue}>??</span>
+                <Grid container>
+                  <Grid item xs={6}>
+                    <span className={styles.PopulationChartTitle}>
+                      Population by race
+                    </span>
+                    <SimpleHorizontalBarChart
+                      data={dataset.filter(
+                        (r) => r.race_and_ethnicity !== "Total"
+                      )}
+                      measure="population_pct"
+                      measureDisplayName={
+                        METRIC_DISPLAY_NAMES["population_pct"]
+                      }
+                      breakdownVar="race_and_ethnicity"
+                      showLegend={false}
+                      hideActions={true}
+                    />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <span className={styles.PopulationChartTitle}>
+                      Population by age [coming soon]
+                    </span>
+                  </Grid>
                 </Grid>
-                {dataset
-                  .filter((r) => r.race_and_ethnicity !== "Total")
-                  .map((row) => (
-                    <Grid item className={styles.PopulationMetric}>
-                      <span>{row.race_and_ethnicity}</span>
-                      <span className={styles.PopulationMetricValue}>
-                        {row.population_pct}%
-                      </span>
-                    </Grid>
-                  ))}
-              </Grid>
+              </AnimateHeight>
             )}
           </CardContent>
         );
