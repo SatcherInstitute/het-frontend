@@ -23,6 +23,25 @@ export type VariableConfig = {
   metrics: Record<string, MetricConfig>; // TODO - strongly type key
 };
 
+export const POPULATION_VARIABLE_CONFIG: VariableConfig = {
+  variableId: "population",
+  variableDisplayName: "Population",
+  metrics: {
+    count: {
+      metricId: "population",
+      fullCardTitleName: "Population",
+      shortVegaLabel: "people",
+      type: "count",
+    },
+    pct_share: {
+      metricId: "population_pct",
+      fullCardTitleName: "Population Share",
+      shortVegaLabel: "% of total",
+      type: "pct_share",
+    },
+  },
+};
+
 // TODO - strongly type key
 export const METRIC_CONFIG: Record<string, VariableConfig[]> = {
   covid: [

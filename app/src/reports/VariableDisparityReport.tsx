@@ -20,6 +20,7 @@ import {
 } from "../data/MetricConfig";
 import PopulationCard from "../cards/PopulationCard";
 import styles from "./Report.module.scss";
+import { POPULATION_VARIABLE_CONFIG } from "../data/MetricConfig";
 
 const SUPPORTED_BREAKDOWNS: BreakdownVar[] = [
   "race_and_ethnicity",
@@ -46,17 +47,19 @@ function VariableDisparityReport(props: {
       : null
   );
 
-  const fields: MetricId[] = [];
-
+  const fields: MetricConfig[] = [];
   if (variableConfig && variableConfig.metrics["per100k"]) {
-    fields.push(variableConfig.metrics["per100k"].metricId as MetricId);
+    fields.push(variableConfig.metrics["per100k"]);
   }
   if (variableConfig && variableConfig.metrics["pct_share"]) {
-    fields.push(variableConfig.metrics["pct_share"].metricId as MetricId);
+    fields.push(variableConfig.metrics["pct_share"]);
   }
-
-  const tableFields: MetricId[] = variableConfig
-    ? [...fields, "population", "population_pct"]
+  const tableFields: MetricConfig[] = variableConfig
+    ? [
+        ...fields,
+        POPULATION_VARIABLE_CONFIG.metrics.count,
+        POPULATION_VARIABLE_CONFIG.metrics.pct_share,
+      ]
     : [];
 
   return (
@@ -146,7 +149,7 @@ function VariableDisparityReport(props: {
             />
             <TableCard
               fips={props.fips}
-              metricIds={tableFields}
+              metrics={tableFields}
               breakdownVar={"race_and_ethnicity" as BreakdownVar}
               nonstandardizedRace={
                 props.dropdownVarId === "covid" ? true : false

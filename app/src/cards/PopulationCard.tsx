@@ -14,7 +14,7 @@ import Button from "@material-ui/core/Button";
 import SimpleHorizontalBarChart from "../charts/SimpleHorizontalBarChart";
 import ArrowDropUp from "@material-ui/icons/ArrowDropUp";
 import ArrowDropDown from "@material-ui/icons/ArrowDropDown";
-import { METRIC_DISPLAY_NAMES } from "../utils/madlib/DisplayNames";
+import { POPULATION_VARIABLE_CONFIG } from "../data/MetricConfig";
 
 function PopulationCard(props: { fips: Fips }) {
   const datasetStore = useDatasetStore();
@@ -109,10 +109,7 @@ function PopulationCard(props: { fips: Fips }) {
                       data={dataset.filter(
                         (r) => r.race_and_ethnicity !== "Total"
                       )}
-                      measure="population_pct"
-                      measureDisplayName={
-                        METRIC_DISPLAY_NAMES["population_pct"]
-                      }
+                      metric={POPULATION_VARIABLE_CONFIG.metrics.pct_share}
                       breakdownVar="race_and_ethnicity"
                       showLegend={false}
                       hideActions={true}

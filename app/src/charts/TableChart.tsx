@@ -7,17 +7,23 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import { Row } from "../data/DatasetTypes";
-import {
-  getFieldDisplayName,
-  formatFieldValue,
-} from "../utils/madlib/DisplayNames";
+import { formatFieldValue } from "../utils/madlib/DisplayNames";
 import WarningRoundedIcon from "@material-ui/icons/WarningRounded";
+import {
+  BreakdownVar,
+  BREAKDOWN_VAR_DISPLAY_NAMES,
+} from "../utils/madlib/DisplayNames";
+import { MetricConfig } from "../data/MetricConfig";
 
-function TableChart(props: { data: Row[]; fields?: string[] }) {
+function TableChart(props: {
+  data: Row[];
+  breakdownVar: BreakdownVar;
+  metrics: MetricConfig[];
+}) {
   const tableColumns: string[] | undefined =
-    !props.fields && props.data.length > 0
+    !props.metrics && props.data.length > 0
       ? Object.keys(props.data[0])
-      : props.fields;
+      : props.metrics.map((metricConfig) => metricConfig.metricId);
 
   return (
     <>
@@ -28,18 +34,28 @@ function TableChart(props: { data: Row[]; fields?: string[] }) {
           <Table stickyHeader>
             <TableHead>
               <TableRow>
-                {tableColumns.map((field, i) => (
-                  <TableCell key={i}>{getFieldDisplayName(field)}</TableCell>
+                <TableCell>
+                  {BREAKDOWN_VAR_DISPLAY_NAMES[props.breakdownVar]}
+                </TableCell>
+                {props.metrics.map((metricConfig, i) => (
+                  <TableCell key={i}>
+                    {metricConfig.fullCardTitleName}
+                  </TableCell>
                 ))}
               </TableRow>
             </TableHead>
             <TableBody>
               {props.data.map((row, i) => (
                 <TableRow key={i}>
-                  {tableColumns.map((field, j) => (
+                  <TableCell>{row[props.breakdownVar]}</TableCell>
+                  {props.metrics.map((metricConfig, j) => (
                     <TableCell key={j}>
-                      {formatFieldValue(field, row[field])}
-                      {(row[field] === null || row[field] === undefined) && (
+                      {formatFieldValue(
+                        metricConfig.metricId,
+                        row[metricConfig.metricId]
+                      )}
+                      {(row[metricConfig.metricId] === null ||
+                        row[metricConfig.metricId] === undefined) && (
                         <WarningRoundedIcon />
                       )}
                     </TableCell>

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Vega } from "react-vega";
 import { useResponsiveWidth } from "../utils/useResponsiveWidth";
 import { Fips } from "../utils/madlib/Fips";
+import { MetricConfig } from "../data/MetricConfig";
 
 type NumberFormat = "raw" | "percentage";
 
@@ -20,8 +21,7 @@ const VAR_COUNTY_FIPS = "COUNTY_FIPS";
 
 function UsaChloroplethMap(props: {
   data: Record<string, any>[];
-  varField: string;
-  varFieldDisplayName: string;
+  metric: MetricConfig;
   legendTitle: string;
   signalListeners: any;
   fips: Fips;
@@ -46,7 +46,7 @@ function UsaChloroplethMap(props: {
         from: VAR_DATASET,
         key: fipsKey,
         fields: [GEO_ID],
-        values: [props.varField],
+        values: [props.metric.metricId],
       },
     ];
     if (props.fips.isState()) {
@@ -67,10 +67,10 @@ function UsaChloroplethMap(props: {
     /* SET UP TOOLTIP */
     const tooltipDatum =
       props.numberFormat === "percentage"
-        ? `format(datum.${props.varField}, '0.1%')`
-        : `format(datum.${props.varField}, ',')`;
-    const tooltipValue = `{"State": datum.properties.name, "${props.varFieldDisplayName}": ${tooltipDatum} }`;
-    const missingDataTooltipValue = `{"State": datum.properties.name, "${props.varFieldDisplayName}": "No data" }`;
+        ? `format(datum.${props.metric.metricId}, '0.1%')`
+        : `format(datum.${props.metric.metricId}, ',')`;
+    const tooltipValue = `{"State": datum.properties.name, "${props.metric.shortVegaLabel}": ${tooltipDatum} }`;
+    const missingDataTooltipValue = `{"State": datum.properties.name, "${props.metric.shortVegaLabel}": "No data" }`;
 
     /* SET UP LEGEND */
     // TODO - Legends should be scaled exactly the same the across compared charts. Looks misleading otherwise.
@@ -114,7 +114,7 @@ function UsaChloroplethMap(props: {
           transform: [
             {
               type: "filter",
-              expr: `isValid(datum.${props.varField})`,
+              expr: `isValid(datum.${props.metric.metricId})`,
             },
           ],
           source: GEO_DATASET,
@@ -128,7 +128,7 @@ function UsaChloroplethMap(props: {
           transform: [
             {
               type: "filter",
-              expr: `!isValid(datum.${props.varField})`,
+              expr: `!isValid(datum.${props.metric.metricId})`,
             },
           ],
           source: GEO_DATASET,
@@ -157,7 +157,7 @@ function UsaChloroplethMap(props: {
         {
           name: "colorScale",
           type: "quantize",
-          domain: { data: VALID_DATASET, field: props.varField },
+          domain: { data: VALID_DATASET, field: props.metric.metricId },
           range: { scheme: "yellowgreenblue", count: 7 },
         },
       ],
@@ -188,7 +188,7 @@ function UsaChloroplethMap(props: {
               },
             },
             update: {
-              fill: [{ scale: "colorScale", field: props.varField }],
+              fill: [{ scale: "colorScale", field: props.metric.metricId }],
             },
             hover: { fill: { value: "red" } },
           },
@@ -205,8 +205,7 @@ function UsaChloroplethMap(props: {
     });
   }, [
     width,
-    props.varField,
-    props.varFieldDisplayName,
+    props.metric,
     props.legendTitle,
     props.numberFormat,
     props.data,
