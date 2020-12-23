@@ -32,7 +32,7 @@ function TableChart(props: {
 }) {
   return (
     <>
-      {!(props.data.length > 0 || props.metrics.length > 0) ? (
+      {props.data.length <= 0 || props.metrics.length <= 0 ? (
         <h1>No Data provided</h1>
       ) : (
         <TableContainer component={Paper} style={{ maxHeight: "500px" }}>
