@@ -36,7 +36,7 @@ export const POPULATION_VARIABLE_CONFIG: VariableConfig = {
     pct_share: {
       metricId: "population_pct",
       fullCardTitleName: "Population Share",
-      shortVegaLabel: "% of total",
+      shortVegaLabel: "% of total population",
       type: "pct_share",
     },
   },
