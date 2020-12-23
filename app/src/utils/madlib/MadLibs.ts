@@ -37,6 +37,22 @@ function getMadLibPhraseText(madLib: MadLib): string {
   return madLibText;
 }
 
+// Updates a MadLib with a new value in the given phrase segment index
+export function getMadLibWithUpdatedValue(
+  originalMadLib: MadLib,
+  phraseSegementIndex: number,
+  newValue: string
+) {
+  let updatePhraseSelections: PhraseSelections = {
+    ...originalMadLib.activeSelections,
+  };
+  updatePhraseSelections[phraseSegementIndex] = newValue;
+  return {
+    ...originalMadLib,
+    activeSelections: updatePhraseSelections,
+  };
+}
+
 export type DropdownVarId =
   | "covid"
   | "diabetes"

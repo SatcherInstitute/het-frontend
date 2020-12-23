@@ -27,6 +27,9 @@ export const BREAKDOWN_VAR_DISPLAY_NAMES: Record<BreakdownVar, string> = {
   sex: "Sex",
 };
 
+// TODO maybe rename this file since this string is out of place
+export const ALL_RACES_DISPLAY_NAME = "All races";
+
 // Prints a formatted version of a field value based on the type specified by the field name
 export function formatFieldValue(nameOfField: string, value: any): string {
   if (value === null || value === undefined) {
