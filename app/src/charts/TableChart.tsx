@@ -8,7 +8,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import { Row } from "../data/DatasetTypes";
 import WarningRoundedIcon from "@material-ui/icons/WarningRounded";
-import { BreakdownCol, BREAKDOWN_VAR_DISPLAY_NAMES } from "../data/Breakdowns";
+import { BreakdownVar, BREAKDOWN_VAR_DISPLAY_NAMES } from "../data/Breakdowns";
 import { MetricConfig } from "../data/MetricConfig";
 
 // Prints a formatted version of a field value based on the type specified by the field name
@@ -27,7 +27,7 @@ function formatFieldValue(nameOfField: string, value: any): string {
 
 function TableChart(props: {
   data: Row[];
-  breakdownCol: BreakdownCol;
+  breakdownVar: BreakdownVar;
   metrics: MetricConfig[];
 }) {
   return (
@@ -40,7 +40,7 @@ function TableChart(props: {
             <TableHead>
               <TableRow>
                 <TableCell>
-                  {BREAKDOWN_VAR_DISPLAY_NAMES[props.breakdownCol]}
+                  {BREAKDOWN_VAR_DISPLAY_NAMES[props.breakdownVar]}
                 </TableCell>
                 {props.metrics.map((metricConfig, i) => (
                   <TableCell key={i}>
@@ -52,7 +52,7 @@ function TableChart(props: {
             <TableBody>
               {props.data.map((row, i) => (
                 <TableRow key={i}>
-                  <TableCell>{row[props.breakdownCol]}</TableCell>
+                  <TableCell>{row[props.breakdownVar]}</TableCell>
                   {props.metrics.map((metricConfig, j) => (
                     <TableCell key={j}>
                       {formatFieldValue(

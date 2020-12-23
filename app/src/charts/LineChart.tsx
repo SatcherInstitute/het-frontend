@@ -4,12 +4,12 @@ import { Row } from "../data/DatasetTypes";
 
 function LineChart(props: {
   data: Row[];
-  breakdownCol: string; // for instance, race
+  breakdownVar: string; // for instance, race
   variable: string; // for instance, rate
   timeVariable: string; // for instance, rate
 }) {
   const tooltipValues = Array.from(
-    new Set(props.data.map((row: any) => row[props.breakdownCol]))
+    new Set(props.data.map((row: any) => row[props.breakdownVar]))
   ).map((breakdown) => ({ field: breakdown, type: "quantitative" }));
   tooltipValues.push({ field: props.timeVariable, type: "temporal" });
 
@@ -30,7 +30,7 @@ function LineChart(props: {
       {
         encoding: {
           color: {
-            field: props.breakdownCol,
+            field: props.breakdownVar,
             type: "nominal",
           },
           y: {
@@ -57,7 +57,7 @@ function LineChart(props: {
       {
         transform: [
           {
-            pivot: props.breakdownCol,
+            pivot: props.breakdownVar,
             value: props.variable,
             groupby: [props.timeVariable],
           },

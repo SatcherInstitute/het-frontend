@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Grid } from "@material-ui/core";
-import { BreakdownCol, BREAKDOWN_VAR_DISPLAY_NAMES } from "../data/Breakdowns";
+import { BreakdownVar, BREAKDOWN_VAR_DISPLAY_NAMES } from "../data/Breakdowns";
 import DisparityBarChartCard from "../cards/DisparityBarChartCard";
 import MapCard from "../cards/MapCard";
 import TableCard from "../cards/TableCard";
@@ -18,7 +18,7 @@ import PopulationCard from "../cards/PopulationCard";
 import styles from "./Report.module.scss";
 import { POPULATION_VARIABLE_CONFIG } from "../data/MetricConfig";
 
-const SUPPORTED_BREAKDOWNS: BreakdownCol[] = [
+const SUPPORTED_BREAKDOWNS: BreakdownVar[] = [
   "race_and_ethnicity",
   "age",
   "sex",
@@ -33,7 +33,7 @@ function VariableDisparityReport(props: {
   hidePopulationCard?: boolean;
 }) {
   const [currentBreakdown, setCurrentBreakdown] = useState<
-    BreakdownCol | "all"
+    BreakdownVar | "all"
   >("all");
 
   // TODO Remove hard coded fail safe value
@@ -123,9 +123,9 @@ function VariableDisparityReport(props: {
                 <ToggleButton value="all" key="all">
                   All
                 </ToggleButton>
-                {SUPPORTED_BREAKDOWNS.map((breakdownCol) => (
-                  <ToggleButton value={breakdownCol} key={breakdownCol}>
-                    {BREAKDOWN_VAR_DISPLAY_NAMES[breakdownCol]}
+                {SUPPORTED_BREAKDOWNS.map((breakdownVar) => (
+                  <ToggleButton value={breakdownVar} key={breakdownVar}>
+                    {BREAKDOWN_VAR_DISPLAY_NAMES[breakdownVar]}
                   </ToggleButton>
                 ))}
               </ToggleButtonGroup>
@@ -146,24 +146,24 @@ function VariableDisparityReport(props: {
             <TableCard
               fips={props.fips}
               metrics={tableFields}
-              breakdownCol={"race_and_ethnicity" as BreakdownCol}
+              breakdownVar={"race_and_ethnicity" as BreakdownVar}
               nonstandardizedRace={
                 props.dropdownVarId === "covid" ? true : false
               }
             />
           </Grid>
           <Grid item xs={props.vertical ? 12 : 6}>
-            {SUPPORTED_BREAKDOWNS.map((breakdownCol) => (
+            {SUPPORTED_BREAKDOWNS.map((breakdownVar) => (
               <>
                 {(currentBreakdown === "all" ||
-                  currentBreakdown === breakdownCol) && (
+                  currentBreakdown === breakdownVar) && (
                   <DisparityBarChartCard
-                    key={variableConfig.variableId + breakdownCol}
+                    key={variableConfig.variableId + breakdownVar}
                     variableConfig={variableConfig}
                     nonstandardizedRace={
                       props.dropdownVarId === "covid" ? true : false
                     }
-                    breakdownCol={breakdownCol as BreakdownCol}
+                    breakdownVar={breakdownVar as BreakdownVar}
                     fips={props.fips}
                   />
                 )}

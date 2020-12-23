@@ -110,7 +110,7 @@ function PopulationCard(props: { fips: Fips }) {
                         (r) => r.race_and_ethnicity !== "Total"
                       )}
                       metric={POPULATION_VARIABLE_CONFIG.metrics.pct_share}
-                      breakdownCol="race_and_ethnicity"
+                      breakdownVar="race_and_ethnicity"
                       showLegend={false}
                       hideActions={true}
                     />

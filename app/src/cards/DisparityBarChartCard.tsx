@@ -9,7 +9,7 @@ import SimpleHorizontalBarChart from "../charts/SimpleHorizontalBarChart";
 import { Fips } from "../utils/madlib/Fips";
 import {
   Breakdowns,
-  BreakdownCol,
+  BreakdownVar,
   BREAKDOWN_VAR_DISPLAY_NAMES,
 } from "../data/Breakdowns";
 import useDatasetStore from "../data/useDatasetStore";
@@ -30,7 +30,7 @@ function getInitalMetricConfig(variableConfig: VariableConfig) {
 
 function DisparityBarChartCard(props: {
   key: string;
-  breakdownCol: BreakdownCol;
+  breakdownVar: BreakdownVar;
   variableConfig: VariableConfig;
   nonstandardizedRace: boolean /* TODO- ideally wouldn't go here, could be calculated based on dataset */;
   fips: Fips;
@@ -65,7 +65,7 @@ function DisparityBarChartCard(props: {
       datasetIds={getDependentDatasets(metrics)}
       queries={[query]}
       titleText={`${metricConfig.fullCardTitleName} by ${
-        BREAKDOWN_VAR_DISPLAY_NAMES[props.breakdownCol]
+        BREAKDOWN_VAR_DISPLAY_NAMES[props.breakdownVar]
       } in ${props.fips.getFullDisplayName()}`}
     >
       {() => {
@@ -80,13 +80,13 @@ function DisparityBarChartCard(props: {
         return (
           <>
             <CardContent className={styles.Breadcrumbs}>
-              {props.breakdownCol !==
-                ("race_and_ethnicity" as BreakdownCol) && (
+              {props.breakdownVar !==
+                ("race_and_ethnicity" as BreakdownVar) && (
                 <Alert severity="warning">
                   Missing data means that we don't know the full story.
                 </Alert>
               )}
-              {props.breakdownCol === ("race_and_ethnicity" as BreakdownCol) &&
+              {props.breakdownVar === ("race_and_ethnicity" as BreakdownVar) &&
                 validDisplayMetricConfigs.length > 1 && (
                   <ToggleButtonGroup
                     value={metricConfig.type}
@@ -114,22 +114,22 @@ function DisparityBarChartCard(props: {
                 )}
             </CardContent>
             <CardContent className={styles.Breadcrumbs}>
-              {props.breakdownCol ===
-                ("race_and_ethnicity" as BreakdownCol) && (
+              {props.breakdownVar ===
+                ("race_and_ethnicity" as BreakdownVar) && (
                 <>
                   {metricConfig.type === "pct_share" && (
                     <DisparityBarChart
                       data={dataset}
                       thickMetric={POPULATION_VARIABLE_CONFIG.metrics.pct_share}
                       thinMetric={metricConfig}
-                      breakdownCol={props.breakdownCol}
+                      breakdownVar={props.breakdownVar}
                       metricDisplayName={metricConfig.shortVegaLabel}
                     />
                   )}
                   {metricConfig.type === "per100k" && (
                     <SimpleHorizontalBarChart
                       data={dataset}
-                      breakdownCol={props.breakdownCol}
+                      breakdownVar={props.breakdownVar}
                       metric={metricConfig}
                       showLegend={false}
                     />

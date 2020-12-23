@@ -2,14 +2,14 @@ import React from "react";
 import { Vega } from "react-vega";
 import { Row } from "../data/DatasetTypes";
 import { useResponsiveWidth } from "../utils/useResponsiveWidth";
-import { BreakdownCol, BREAKDOWN_VAR_DISPLAY_NAMES } from "../data/Breakdowns";
+import { BreakdownVar, BREAKDOWN_VAR_DISPLAY_NAMES } from "../data/Breakdowns";
 import { MetricConfig } from "../data/MetricConfig";
 
 function getSpec(
   data: Record<string, any>[],
   width: number,
-  breakdownCol: string,
-  breakdownColDisplayName: string,
+  breakdownVar: string,
+  breakdownVarDisplayName: string,
   thickMeasure: string,
   thickMeasureDisplayName: string,
   thinMeasure: string,
@@ -53,7 +53,7 @@ function getSpec(
         encode: {
           enter: {
             tooltip: {
-              signal: `datum. ${breakdownCol} + ', ${thickMeasureDisplayName}: ' + datum. ${thickMeasure}+'%'`,
+              signal: `datum. ${breakdownVar} + ', ${thickMeasureDisplayName}: ' + datum. ${thickMeasure}+'%'`,
             },
           },
           update: {
@@ -61,7 +61,7 @@ function getSpec(
             ariaRoleDescription: { value: "bar" },
             x: { scale: "x", field: thickMeasure },
             x2: { scale: "x", value: 0 },
-            y: { scale: "y", field: breakdownCol },
+            y: { scale: "y", field: breakdownVar },
             height: { scale: "y", band: 1 },
           },
         },
@@ -74,7 +74,7 @@ function getSpec(
         encode: {
           enter: {
             tooltip: {
-              signal: `datum. ${breakdownCol} + ', ${thinMeasureDisplayName}: ' + datum. ${thinMeasure}+'%'`,
+              signal: `datum. ${breakdownVar} + ', ${thinMeasureDisplayName}: ' + datum. ${thinMeasure}+'%'`,
             },
           },
           update: {
@@ -84,7 +84,7 @@ function getSpec(
             x2: { scale: "x", value: 0 },
             yc: {
               scale: "y",
-              field: breakdownCol,
+              field: breakdownVar,
               offset: (BAR_HEIGHT - BAR_HEIGHT * BAR_PADDING) / 2,
             },
             height: { scale: "y", band: THIN_RATIO },
@@ -103,7 +103,7 @@ function getSpec(
             dx: { value: 3 },
             fill: { value: "black" },
             x: { scale: "x", field: thinMeasure },
-            y: { scale: "y", field: breakdownCol, band: 0.5 },
+            y: { scale: "y", field: breakdownVar, band: 0.5 },
             text: {
               signal: `isValid(datum["${thinMeasure}"]) ? datum["${thinMeasure}"] + "${metricDisplayName}" : "" `,
             },
@@ -125,7 +125,7 @@ function getSpec(
         type: "band",
         domain: {
           data: DATASET,
-          field: breakdownCol,
+          field: breakdownVar,
           sort: { op: "min", field: thickMeasure, order: "descending" },
         },
         range: { step: { signal: "y_step" } },
@@ -167,7 +167,7 @@ function getSpec(
         scale: "y",
         orient: "left",
         grid: false,
-        title: breakdownColDisplayName,
+        title: breakdownVarDisplayName,
         zindex: 0,
       },
     ],
@@ -193,7 +193,7 @@ function DisparityBarChart(props: {
   data: Row[];
   thickMetric: MetricConfig;
   thinMetric: MetricConfig;
-  breakdownCol: BreakdownCol;
+  breakdownVar: BreakdownVar;
   metricDisplayName: string;
 }) {
   const [ref, width] = useResponsiveWidth(
@@ -205,8 +205,8 @@ function DisparityBarChart(props: {
         spec={getSpec(
           props.data,
           width,
-          props.breakdownCol,
-          BREAKDOWN_VAR_DISPLAY_NAMES[props.breakdownCol],
+          props.breakdownVar,
+          BREAKDOWN_VAR_DISPLAY_NAMES[props.breakdownVar],
           props.thickMetric.metricId,
           props.thickMetric.shortVegaLabel,
           props.thinMetric.metricId,
