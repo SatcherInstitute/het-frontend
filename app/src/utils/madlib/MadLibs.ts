@@ -1,4 +1,4 @@
-import { USA_FIPS, STATE_FIPS_MAP, FIPS_MAP } from "./Fips";
+import { USA_FIPS, FIPS_MAP } from "./Fips";
 
 // Map of phrase segment index to its selected value
 export type PhraseSelections = Record<number, string>;
@@ -59,12 +59,7 @@ const DROPDOWN_VAR: Record<DropdownVarId, string> = {
 const MADLIB_LIST: MadLib[] = [
   {
     id: "disparity",
-    phrase: [
-      "Tell me about disparities for",
-      DROPDOWN_VAR,
-      "in",
-      STATE_FIPS_MAP,
-    ],
+    phrase: ["Tell me about disparities for", DROPDOWN_VAR, "in", FIPS_MAP],
     defaultSelections: { 1: "covid", 3: USA_FIPS },
     activeSelections: { 1: "covid", 3: USA_FIPS },
   },
