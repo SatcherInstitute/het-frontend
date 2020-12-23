@@ -65,11 +65,12 @@ function UsaChloroplethMap(props: {
     }
 
     /* SET UP TOOLTIP */
-    let tooltipDatum =
+    const tooltipDatum =
       props.numberFormat === "percentage"
         ? `format(datum.${props.varField}, '0.1%')`
         : `format(datum.${props.varField}, ',')`;
     const tooltipValue = `{"State": datum.properties.name, "${props.varFieldDisplayName}": ${tooltipDatum} }`;
+    const missingDataTooltipValue = `{"State": datum.properties.name, "${props.varFieldDisplayName}": "No data" }`;
 
     /* SET UP LEGEND */
     // TODO - Legends should be scaled exactly the same the across compared charts. Looks misleading otherwise.
@@ -168,7 +169,7 @@ function UsaChloroplethMap(props: {
           encode: {
             enter: {
               tooltip: {
-                signal: 'datum.properties.name + ": No Data"',
+                signal: missingDataTooltipValue,
               },
             },
             update: {
