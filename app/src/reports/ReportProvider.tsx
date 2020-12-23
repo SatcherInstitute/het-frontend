@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Grid } from "@material-ui/core";
 import ChartDumpReport from "./ChartDumpReport";
 import VariableDisparityReport from "./VariableDisparityReport";
+import TwoVariableReport from "./TwoVariableReport";
 import {
   MadLib,
   getMadLibWithUpdatedValue,
@@ -86,34 +87,19 @@ function ReportProvider(props: { madLib: MadLib; setMadLib: Function }) {
         const compareDisparityVariable2 = getPhraseValue(props.madLib, 3);
         const fipsCode = getPhraseValue(props.madLib, 5);
         return (
-          <Grid container spacing={1} alignItems="flex-start">
-            <Grid item xs={6}>
-              <VariableDisparityReport
-                key={compareDisparityVariable1 + fipsCode}
-                dropdownVarId={compareDisparityVariable1 as DropdownVarId}
-                fips={new Fips(fipsCode)}
-                updateFipsCallback={(fips: Fips) =>
-                  props.setMadLib(
-                    getMadLibWithUpdatedValue(props.madLib, 3, fips.code)
-                  )
-                }
-                vertical={true}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <VariableDisparityReport
-                key={compareDisparityVariable2 + fipsCode}
-                dropdownVarId={compareDisparityVariable2 as DropdownVarId}
-                fips={new Fips(fipsCode)}
-                updateFipsCallback={(fips: Fips) =>
-                  props.setMadLib(
-                    getMadLibWithUpdatedValue(props.madLib, 5, fips.code)
-                  )
-                }
-                vertical={true}
-              />
-            </Grid>
-          </Grid>
+          <TwoVariableReport
+            key={
+              compareDisparityVariable1 + +compareDisparityVariable2 + fipsCode
+            }
+            dropdownVarId1={compareDisparityVariable1 as DropdownVarId}
+            dropdownVarId2={compareDisparityVariable2 as DropdownVarId}
+            fips={new Fips(fipsCode)}
+            updateFipsCallback={(fips: Fips) =>
+              props.setMadLib(
+                getMadLibWithUpdatedValue(props.madLib, 5, fips.code)
+              )
+            }
+          />
         );
       case "dump":
         return <ChartDumpReport />;
