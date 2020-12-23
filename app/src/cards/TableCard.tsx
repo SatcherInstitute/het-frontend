@@ -11,6 +11,7 @@ import {
   BreakdownVar,
   BREAKDOWN_VAR_DISPLAY_NAMES,
 } from "../data/Breakdowns";
+import { CardContent } from "@material-ui/core";
 
 function TableCard(props: {
   fips: Fips;
@@ -51,9 +52,11 @@ function TableCard(props: {
         return (
           <>
             {queryResponse.showErrorMessage(props.metricIds) && (
-              <Alert severity="warning">
-                Missing data means that we don't know the full story.
-              </Alert>
+              <CardContent>
+                <Alert severity="warning">
+                  Missing data means that we don't know the full story.
+                </Alert>
+              </CardContent>
             )}
             {!queryResponse.isError() && (
               <TableChart
