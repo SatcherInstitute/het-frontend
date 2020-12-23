@@ -84,7 +84,7 @@ function ChartDumpReport() {
               </div>
               <LineChart
                 data={timeSeriesData}
-                breakdownVar="race_and_ethnicity"
+                breakdownCol="race_and_ethnicity"
                 variable={"covid_cases"}
                 timeVariable="date"
               />

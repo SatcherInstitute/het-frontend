@@ -7,15 +7,12 @@ import { Breakdowns } from "../data/Breakdowns";
 import { getDependentDatasets, MetricId } from "../data/variableProviders";
 import MetricQuery from "../data/MetricQuery";
 import { Fips } from "../utils/madlib/Fips";
-import {
-  BreakdownVar,
-  BREAKDOWN_VAR_DISPLAY_NAMES,
-} from "../utils/madlib/DisplayNames";
+import { BreakdownCol, BREAKDOWN_VAR_DISPLAY_NAMES } from "../data/Breakdowns";
 import { MetricConfig } from "../data/MetricConfig";
 
 function TableCard(props: {
   fips: Fips;
-  breakdownVar: BreakdownVar;
+  breakdownCol: BreakdownCol;
   metrics: MetricConfig[];
   nonstandardizedRace: boolean /* TODO- ideally wouldn't go here, could be calculated based on dataset */;
 }) {
@@ -38,7 +35,7 @@ function TableCard(props: {
       queries={[query]}
       datasetIds={datasetIds}
       titleText={`${
-        BREAKDOWN_VAR_DISPLAY_NAMES[props.breakdownVar]
+        BREAKDOWN_VAR_DISPLAY_NAMES[props.breakdownCol]
       } in ${props.fips.getFullDisplayName()}`}
     >
       {() => {
@@ -61,7 +58,7 @@ function TableCard(props: {
             {dataset.length > 0 && (
               <TableChart
                 data={dataset}
-                breakdownVar={props.breakdownVar}
+                breakdownCol={props.breakdownCol}
                 metrics={props.metrics}
               />
             )}

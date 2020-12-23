@@ -8,11 +8,11 @@ import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
 import SimpleHorizontalBarChart from "../charts/SimpleHorizontalBarChart";
 import { Fips } from "../utils/madlib/Fips";
 import {
-  BreakdownVar,
+  Breakdowns,
+  BreakdownCol,
   BREAKDOWN_VAR_DISPLAY_NAMES,
-} from "../utils/madlib/DisplayNames";
+} from "../data/Breakdowns";
 import useDatasetStore from "../data/useDatasetStore";
-import { Breakdowns } from "../data/Breakdowns";
 import { getDependentDatasets, MetricId } from "../data/variableProviders";
 import MetricQuery from "../data/MetricQuery";
 import { MetricConfig, VariableConfig } from "../data/MetricConfig";
@@ -30,7 +30,7 @@ function getInitalMetricConfig(variableConfig: VariableConfig) {
 
 function DisparityBarChartCard(props: {
   key: string;
-  breakdownVar: BreakdownVar;
+  breakdownCol: BreakdownCol;
   variableConfig: VariableConfig;
   nonstandardizedRace: boolean /* TODO- ideally wouldn't go here, could be calculated based on dataset */;
   fips: Fips;
@@ -65,7 +65,7 @@ function DisparityBarChartCard(props: {
       datasetIds={getDependentDatasets(metrics)}
       queries={[query]}
       titleText={`${metricConfig.fullCardTitleName} by ${
-        BREAKDOWN_VAR_DISPLAY_NAMES[props.breakdownVar]
+        BREAKDOWN_VAR_DISPLAY_NAMES[props.breakdownCol]
       } in ${props.fips.getFullDisplayName()}`}
     >
       {() => {
@@ -80,13 +80,13 @@ function DisparityBarChartCard(props: {
         return (
           <>
             <CardContent className={styles.Breadcrumbs}>
-              {props.breakdownVar !==
-                ("race_and_ethnicity" as BreakdownVar) && (
+              {props.breakdownCol !==
+                ("race_and_ethnicity" as BreakdownCol) && (
                 <Alert severity="warning">
                   Missing data means that we don't know the full story.
                 </Alert>
               )}
-              {props.breakdownVar === ("race_and_ethnicity" as BreakdownVar) &&
+              {props.breakdownCol === ("race_and_ethnicity" as BreakdownCol) &&
                 validDisplayMetricConfigs.length > 1 && (
                   <ToggleButtonGroup
                     value={metricConfig.type}
@@ -114,22 +114,22 @@ function DisparityBarChartCard(props: {
                 )}
             </CardContent>
             <CardContent className={styles.Breadcrumbs}>
-              {props.breakdownVar ===
-                ("race_and_ethnicity" as BreakdownVar) && (
+              {props.breakdownCol ===
+                ("race_and_ethnicity" as BreakdownCol) && (
                 <>
                   {metricConfig.type === "pct_share" && (
                     <DisparityBarChart
                       data={dataset}
                       thickMetric={POPULATION_VARIABLE_CONFIG.metrics.pct_share}
                       thinMetric={metricConfig}
-                      breakdownVar={props.breakdownVar as BreakdownVar}
+                      breakdownCol={props.breakdownCol}
                       metricDisplayName={metricConfig.shortVegaLabel}
                     />
                   )}
                   {metricConfig.type === "per100k" && (
                     <SimpleHorizontalBarChart
                       data={dataset}
-                      breakdownVar={props.breakdownVar as BreakdownVar}
+                      breakdownCol={props.breakdownCol}
                       metric={metricConfig}
                       showLegend={false}
                     />

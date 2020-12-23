@@ -9,15 +9,12 @@ import TableRow from "@material-ui/core/TableRow";
 import { Row } from "../data/DatasetTypes";
 import { formatFieldValue } from "../utils/madlib/DisplayNames";
 import WarningRoundedIcon from "@material-ui/icons/WarningRounded";
-import {
-  BreakdownVar,
-  BREAKDOWN_VAR_DISPLAY_NAMES,
-} from "../utils/madlib/DisplayNames";
+import { BreakdownCol, BREAKDOWN_VAR_DISPLAY_NAMES } from "../data/Breakdowns";
 import { MetricConfig } from "../data/MetricConfig";
 
 function TableChart(props: {
   data: Row[];
-  breakdownVar: BreakdownVar;
+  breakdownCol: BreakdownCol;
   metrics: MetricConfig[];
 }) {
   const tableColumns: string[] | undefined =
@@ -35,7 +32,7 @@ function TableChart(props: {
             <TableHead>
               <TableRow>
                 <TableCell>
-                  {BREAKDOWN_VAR_DISPLAY_NAMES[props.breakdownVar]}
+                  {BREAKDOWN_VAR_DISPLAY_NAMES[props.breakdownCol]}
                 </TableCell>
                 {props.metrics.map((metricConfig, i) => (
                   <TableCell key={i}>
@@ -47,7 +44,7 @@ function TableChart(props: {
             <TableBody>
               {props.data.map((row, i) => (
                 <TableRow key={i}>
-                  <TableCell>{row[props.breakdownVar]}</TableCell>
+                  <TableCell>{row[props.breakdownCol]}</TableCell>
                   {props.metrics.map((metricConfig, j) => (
                     <TableCell key={j}>
                       {formatFieldValue(

@@ -1,5 +1,7 @@
 import { Fips } from "../utils/madlib/Fips";
 
+export const ALL_RACES_DISPLAY_NAME = "All races";
+
 export type GeographicBreakdown = "national" | "state" | "county";
 
 // TODO is the race vs race_nonstandard distinction necessary, or should we just
@@ -17,6 +19,14 @@ export type BreakdownCol =
   | "sex"
   | "date"
   | "state_fips";
+
+export const BREAKDOWN_VAR_DISPLAY_NAMES: Record<BreakdownCol, string> = {
+  race_and_ethnicity: "Race and Ethnicity",
+  age: "Age",
+  sex: "Sex",
+  date: "Date",
+  state_fips: "State FIPS Code",
+};
 
 function demographicBreakdownToCol(
   demographic: DemographicBreakdown

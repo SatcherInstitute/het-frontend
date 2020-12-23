@@ -2,17 +2,14 @@ import React from "react";
 import { Vega } from "react-vega";
 import { Row } from "../data/DatasetTypes";
 import { useResponsiveWidth } from "../utils/useResponsiveWidth";
-import {
-  BreakdownVar,
-  BREAKDOWN_VAR_DISPLAY_NAMES,
-} from "../utils/madlib/DisplayNames";
+import { BreakdownCol, BREAKDOWN_VAR_DISPLAY_NAMES } from "../data/Breakdowns";
 import { MetricConfig } from "../data/MetricConfig";
 
 function getSpec(
   data: Record<string, any>[],
   width: number,
-  breakdownVar: string,
-  breakdownVarDisplayName: string,
+  breakdownCol: string,
+  breakdownColDisplayName: string,
   measure: string,
   measureDisplayName: string,
   showLegend: boolean
@@ -69,7 +66,7 @@ function getSpec(
         encode: {
           enter: {
             tooltip: {
-              signal: `datum. ${breakdownVar} + ', ${measureDisplayName}: ' + format(datum["${measure}"], ",")`,
+              signal: `datum. ${breakdownCol} + ', ${measureDisplayName}: ' + format(datum["${measure}"], ",")`,
             },
           },
           update: {
@@ -77,7 +74,7 @@ function getSpec(
             ariaRoleDescription: { value: "bar" },
             x: { scale: "x", field: measure },
             x2: { scale: "x", value: 0 },
-            y: { scale: "y", field: breakdownVar },
+            y: { scale: "y", field: breakdownCol },
             height: { scale: "y", band: 1 },
           },
         },
@@ -94,7 +91,7 @@ function getSpec(
             dx: { value: 3 },
             fill: { value: "black" },
             x: { scale: "x", field: measure },
-            y: { scale: "y", field: breakdownVar, band: 0.8 },
+            y: { scale: "y", field: breakdownCol, band: 0.8 },
             text: {
               signal: `isValid(datum["${measure}"]) ? format(datum["${measure}"], ",") : "" `,
             },
@@ -116,7 +113,7 @@ function getSpec(
         type: "band",
         domain: {
           data: DATASET,
-          field: breakdownVar,
+          field: breakdownCol,
           sort: { op: "min", field: measure, order: "descending" },
         },
         range: { step: { signal: "y_step" } },
@@ -158,7 +155,7 @@ function getSpec(
         scale: "y",
         orient: "left",
         grid: false,
-        title: breakdownVarDisplayName,
+        title: breakdownColDisplayName,
         zindex: 0,
       },
     ],
@@ -169,7 +166,7 @@ function getSpec(
 function SimpleHorizontalBarChart(props: {
   data: Row[];
   metric: MetricConfig;
-  breakdownVar: BreakdownVar;
+  breakdownCol: BreakdownCol;
   showLegend: boolean;
   hideActions?: boolean;
 }) {
@@ -182,8 +179,8 @@ function SimpleHorizontalBarChart(props: {
         spec={getSpec(
           props.data,
           width,
-          props.breakdownVar,
-          BREAKDOWN_VAR_DISPLAY_NAMES[props.breakdownVar],
+          props.breakdownCol,
+          BREAKDOWN_VAR_DISPLAY_NAMES[props.breakdownCol],
           props.metric.metricId,
           props.metric.shortVegaLabel,
           props.showLegend
