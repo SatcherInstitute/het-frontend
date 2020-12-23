@@ -12,7 +12,7 @@ import { BreakdownCol, BREAKDOWN_VAR_DISPLAY_NAMES } from "../data/Breakdowns";
 import { MetricConfig } from "../data/MetricConfig";
 
 // Prints a formatted version of a field value based on the type specified by the field name
-export function formatFieldValue(nameOfField: string, value: any): string {
+function formatFieldValue(nameOfField: string, value: any): string {
   if (value === null || value === undefined) {
     return "";
   }
@@ -30,14 +30,9 @@ function TableChart(props: {
   breakdownCol: BreakdownCol;
   metrics: MetricConfig[];
 }) {
-  const tableColumns: string[] | undefined =
-    !props.metrics && props.data.length > 0
-      ? Object.keys(props.data[0])
-      : props.metrics.map((metricConfig) => metricConfig.metricId);
-
   return (
     <>
-      {!tableColumns ? (
+      {!(props.data.length > 0 || props.metrics.length > 0) ? (
         <h1>No Data provided</h1>
       ) : (
         <TableContainer component={Paper} style={{ maxHeight: "500px" }}>
