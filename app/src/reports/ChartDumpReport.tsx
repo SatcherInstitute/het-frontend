@@ -48,9 +48,9 @@ function ChartDumpReport() {
         const pieChartData = datasetStore
           .getMetrics(state1PopulationQuery)
           .data!.filter((r) => r.race_and_ethnicity !== "Total");
-        const timeSeriesData = datasetStore.getMetrics(state1CovidQuery).data!;
-        const geo1 = datasetStore.getMetrics(state1DiabetesQuery).data!;
-        const geo2 = datasetStore.getMetrics(state2DiabetesQuery).data!;
+        const timeSeriesData = datasetStore.getMetrics(state1CovidQuery).data;
+        const geo1 = datasetStore.getMetrics(state1DiabetesQuery).data;
+        const geo2 = datasetStore.getMetrics(state2DiabetesQuery).data;
         const groupedChartData = geo1.concat(geo2);
         const population1 = datasetStore.getMetrics(state1PopulationQuery)
           .data!;

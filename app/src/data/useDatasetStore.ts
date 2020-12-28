@@ -4,12 +4,7 @@ import { getUniqueProviders } from "./variableProviders";
 import VariableProvider from "./variables/VariableProvider";
 import { joinOnCols } from "./datasetutils";
 import { DataFrame, IDataFrame } from "data-forge";
-import {
-  MetricQuery,
-  MetricQueryResponse,
-  UnsupportedBreakdownError,
-  NoDataError,
-} from "./MetricQuery";
+import { MetricQuery, MetricQueryResponse, ExpectedError } from "./MetricQuery";
 import { getDataFetcher, getLogger } from "../utils/globals";
 
 const METADATA_KEY = "all_metadata";
@@ -212,10 +207,8 @@ export function useDatasetStoreProvider(): DatasetStore {
           });
           return new MetricQueryResponse(joined.toArray());
         } catch (err) {
-          if (
-            err instanceof UnsupportedBreakdownError ||
-            err instanceof NoDataError
-          ) {
+          // TODO refactor so that instead of Variable providers throwing ExpectedError, they just return a populated MetricQueryResponse
+          if (err instanceof ExpectedError) {
             return new MetricQueryResponse(err);
           } else {
             throw err; // re-throw the error unchanged

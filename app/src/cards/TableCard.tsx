@@ -53,7 +53,7 @@ function TableCard(props: {
 
         return (
           <>
-            {queryResponse.showErrorMessage(metricIds) && (
+            {queryResponse.shouldShowError(metricIds) && (
               <CardContent>
                 <Alert severity="warning">
                   Missing data means that we don't know the full story.

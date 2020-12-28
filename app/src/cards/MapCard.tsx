@@ -112,17 +112,13 @@ function MapCard(props: {
     >
       {() => {
         const queryResponse = datasetStore.getMetrics(initalQuery);
-        let mapData = queryResponse.isError()
-          ? []
-          : queryResponse.data
-              .filter(
-                (row) => row.race_and_ethnicity !== "Not Hispanic or Latino"
-              )
-              .filter(
-                (r) =>
-                  r[props.metricConfig.metricId] !== undefined &&
-                  r[props.metricConfig.metricId] !== null
-              );
+        let mapData = queryResponse.data
+          .filter((row) => row.race_and_ethnicity !== "Not Hispanic or Latino")
+          .filter(
+            (r) =>
+              r[props.metricConfig.metricId] !== undefined &&
+              r[props.metricConfig.metricId] !== null
+          );
         if (!props.fips.isUsa()) {
           // TODO - this doesn't consider county level data
           mapData = mapData.filter((r) => r.state_fips === props.fips.code);

@@ -78,14 +78,14 @@ function DisparityBarChartCard(props: {
         );
         return (
           <>
-            {queryResponse.showErrorMessage([metricConfig.metricId]) && (
+            {queryResponse.shouldShowError([metricConfig.metricId]) && (
               <CardContent className={styles.Breadcrumbs}>
                 <Alert severity="warning">
                   Missing data means that we don't know the full story.
                 </Alert>
               </CardContent>
             )}
-            {!queryResponse.showErrorMessage([metricConfig.metricId]) &&
+            {!queryResponse.shouldShowError([metricConfig.metricId]) &&
               validDisplayMetricConfigs.length > 1 && (
                 <CardContent className={styles.Breadcrumbs}>
                   <ToggleButtonGroup
@@ -113,7 +113,7 @@ function DisparityBarChartCard(props: {
                   </ToggleButtonGroup>
                 </CardContent>
               )}
-            {!queryResponse.showErrorMessage([metricConfig.metricId]) && (
+            {!queryResponse.shouldShowError([metricConfig.metricId]) && (
               <CardContent className={styles.Breadcrumbs}>
                 {metricConfig.type === "pct_share" && (
                   <DisparityBarChart

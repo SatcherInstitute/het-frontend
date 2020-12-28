@@ -106,9 +106,9 @@ function PopulationCard(props: { fips: Fips }) {
                       Population by race
                     </span>
                     <SimpleHorizontalBarChart
-                      data={datasetStore
-                        .getMetrics(query)
-                        .data.filter((r) => r.race_and_ethnicity !== "Total")}
+                      data={queryResponse.data.filter(
+                        (r) => r.race_and_ethnicity !== "Total"
+                      )}
                       metric={POPULATION_VARIABLE_CONFIG.metrics.pct_share}
                       breakdownVar="race_and_ethnicity"
                       showLegend={false}
