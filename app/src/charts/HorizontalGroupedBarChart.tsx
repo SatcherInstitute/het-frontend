@@ -1,12 +1,12 @@
 import React from "react";
 import { Vega, VisualizationSpec } from "react-vega";
-import { BreakdownCol } from "../data/Breakdowns";
+import { BreakdownVar } from "../data/Breakdowns";
 import { Row } from "../data/DatasetTypes";
 
 function getSpec(
   data: Record<string, any>[],
-  dim1: BreakdownCol,
-  dim2: BreakdownCol,
+  dim1: BreakdownVar,
+  dim2: BreakdownVar,
   measure: string
 ): VisualizationSpec {
   return {

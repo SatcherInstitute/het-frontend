@@ -103,13 +103,17 @@ function MapCard(props: {
     >
       {() => {
         const queryResponse = datasetStore.getMetrics(query);
-        let mapData = queryResponse.data
-          .filter((row) => row.race_and_ethnicity !== "Not Hispanic or Latino")
-          .filter(
-            (r) =>
-              r[props.metricConfig.metricId] !== undefined &&
-              r[props.metricConfig.metricId] !== null
-          );
+        let mapData = queryResponse.isError()
+          ? []
+          : queryResponse.data
+              .filter(
+                (row) => row.race_and_ethnicity !== "Not Hispanic or Latino"
+              )
+              .filter(
+                (r) =>
+                  r[props.metricConfig.metricId] !== undefined &&
+                  r[props.metricConfig.metricId] !== null
+              );
         if (!props.fips.isUsa()) {
           // TODO - this doesn't consider county level data
           mapData = mapData.filter((r) => r.state_fips === props.fips.code);
@@ -144,9 +148,6 @@ function MapCard(props: {
                       <List component="nav" aria-label="Device settings">
                         <ListItem
                           button
-                          aria-haspopup="true"
-                          aria-controls="lock-menu"
-                          aria-label="when device is locked"
                           onClick={(event: React.MouseEvent<HTMLElement>) =>
                             setAnchorEl(event.currentTarget)
                           }
@@ -213,8 +214,7 @@ function MapCard(props: {
                 {props.metricConfig && (
                   <UsaChloroplethMap
                     signalListeners={signalListeners}
-                    varField={props.metricConfig.metricId}
-                    varFieldDisplayName={props.metricConfig.shortVegaLabel}
+                    metric={props.metricConfig}
                     legendTitle={props.metricConfig.fullCardTitleName}
                     data={mapData}
                     hideLegend={!props.fips.isUsa()} // TODO - update logic here when we have county level data

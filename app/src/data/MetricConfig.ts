@@ -23,6 +23,36 @@ export type VariableConfig = {
   metrics: Record<string, MetricConfig>; // TODO - strongly type key
 };
 
+export const POPULATION_VARIABLE_CONFIG: VariableConfig = {
+  variableId: "population",
+  variableDisplayName: "Population",
+  metrics: {
+    count: {
+      metricId: "population",
+      fullCardTitleName: "Population",
+      shortVegaLabel: "people",
+      type: "count",
+    },
+    pct_share: {
+      metricId: "population_pct",
+      fullCardTitleName: "Population Share",
+      shortVegaLabel: "% of total population",
+      type: "pct_share",
+    },
+  },
+};
+
+// Prints a formatted version of a field value based on the type specified by the field name
+export function formatFieldValue(metricType: MetricType, value: any): string {
+  if (value === null || value === undefined) {
+    return "";
+  }
+  const formattedValue =
+    typeof value === "number" ? value.toLocaleString("en") : value;
+  const suffix = metricType === "pct_share" ? "%" : "";
+  return `${formattedValue}${suffix}`;
+}
+
 // TODO - strongly type key
 export const METRIC_CONFIG: Record<string, VariableConfig[]> = {
   covid: [

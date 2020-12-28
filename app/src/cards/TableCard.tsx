@@ -12,11 +12,12 @@ import {
   BREAKDOWN_VAR_DISPLAY_NAMES,
 } from "../data/Breakdowns";
 import { CardContent } from "@material-ui/core";
+import { MetricConfig } from "../data/MetricConfig";
 
 function TableCard(props: {
   fips: Fips;
   breakdownVar: BreakdownVar;
-  metricIds: MetricId[];
+  metrics: MetricConfig[];
   nonstandardizedRace: boolean /* TODO- ideally wouldn't go here, could be calculated based on dataset */;
 }) {
   const datasetStore = useDatasetStore();
@@ -27,10 +28,11 @@ function TableCard(props: {
     props.breakdownVar,
     props.nonstandardizedRace
   );
-
-  const query = new MetricQuery(props.metricIds, breakdowns);
-
-  const datasetIds = getDependentDatasets(props.metricIds);
+  const metricIds: MetricId[] = props.metrics.map(
+    (metricConfig) => metricConfig.metricId
+  );
+  const query = new MetricQuery(metricIds, breakdowns);
+  const datasetIds = getDependentDatasets(metricIds);
 
   return (
     <CardWrapper
@@ -51,7 +53,7 @@ function TableCard(props: {
 
         return (
           <>
-            {queryResponse.showErrorMessage(props.metricIds) && (
+            {queryResponse.showErrorMessage(metricIds) && (
               <CardContent>
                 <Alert severity="warning">
                   Missing data means that we don't know the full story.
@@ -61,7 +63,8 @@ function TableCard(props: {
             {!queryResponse.isError() && (
               <TableChart
                 data={dataset}
-                fields={[props.breakdownVar as string].concat(props.metricIds)}
+                breakdownVar={props.breakdownVar}
+                metrics={props.metrics}
               />
             )}
           </>

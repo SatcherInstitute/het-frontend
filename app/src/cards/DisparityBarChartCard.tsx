@@ -7,7 +7,6 @@ import ToggleButton from "@material-ui/lab/ToggleButton";
 import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
 import SimpleHorizontalBarChart from "../charts/SimpleHorizontalBarChart";
 import { Fips } from "../utils/madlib/Fips";
-import { METRIC_DISPLAY_NAMES } from "../utils/madlib/DisplayNames";
 import useDatasetStore from "../data/useDatasetStore";
 import {
   Breakdowns,
@@ -17,6 +16,7 @@ import {
 import { getDependentDatasets, MetricId } from "../data/variableProviders";
 import { MetricQuery } from "../data/MetricQuery";
 import { MetricConfig, VariableConfig } from "../data/MetricConfig";
+import { POPULATION_VARIABLE_CONFIG } from "../data/MetricConfig";
 
 import CardWrapper from "./CardWrapper";
 
@@ -70,7 +70,6 @@ function DisparityBarChartCard(props: {
     >
       {() => {
         const queryResponse = datasetStore.getMetrics(query);
-        console.log("kkz queryResponse", queryResponse);
         const dataset = queryResponse.data.filter(
           (row) =>
             !["Not Hispanic or Latino", "Total"].includes(
@@ -119,12 +118,8 @@ function DisparityBarChartCard(props: {
                 {metricConfig.type === "pct_share" && (
                   <DisparityBarChart
                     data={dataset}
-                    thickMeasure={"population_pct" as MetricId}
-                    thickMeasureDisplayName={
-                      METRIC_DISPLAY_NAMES["population_pct" as MetricId]
-                    }
-                    thinMeasure={metricConfig.metricId}
-                    thinMeasureDisplayName={metricConfig.shortVegaLabel}
+                    thickMetric={POPULATION_VARIABLE_CONFIG.metrics.pct_share}
+                    thinMetric={metricConfig}
                     breakdownVar={props.breakdownVar}
                     metricDisplayName={metricConfig.shortVegaLabel}
                   />
@@ -133,8 +128,7 @@ function DisparityBarChartCard(props: {
                   <SimpleHorizontalBarChart
                     data={dataset}
                     breakdownVar={props.breakdownVar}
-                    measure={metricConfig.metricId}
-                    measureDisplayName={metricConfig.shortVegaLabel}
+                    metric={metricConfig}
                     showLegend={false}
                   />
                 )}
