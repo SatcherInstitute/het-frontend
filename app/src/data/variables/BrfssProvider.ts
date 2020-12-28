@@ -1,11 +1,7 @@
-import { Breakdowns } from "../Breakdowns";
+import { Breakdowns, ALL_RACES_DISPLAY_NAME } from "../Breakdowns";
 import { Dataset, Row } from "../DatasetTypes";
 import { per100k } from "../datasetutils";
-import {
-  USA_FIPS,
-  USA_DISPLAY_NAME,
-  ALL_RACES_DISPLAY_NAME,
-} from "../../utils/madlib/Fips";
+import { USA_FIPS, USA_DISPLAY_NAME } from "../../utils/madlib/Fips";
 import VariableProvider from "./VariableProvider";
 
 class BrfssProvider extends VariableProvider {

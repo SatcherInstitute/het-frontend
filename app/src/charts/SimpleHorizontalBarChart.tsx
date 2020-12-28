@@ -2,11 +2,8 @@ import React from "react";
 import { Vega } from "react-vega";
 import { Row } from "../data/DatasetTypes";
 import { useResponsiveWidth } from "../utils/useResponsiveWidth";
-import { MetricId } from "../data/variableProviders";
-import {
-  BreakdownVar,
-  BREAKDOWN_VAR_DISPLAY_NAMES,
-} from "../utils/madlib/DisplayNames";
+import { BreakdownVar, BREAKDOWN_VAR_DISPLAY_NAMES } from "../data/Breakdowns";
+import { MetricConfig } from "../data/MetricConfig";
 
 function getSpec(
   data: Record<string, any>[],
@@ -19,7 +16,7 @@ function getSpec(
 ): any {
   const BAR_HEIGHT = 40;
   const BAR_PADDING = 0.1;
-  const MEASURE_COLOR = "#89B7D5";
+  const MEASURE_COLOR = "#BDC1C6";
   const DATASET = "DATASET";
   const WIDTH_PADDING_FOR_SNOWMAN_MENU = 50;
 
@@ -168,8 +165,7 @@ function getSpec(
 
 function SimpleHorizontalBarChart(props: {
   data: Row[];
-  measure: MetricId;
-  measureDisplayName: string;
+  metric: MetricConfig;
   breakdownVar: BreakdownVar;
   showLegend: boolean;
   hideActions?: boolean;
@@ -185,8 +181,8 @@ function SimpleHorizontalBarChart(props: {
           width,
           props.breakdownVar,
           BREAKDOWN_VAR_DISPLAY_NAMES[props.breakdownVar],
-          props.measure,
-          props.measureDisplayName,
+          props.metric.metricId,
+          props.metric.shortVegaLabel,
           props.showLegend
         )}
         actions={props.hideActions ? false : true}

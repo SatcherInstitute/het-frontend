@@ -8,15 +8,15 @@ import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
 import SimpleHorizontalBarChart from "../charts/SimpleHorizontalBarChart";
 import { Fips } from "../utils/madlib/Fips";
 import {
+  Breakdowns,
   BreakdownVar,
   BREAKDOWN_VAR_DISPLAY_NAMES,
-  METRIC_DISPLAY_NAMES,
-} from "../utils/madlib/DisplayNames";
+} from "../data/Breakdowns";
 import useDatasetStore from "../data/useDatasetStore";
-import { Breakdowns } from "../data/Breakdowns";
 import { getDependentDatasets, MetricId } from "../data/variableProviders";
 import MetricQuery from "../data/MetricQuery";
 import { MetricConfig, VariableConfig } from "../data/MetricConfig";
+import { POPULATION_VARIABLE_CONFIG } from "../data/MetricConfig";
 
 import CardWrapper from "./CardWrapper";
 
@@ -120,22 +120,17 @@ function DisparityBarChartCard(props: {
                   {metricConfig.type === "pct_share" && (
                     <DisparityBarChart
                       data={dataset}
-                      thickMeasure={"population_pct" as MetricId}
-                      thickMeasureDisplayName={
-                        METRIC_DISPLAY_NAMES["population_pct" as MetricId]
-                      }
-                      thinMeasure={metricConfig.metricId}
-                      thinMeasureDisplayName={metricConfig.shortVegaLabel}
-                      breakdownVar={props.breakdownVar as BreakdownVar}
+                      thickMetric={POPULATION_VARIABLE_CONFIG.metrics.pct_share}
+                      thinMetric={metricConfig}
+                      breakdownVar={props.breakdownVar}
                       metricDisplayName={metricConfig.shortVegaLabel}
                     />
                   )}
                   {metricConfig.type === "per100k" && (
                     <SimpleHorizontalBarChart
                       data={dataset}
-                      breakdownVar={props.breakdownVar as BreakdownVar}
-                      measure={metricConfig.metricId}
-                      measureDisplayName={metricConfig.shortVegaLabel}
+                      breakdownVar={props.breakdownVar}
+                      metric={metricConfig}
                       showLegend={false}
                     />
                   )}

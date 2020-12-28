@@ -7,15 +7,13 @@ import { Breakdowns } from "../data/Breakdowns";
 import { getDependentDatasets, MetricId } from "../data/variableProviders";
 import MetricQuery from "../data/MetricQuery";
 import { Fips } from "../utils/madlib/Fips";
-import {
-  BreakdownVar,
-  BREAKDOWN_VAR_DISPLAY_NAMES,
-} from "../utils/madlib/DisplayNames";
+import { BreakdownVar, BREAKDOWN_VAR_DISPLAY_NAMES } from "../data/Breakdowns";
+import { MetricConfig } from "../data/MetricConfig";
 
 function TableCard(props: {
   fips: Fips;
   breakdownVar: BreakdownVar;
-  metricIds: MetricId[];
+  metrics: MetricConfig[];
   nonstandardizedRace: boolean /* TODO- ideally wouldn't go here, could be calculated based on dataset */;
 }) {
   const datasetStore = useDatasetStore();
@@ -25,9 +23,11 @@ function TableCard(props: {
   const breakdowns = Breakdowns.forFips(props.fips).andRace(
     props.nonstandardizedRace
   );
-  const query = new MetricQuery(props.metricIds, breakdowns);
-
-  const datasetIds = getDependentDatasets(props.metricIds);
+  const metricIds: MetricId[] = props.metrics.map(
+    (metricConfig) => metricConfig.metricId
+  );
+  const query = new MetricQuery(metricIds, breakdowns);
+  const datasetIds = getDependentDatasets(metricIds);
 
   return (
     <CardWrapper
@@ -57,7 +57,8 @@ function TableCard(props: {
             {dataset.length > 0 && (
               <TableChart
                 data={dataset}
-                fields={[props.breakdownVar as string].concat(props.metricIds)}
+                breakdownVar={props.breakdownVar}
+                metrics={props.metrics}
               />
             )}
           </>

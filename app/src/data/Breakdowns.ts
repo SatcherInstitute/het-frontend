@@ -1,5 +1,7 @@
 import { Fips } from "../utils/madlib/Fips";
 
+export const ALL_RACES_DISPLAY_NAME = "All races";
+
 export type GeographicBreakdown = "national" | "state" | "county";
 
 // TODO is the race vs race_nonstandard distinction necessary, or should we just
@@ -11,16 +13,24 @@ export type DemographicBreakdown = "race" | "race_nonstandard" | "age" | "sex";
 // or an enum/constants that can be referenced.
 // TODO do we want to generalize state_fips to just fips so that the same column
 // can be used across different geography levels?
-export type BreakdownCol =
+export type BreakdownVar =
   | "race_and_ethnicity"
   | "age"
   | "sex"
   | "date"
   | "state_fips";
 
+export const BREAKDOWN_VAR_DISPLAY_NAMES: Record<BreakdownVar, string> = {
+  race_and_ethnicity: "Race and Ethnicity",
+  age: "Age",
+  sex: "Sex",
+  date: "Date",
+  state_fips: "State FIPS Code",
+};
+
 function demographicBreakdownToCol(
   demographic: DemographicBreakdown
-): BreakdownCol {
+): BreakdownVar {
   switch (demographic) {
     case "race":
     case "race_nonstandard":
@@ -128,8 +138,8 @@ export class Breakdowns {
     return this;
   }
 
-  getJoinColumns(): BreakdownCol[] {
-    const joinCols: BreakdownCol[] = ["state_fips"];
+  getJoinColumns(): BreakdownVar[] {
+    const joinCols: BreakdownVar[] = ["state_fips"];
     if (this.demographic) {
       joinCols.push(demographicBreakdownToCol(this.demographic));
     }
