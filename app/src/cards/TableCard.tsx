@@ -23,9 +23,9 @@ function TableCard(props: {
   const breakdowns = Breakdowns.forFips(props.fips).andRace(
     props.nonstandardizedRace
   );
-  const metricIds: MetricId[] = props.metrics.map((metricConfig) => {
-    return metricConfig.metricId;
-  });
+  const metricIds: MetricId[] = props.metrics.map(
+    (metricConfig) => metricConfig.metricId
+  );
   const query = new MetricQuery(metricIds, breakdowns);
   const datasetIds = getDependentDatasets(metricIds);
 

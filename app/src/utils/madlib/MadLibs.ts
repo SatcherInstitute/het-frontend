@@ -37,7 +37,7 @@ function getMadLibPhraseText(madLib: MadLib): string {
   return madLibText;
 }
 
-// Updates a MadLib with a new value in the given phrase segment index
+/* Returns a copy of the MadLib with with an updated value in the given phrase segment index */
 export function getMadLibWithUpdatedValue(
   originalMadLib: MadLib,
   phraseSegementIndex: number,

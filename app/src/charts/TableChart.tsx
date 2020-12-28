@@ -9,21 +9,7 @@ import TableRow from "@material-ui/core/TableRow";
 import { Row } from "../data/DatasetTypes";
 import WarningRoundedIcon from "@material-ui/icons/WarningRounded";
 import { BreakdownVar, BREAKDOWN_VAR_DISPLAY_NAMES } from "../data/Breakdowns";
-import { MetricConfig } from "../data/MetricConfig";
-
-// Prints a formatted version of a field value based on the type specified by the field name
-function formatFieldValue(nameOfField: string, value: any): string {
-  if (value === null || value === undefined) {
-    return "";
-  }
-  const formattedValue =
-    typeof value === "number" ? value.toLocaleString("en") : value;
-  const suffix =
-    nameOfField.endsWith("_pct") || nameOfField.endsWith("_pct_of_geo")
-      ? "%"
-      : "";
-  return `${formattedValue}${suffix}`;
-}
+import { MetricConfig, formatFieldValue } from "../data/MetricConfig";
 
 function TableChart(props: {
   data: Row[];
@@ -56,7 +42,7 @@ function TableChart(props: {
                   {props.metrics.map((metricConfig, j) => (
                     <TableCell key={j}>
                       {formatFieldValue(
-                        metricConfig.metricId,
+                        metricConfig.type,
                         row[metricConfig.metricId]
                       )}
                       {(row[metricConfig.metricId] === null ||
