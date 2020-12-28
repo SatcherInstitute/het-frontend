@@ -69,29 +69,38 @@ function MapCard(props: {
 
   const datasetStore = useDatasetStore();
 
-  const raceBreakdown = Breakdowns.byState().andRace(props.nonstandardizedRace);
-  const ageBreakdown = Breakdowns.byState().andAge();
-  const sexBreakdown = Breakdowns.byState().andGender();
-
-  const raceQuery = new MetricQuery(props.metricConfig.metricId, raceBreakdown);
-  const ageQuery = new MetricQuery(props.metricConfig.metricId, ageBreakdown);
-  const sexQuery = new MetricQuery(props.metricConfig.metricId, sexBreakdown);
-
   let queries = [];
-  if (
-    props.currentBreakdown === "all" ||
-    props.currentBreakdown === "race_and_ethnicity"
-  ) {
-    queries.push(raceQuery);
-  }
-  if (props.currentBreakdown === "all" || props.currentBreakdown === "age") {
-    queries.push(ageQuery);
-  }
-  if (props.currentBreakdown === "all" || props.currentBreakdown === "sex") {
-    queries.push(sexQuery);
-  }
+  let initalQuery: MetricQuery;
 
-  let query = raceQuery;
+  if (["age", "all"].includes(props.currentBreakdown)) {
+    const ageQuery = new MetricQuery(
+      props.metricConfig.metricId,
+      Breakdowns.byState().andAge()
+    );
+    queries.push(ageQuery);
+    if (props.currentBreakdown !== "all") {
+      initalQuery = ageQuery;
+    }
+  }
+  if (["sex", "all"].includes(props.currentBreakdown)) {
+    const sexQuery = new MetricQuery(
+      props.metricConfig.metricId,
+      Breakdowns.byState().andGender()
+    );
+    queries.push(sexQuery);
+    if (props.currentBreakdown !== "all") {
+      initalQuery = sexQuery;
+    }
+  }
+  if (["race_and_ethnicity", "all"].includes(props.currentBreakdown)) {
+    const raceQuery = new MetricQuery(
+      props.metricConfig.metricId,
+      Breakdowns.byState().andRace(props.nonstandardizedRace)
+    );
+    queries.push(raceQuery);
+    // If all are enabled, race should be the default inital query
+    initalQuery = raceQuery;
+  }
 
   return (
     <CardWrapper
@@ -102,7 +111,7 @@ function MapCard(props: {
       } in ${props.fips.getFullDisplayName()}`}
     >
       {() => {
-        const queryResponse = datasetStore.getMetrics(query);
+        const queryResponse = datasetStore.getMetrics(initalQuery);
         let mapData = queryResponse.isError()
           ? []
           : queryResponse.data
@@ -133,7 +142,7 @@ function MapCard(props: {
               />
             </CardContent>
 
-            {props.enableFilter && (
+            {props.enableFilter && !queryResponse.isError() && (
               <>
                 <Divider />
                 <CardContent
@@ -145,7 +154,8 @@ function MapCard(props: {
                       Filtered by:
                     </Grid>
                     <Grid item>
-                      <List component="nav" aria-label="Device settings">
+                      {/* TODO- Clean up UI */}
+                      <List component="nav">
                         <ListItem
                           button
                           onClick={(event: React.MouseEvent<HTMLElement>) =>
@@ -156,7 +166,6 @@ function MapCard(props: {
                         </ListItem>
                       </List>
                       <Menu
-                        id="lock-menu"
                         anchorEl={anchorEl}
                         keepMounted
                         open={Boolean(anchorEl)}
@@ -164,19 +173,18 @@ function MapCard(props: {
                           setAnchorEl(null);
                         }}
                       >
-                        {(props.currentBreakdown === "age" ||
-                          props.currentBreakdown === "all") && (
+                        {["age", "all"].includes(props.currentBreakdown) && (
                           <MenuItem disabled={true}>Age [unavailable]</MenuItem>
                         )}
-                        {(props.currentBreakdown === "sex" ||
-                          props.currentBreakdown === "all") && (
+                        {["sex", "all"].includes(props.currentBreakdown) && (
                           <MenuItem disabled={true}>Sex [unavailable]</MenuItem>
                         )}
-                        {(props.currentBreakdown === "race_and_ethnicity" ||
-                          props.currentBreakdown === "all") && (
+                        {["race_and_ethnicity", "all"].includes(
+                          props.currentBreakdown
+                        ) && (
                           <>
                             <MenuItem disabled={true}>Races</MenuItem>
-                            {RACES.map((option, index) => (
+                            {RACES.map((option) => (
                               <MenuItem
                                 key={option}
                                 onClick={(e) => {
