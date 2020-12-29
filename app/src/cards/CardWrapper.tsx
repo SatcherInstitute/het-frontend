@@ -10,7 +10,7 @@ import { CardContent } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 import { WithMetrics } from "../data/WithLoadingOrErrorUI";
-import MetricQuery from "../data/MetricQuery";
+import { MetricQuery } from "../data/MetricQuery";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import useDatasetStore from "../data/useDatasetStore";
 

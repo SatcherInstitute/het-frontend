@@ -4,7 +4,7 @@ import CardWrapper from "./CardWrapper";
 import useDatasetStore from "../data/useDatasetStore";
 import { Breakdowns } from "../data/Breakdowns";
 import { getDependentDatasets, MetricId } from "../data/variableProviders";
-import MetricQuery from "../data/MetricQuery";
+import { MetricQuery } from "../data/MetricQuery";
 import { Fips } from "../utils/madlib/Fips";
 import { CardContent } from "@material-ui/core";
 import { Grid } from "@material-ui/core";
@@ -33,8 +33,8 @@ function PopulationCard(props: { fips: Fips }) {
       hideFooter={true}
     >
       {() => {
-        const dataset = datasetStore.getMetrics(query);
-        const totalPopulation = dataset.find(
+        const queryResponse = datasetStore.getMetrics(query);
+        const totalPopulation = queryResponse.data.find(
           (r) => r.race_and_ethnicity === "Total"
         );
         const totalPopulationSize = totalPopulation
@@ -43,7 +43,7 @@ function PopulationCard(props: { fips: Fips }) {
 
         return (
           <CardContent>
-            {dataset.length > 0 && (
+            {!queryResponse.isError() && (
               <Button
                 aria-label="expand description"
                 onClick={() => setExpanded(!expanded)}
@@ -57,7 +57,7 @@ function PopulationCard(props: { fips: Fips }) {
             <span className={styles.PopulationCardTitle}>
               {props.fips.getFullDisplayName()}
             </span>
-            {dataset.length < 1 && (
+            {queryResponse.isError() && (
               <Alert severity="warning">
                 Missing data means that we don't know the full story.
               </Alert>
@@ -66,7 +66,7 @@ function PopulationCard(props: { fips: Fips }) {
                 we manually trigger a resize when the div size changes so vega chart will 
                 render with the right size. This means the vega chart won't appear until the 
                 AnimateHeight is finished expanding */}
-            {dataset.length > 0 && (
+            {!queryResponse.isError() && (
               <AnimateHeight
                 duration={500}
                 height={expanded ? "auto" : 70}
@@ -89,7 +89,7 @@ function PopulationCard(props: { fips: Fips }) {
                     <span className={styles.PopulationMetricValue}>??</span>
                   </Grid>
                   {/* TODO- properly align these */}
-                  {dataset
+                  {queryResponse.data
                     .filter((r) => r.race_and_ethnicity !== "Total")
                     .map((row) => (
                       <Grid item className={styles.PopulationMetric}>
@@ -106,7 +106,7 @@ function PopulationCard(props: { fips: Fips }) {
                       Population by race
                     </span>
                     <SimpleHorizontalBarChart
-                      data={dataset.filter(
+                      data={queryResponse.data.filter(
                         (r) => r.race_and_ethnicity !== "Total"
                       )}
                       metric={POPULATION_VARIABLE_CONFIG.metrics.pct_share}

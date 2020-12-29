@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { LoadStatus } from "./DatasetTypes";
 import useDatasetStore from "./useDatasetStore";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import MetricQuery from "./MetricQuery";
+import { MetricQuery } from "./MetricQuery";
 
 function getJointLoadStatus(statuses: LoadStatus[]) {
   if (statuses.includes("error")) {

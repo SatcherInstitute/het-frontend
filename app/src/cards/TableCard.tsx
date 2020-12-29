@@ -3,11 +3,15 @@ import TableChart from "../charts/TableChart";
 import { Alert } from "@material-ui/lab";
 import CardWrapper from "./CardWrapper";
 import useDatasetStore from "../data/useDatasetStore";
-import { Breakdowns } from "../data/Breakdowns";
 import { getDependentDatasets, MetricId } from "../data/variableProviders";
-import MetricQuery from "../data/MetricQuery";
+import { MetricQuery } from "../data/MetricQuery";
 import { Fips } from "../utils/madlib/Fips";
-import { BreakdownVar, BREAKDOWN_VAR_DISPLAY_NAMES } from "../data/Breakdowns";
+import {
+  Breakdowns,
+  BreakdownVar,
+  BREAKDOWN_VAR_DISPLAY_NAMES,
+} from "../data/Breakdowns";
+import { CardContent } from "@material-ui/core";
 import { MetricConfig } from "../data/MetricConfig";
 
 function TableCard(props: {
@@ -20,7 +24,8 @@ function TableCard(props: {
 
   // TODO need to handle race categories standard vs non-standard for covid vs
   // other demographic.
-  const breakdowns = Breakdowns.forFips(props.fips).andRace(
+  const breakdowns = Breakdowns.forFips(props.fips).addBreakdown(
+    props.breakdownVar,
     props.nonstandardizedRace
   );
   const metricIds: MetricId[] = props.metrics.map(
@@ -38,23 +43,24 @@ function TableCard(props: {
       } in ${props.fips.getFullDisplayName()}`}
     >
       {() => {
-        const dataset = datasetStore
-          .getMetrics(query)
-          .filter(
-            (row) =>
-              !["Not Hispanic or Latino", "Total"].includes(
-                row.race_and_ethnicity
-              )
-          );
+        const queryResponse = datasetStore.getMetrics(query);
+        const dataset = queryResponse.data.filter(
+          (row) =>
+            !["Not Hispanic or Latino", "Total"].includes(
+              row.race_and_ethnicity
+            )
+        );
 
         return (
           <>
-            {dataset.length < 1 && (
-              <Alert severity="warning">
-                Missing data means that we don't know the full story.
-              </Alert>
+            {queryResponse.shouldShowError(metricIds) && (
+              <CardContent>
+                <Alert severity="warning">
+                  Missing data means that we don't know the full story.
+                </Alert>
+              </CardContent>
             )}
-            {dataset.length > 0 && (
+            {!queryResponse.isError() && (
               <TableChart
                 data={dataset}
                 breakdownVar={props.breakdownVar}

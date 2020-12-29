@@ -113,23 +113,40 @@ export class Breakdowns {
     return this;
   }
 
+  addBreakdown(
+    breakdownVar: BreakdownVar,
+    nonstandardizedRace = false
+  ): Breakdowns {
+    switch (breakdownVar) {
+      case "race_and_ethnicity":
+        return nonstandardizedRace
+          ? this.andDemographic("race_nonstandard")
+          : this.andDemographic("race");
+      case "age":
+        return this.andDemographic("age");
+      case "sex":
+        return this.andDemographic("sex");
+      case "date":
+        this.time = true;
+        return this;
+    }
+    return this;
+  }
+
   andRace(nonstandard = false): Breakdowns {
-    return nonstandard
-      ? this.andDemographic("race_nonstandard")
-      : this.andDemographic("race");
+    return this.addBreakdown("race_and_ethnicity", nonstandard);
   }
 
   andAge(): Breakdowns {
-    return this.andDemographic("age");
+    return this.addBreakdown("age");
   }
 
   andGender(): Breakdowns {
-    return this.andDemographic("sex");
+    return this.addBreakdown("sex");
   }
 
   andTime(): Breakdowns {
-    this.time = true;
-    return this;
+    return this.addBreakdown("date");
   }
 
   /** Filters to entries that exactly match the specified FIPS code. */

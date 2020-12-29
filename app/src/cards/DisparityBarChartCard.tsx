@@ -7,14 +7,14 @@ import ToggleButton from "@material-ui/lab/ToggleButton";
 import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
 import SimpleHorizontalBarChart from "../charts/SimpleHorizontalBarChart";
 import { Fips } from "../utils/madlib/Fips";
+import useDatasetStore from "../data/useDatasetStore";
 import {
   Breakdowns,
   BreakdownVar,
   BREAKDOWN_VAR_DISPLAY_NAMES,
 } from "../data/Breakdowns";
-import useDatasetStore from "../data/useDatasetStore";
 import { getDependentDatasets, MetricId } from "../data/variableProviders";
-import MetricQuery from "../data/MetricQuery";
+import { MetricQuery } from "../data/MetricQuery";
 import { MetricConfig, VariableConfig } from "../data/MetricConfig";
 import { POPULATION_VARIABLE_CONFIG } from "../data/MetricConfig";
 
@@ -43,7 +43,8 @@ function DisparityBarChartCard(props: {
 
   // TODO need to handle race categories standard vs non-standard for covid vs
   // other demographic.
-  const breakdowns = Breakdowns.forFips(props.fips).andRace(
+  const breakdowns = Breakdowns.forFips(props.fips).addBreakdown(
+    props.breakdownVar,
     props.nonstandardizedRace
   );
 
@@ -51,7 +52,6 @@ function DisparityBarChartCard(props: {
     (metricConfig: MetricConfig) => metricConfig.metricId
   );
   const metrics: MetricId[] = [...metricIds, "population", "population_pct"];
-
   const query = new MetricQuery(metrics, breakdowns);
 
   // TODO - what if there are no valid types at all? What do we show?
@@ -69,25 +69,25 @@ function DisparityBarChartCard(props: {
       } in ${props.fips.getFullDisplayName()}`}
     >
       {() => {
-        const dataset = datasetStore
-          .getMetrics(query)
-          .filter(
-            (row) =>
-              !["Not Hispanic or Latino", "Total"].includes(
-                row.race_and_ethnicity
-              )
-          );
+        const queryResponse = datasetStore.getMetrics(query);
+        const dataset = queryResponse.data.filter(
+          (row) =>
+            !["Not Hispanic or Latino", "Total"].includes(
+              row.race_and_ethnicity
+            )
+        );
         return (
           <>
-            <CardContent className={styles.Breadcrumbs}>
-              {props.breakdownVar !==
-                ("race_and_ethnicity" as BreakdownVar) && (
+            {queryResponse.shouldShowError([metricConfig.metricId]) && (
+              <CardContent className={styles.Breadcrumbs}>
                 <Alert severity="warning">
                   Missing data means that we don't know the full story.
                 </Alert>
-              )}
-              {props.breakdownVar === ("race_and_ethnicity" as BreakdownVar) &&
-                validDisplayMetricConfigs.length > 1 && (
+              </CardContent>
+            )}
+            {!queryResponse.shouldShowError([metricConfig.metricId]) &&
+              validDisplayMetricConfigs.length > 1 && (
+                <CardContent className={styles.Breadcrumbs}>
                   <ToggleButtonGroup
                     value={metricConfig.type}
                     exclusive
@@ -111,32 +111,29 @@ function DisparityBarChartCard(props: {
                       </ToggleButton>
                     ))}
                   </ToggleButtonGroup>
-                )}
-            </CardContent>
-            <CardContent className={styles.Breadcrumbs}>
-              {props.breakdownVar ===
-                ("race_and_ethnicity" as BreakdownVar) && (
-                <>
-                  {metricConfig.type === "pct_share" && (
-                    <DisparityBarChart
-                      data={dataset}
-                      thickMetric={POPULATION_VARIABLE_CONFIG.metrics.pct_share}
-                      thinMetric={metricConfig}
-                      breakdownVar={props.breakdownVar}
-                      metricDisplayName={metricConfig.shortVegaLabel}
-                    />
-                  )}
-                  {metricConfig.type === "per100k" && (
-                    <SimpleHorizontalBarChart
-                      data={dataset}
-                      breakdownVar={props.breakdownVar}
-                      metric={metricConfig}
-                      showLegend={false}
-                    />
-                  )}
-                </>
+                </CardContent>
               )}
-            </CardContent>
+            {!queryResponse.shouldShowError([metricConfig.metricId]) && (
+              <CardContent className={styles.Breadcrumbs}>
+                {metricConfig.type === "pct_share" && (
+                  <DisparityBarChart
+                    data={dataset}
+                    thickMetric={POPULATION_VARIABLE_CONFIG.metrics.pct_share}
+                    thinMetric={metricConfig}
+                    breakdownVar={props.breakdownVar}
+                    metricDisplayName={metricConfig.shortVegaLabel}
+                  />
+                )}
+                {metricConfig.type === "per100k" && (
+                  <SimpleHorizontalBarChart
+                    data={dataset}
+                    breakdownVar={props.breakdownVar}
+                    metric={metricConfig}
+                    showLegend={false}
+                  />
+                )}
+              </CardContent>
+            )}
           </>
         );
       }}

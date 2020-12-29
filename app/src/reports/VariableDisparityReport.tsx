@@ -133,6 +133,9 @@ function VariableDisparityReport(props: {
           </Grid>
           <Grid item xs={props.vertical ? 12 : 6}>
             <MapCard
+              key={
+                currentBreakdown + variableConfig.metrics["per100k"].metricId
+              }
               metricConfig={variableConfig.metrics["per100k"] as MetricConfig}
               fips={props.fips}
               updateFipsCallback={(fips: Fips) => {
@@ -142,6 +145,7 @@ function VariableDisparityReport(props: {
               nonstandardizedRace={
                 props.dropdownVarId === "covid" ? true : false
               }
+              currentBreakdown={currentBreakdown}
             />
             <TableCard
               fips={props.fips}
