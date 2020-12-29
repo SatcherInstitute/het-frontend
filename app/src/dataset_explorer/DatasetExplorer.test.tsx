@@ -24,7 +24,7 @@ describe("DatasetExplorer", () => {
   const mockLoadDataset = jest.fn();
 
   beforeEach(() => {
-    jest.mock("../../utils/DataFetcher");
+    jest.mock("../data/DataFetcher");
     DataFetcher.prototype.getMetadata = mockGetMetadata;
     DataFetcher.prototype.loadDataset = mockLoadDataset;
   });
