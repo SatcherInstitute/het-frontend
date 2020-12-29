@@ -25,6 +25,19 @@ export class MetricQuery {
 
 export class ExpectedError extends Error {}
 
+function getInvalidValues(rows: Row[]) {
+  let invalidValues: Record<string, number> = {};
+  rows.forEach((row: Row) => {
+    Object.entries(row).forEach(([fieldName, value]) => {
+      if (value === undefined || value === null) {
+        const currentValue = invalidValues[fieldName] || 0;
+        invalidValues[fieldName] = currentValue + 1;
+      }
+    });
+  });
+  return invalidValues;
+}
+
 export class MetricQueryResponse {
   readonly data: Row[];
   readonly error?: ExpectedError;
@@ -37,20 +50,8 @@ export class MetricQueryResponse {
       this.invalidValues = {};
     } else {
       this.data = input as Row[];
-      this.invalidValues = {};
       // TODO - it may be more efficient to calcluate this in the provider
-      this.data.forEach((row: Row) => {
-        Object.entries(row).forEach(([fieldName, value]) =>
-          this.maybeIncrementInvalidValues(fieldName, value)
-        );
-      });
-    }
-  }
-
-  maybeIncrementInvalidValues(fieldName: string, value: string): void {
-    if (value === undefined || value === null) {
-      const currentValue = this.invalidValues[fieldName] || 0;
-      this.invalidValues[fieldName] = currentValue + 1;
+      this.invalidValues = getInvalidValues(this.data);
     }
   }
 
@@ -65,8 +66,8 @@ export class MetricQueryResponse {
   // Returns true if any of requested fields are missing or an error is present
   shouldShowError(fields: string[]): boolean {
     return (
-      fields.find((field: string) => this.isFieldMissing(field)) !==
-        undefined || this.isError()
+      fields.some((field: string) => this.isFieldMissing(field)) ||
+      this.isError()
     );
   }
 }

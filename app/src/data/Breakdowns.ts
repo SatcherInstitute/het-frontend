@@ -113,39 +113,40 @@ export class Breakdowns {
     return this;
   }
 
-  andRace(nonstandard = false): Breakdowns {
-    return nonstandard
-      ? this.andDemographic("race_nonstandard")
-      : this.andDemographic("race");
-  }
-
-  andAge(): Breakdowns {
-    return this.andDemographic("age");
-  }
-
-  andGender(): Breakdowns {
-    return this.andDemographic("sex");
-  }
-
-  andTime(): Breakdowns {
-    this.time = true;
-    return this;
-  }
-
   addBreakdown(
     breakdownVar: BreakdownVar,
     nonstandardizedRace = false
   ): Breakdowns {
-    if (breakdownVar === "race_and_ethnicity") {
-      return this.andRace(nonstandardizedRace);
-    }
-    if (breakdownVar === "age") {
-      return this.andAge();
-    }
-    if (breakdownVar === "sex") {
-      return this.andGender();
+    switch (breakdownVar) {
+      case "race_and_ethnicity":
+        return nonstandardizedRace
+          ? this.andDemographic("race_nonstandard")
+          : this.andDemographic("race");
+      case "age":
+        return this.andDemographic("age");
+      case "sex":
+        return this.andDemographic("sex");
+      case "date":
+        this.time = true;
+        return this;
     }
     return this;
+  }
+
+  andRace(nonstandard = false): Breakdowns {
+    return this.addBreakdown("race_and_ethnicity", nonstandard);
+  }
+
+  andAge(): Breakdowns {
+    return this.addBreakdown("age");
+  }
+
+  andGender(): Breakdowns {
+    return this.addBreakdown("sex");
+  }
+
+  andTime(): Breakdowns {
+    return this.addBreakdown("date");
   }
 
   /** Filters to entries that exactly match the specified FIPS code. */

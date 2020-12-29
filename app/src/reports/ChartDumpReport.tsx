@@ -47,15 +47,13 @@ function ChartDumpReport() {
       {() => {
         const pieChartData = datasetStore
           .getMetrics(state1PopulationQuery)
-          .data!.filter((r) => r.race_and_ethnicity !== "Total");
+          .data.filter((r) => r.race_and_ethnicity !== "Total");
         const timeSeriesData = datasetStore.getMetrics(state1CovidQuery).data;
         const geo1 = datasetStore.getMetrics(state1DiabetesQuery).data;
         const geo2 = datasetStore.getMetrics(state2DiabetesQuery).data;
         const groupedChartData = geo1.concat(geo2);
-        const population1 = datasetStore.getMetrics(state1PopulationQuery)
-          .data!;
-        const population2 = datasetStore.getMetrics(state2PopulationQuery)
-          .data!;
+        const population1 = datasetStore.getMetrics(state1PopulationQuery).data;
+        const population2 = datasetStore.getMetrics(state2PopulationQuery).data;
         const popChartData = population1
           .concat(population2)
           .filter((r) => r.race_and_ethnicity !== "Total");
