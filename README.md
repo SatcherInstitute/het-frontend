@@ -1,6 +1,6 @@
 # het-frontend
 
-The frontend codebase for [Health Equity Tracker](https://healthequitytracker.org/).
+**The frontend codebase for [Health Equity Tracker](https://healthequitytracker.org/) has moved to [health-equity-tracker](https://github.com/SatcherInstitute/health-equity-tracker)**
 
 ## Developer Instructions 
 
